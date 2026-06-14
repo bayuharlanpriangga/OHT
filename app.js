@@ -595,6 +595,8 @@ function init(){
       if(a.lastResisted!==td) a.failedToday=false;
     });
   }
+  // Init Firebase
+  setTimeout(initFirebase, 500);
   // Init date filter labels (tampilkan hari ini)
   if(typeof initAllDateFilterLabels==='function') setTimeout(initAllDateFilterLabels, 100);
   // Dismiss loading screen setelah app siap
@@ -693,7 +695,7 @@ function renderStats(){
   const ln=LVL_NAMES[Math.min(level-1,LVL_NAMES.length-1)];
   const xb=$('xp-bar');if(xb)xb.style.width=xpIn+'%';
   setTxt('xp-cur',xpIn);setTxt('xp-level',`LVL ${level} — ${ln}`);setTxt('xp-name',S.name||'User');
-  const av=$('xp-avatar');if(av)av.textContent=(S.name||'U').charAt(0).toUpperCase();
+  // avatar is now canvas, rendered by renderHomeAvatar
   setTxt('freeze-count',S.freezes||0);setTxt('freeze-big-count',S.freezes||0);
   // FIX #14: danger state on freeze chip
   const chip=$('freeze-chip');
@@ -704,7 +706,8 @@ function renderStats(){
   if(badge){if(total>0){badge.style.display='block';badge.textContent=total;}else badge.style.display='none';}
   // FIX: sync vacation toggle
   const vt=$('vacation-toggle');if(vt)vt.classList.toggle('on',!!S.vacationMode);
-}
+
+  if(typeof renderHomeAvatar==='function') setTimeout(renderHomeAvatar, 50);}
 
 // ── DUE CHECK ──────────────────────────────────────────────
 function isDueToday(h){ if(isRestDay()) return false;return isDueDateStr(h,todayStr());}
@@ -1479,7 +1482,7 @@ function navigate(page){
   pg.classList.add('active');
 
   // 3. Nav highlight
-  const mainPages=['today','habits','wellness','focus'];
+  const mainPages=['today','habits','wellness','friends'];
   if(mainPages.includes(page)){
     const nb=$('bnav-'+page);if(nb)nb.classList.add('active');
     const bm=$('bnav-more');if(bm)bm.classList.remove('active');
@@ -1502,6 +1505,7 @@ function navigate(page){
   if(page==='garden'){initGardenPage();}
   if(page==='profile'){initProfilePage();}
   if(page==='shop'){initShopPage();}
+  if(page==='friends'){initFriendsPage();}
   if(page==='jadwal'){initJadwalPage();}
 
   // 6. Render - small timeout to ensure DOM paint completes
@@ -7448,8 +7452,8 @@ function setProfileMode(mode) {
   const editEl = $('profile-edit-mode');
   if(viewEl) viewEl.style.display = mode === 'view' ? 'block' : 'none';
   if(editEl) editEl.style.display = mode === 'edit' ? 'block' : 'none';
-  if(mode === 'view') renderProfileView();
-  else renderProfileEdit();
+  if(mode === 'view') {renderProfilePage(); setTimeout(()=>{ const c=$('profile-char-canvas'); if(c && typeof drawChibiChar==='function') {/* redrawn by renderProfilePage */}},100);}
+  else {renderProfileEdit(); setTimeout(drawEditPreview, 80);}
 }
 
 function renderProfileView() {
@@ -7465,11 +7469,15 @@ function renderProfilePage() {
   const xpInLevel = xp % 100;
   const coins = getGardenData().coins || 0;
 
+  // Canvas full viewport width (bleed ke edge)
+  const pageW = window.innerWidth;
+  const canvasH = Math.round(pageW * 0.80); // taller for more BG
+
   el.innerHTML = `
-    <div style="position:relative;display:flex;justify-content:center;margin-bottom:14px;">
-      <canvas id="profile-char-canvas" width="220" height="300"
-        style="display:block;cursor:pointer;border:2px solid var(--yellow);box-shadow:5px 5px 0 color-mix(in srgb,var(--yellow) 25%,transparent);"
-        title="Klik untuk rotasi" onclick="rotateProfileChar()"></canvas>
+    <div style="position:relative;width:100vw;left:50%;transform:translateX(-50%);cursor:pointer;margin-bottom:0;" onclick="rotateProfileChar()" title="Tap untuk rotasi">
+      <canvas id="profile-char-canvas" width="${pageW}" height="${canvasH}"
+        style="display:block;width:100%;height:auto;"></canvas>
+      <div style="position:absolute;bottom:11px;right:11px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,255,255,.6);">↺ Tap rotasi</div>
     </div>
     <!-- Stats panel -->
     <div style="background:var(--surface);border:var(--bo-t);padding:14px;margin-bottom:11px;">
@@ -7508,25 +7516,81 @@ function renderProfilePage() {
       </div>
     </div>`;
 
-  // Draw char on canvas
+  // Draw full scene on profile canvas
   setTimeout(() => {
     const canvas = $('profile-char-canvas');
     if(!canvas) return;
+    const W = canvas.width, H = canvas.height;
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, 200, 260);
-    // Background
-    const bg = getProfileBgConfig();
-    const grad = ctx.createLinearGradient(0,0,0,260);
-    grad.addColorStop(0, bg.top); grad.addColorStop(1, bg.bot);
-    ctx.fillStyle = grad; ctx.fillRect(0,0,200,260);
-    // Grass
-    ctx.fillStyle = bg.grass;
-    ctx.fillRect(0, 200, 200, 60);
-    // Draw char centered, big
+    ctx.clearRect(0, 0, W, H);
+
+    const bg = typeof getProfileBgConfig==='function' ? getProfileBgConfig() : {top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'};
+
+    // Sky gradient
+    const skyGrd = ctx.createLinearGradient(0,0,0,H*0.7);
+    skyGrd.addColorStop(0, bg.top); skyGrd.addColorStop(1, bg.bot);
+    ctx.fillStyle = skyGrd; ctx.fillRect(0,0,W,H);
+
+    // Stars
+    if(bg.top.startsWith('#0')||bg.top.startsWith('#05')||bg.top.startsWith('#0a')) {
+      ctx.fillStyle='rgba(255,255,255,.7)';
+      for(let s=0;s<50;s++) {
+        ctx.fillRect((s*137.508)%W, (s*73.1)%(H*0.55), 1.5, 1.5);
+      }
+    }
+
+    // Celestial body
+    const now2=new Date(); const h2=now2.getHours()+now2.getMinutes()/60;
+    const isDaytime=h2>=6&&h2<18;
+    if(isDaytime) {
+      const t=(h2-6)/12;
+      const cx=W*0.1+W*0.8*t, cy=H*0.35-Math.sin(Math.PI*t)*H*0.28;
+      const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,W*0.08);
+      glow.addColorStop(0,'rgba(255,220,60,.4)'); glow.addColorStop(1,'transparent');
+      ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(cx,cy,W*0.08,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#ffd700'; ctx.beginPath(); ctx.arc(cx,cy,W*0.025,0,Math.PI*2); ctx.fill();
+    } else {
+      const tM=h2>=18?(h2-18)/12:(h2+6)/12;
+      const mx=W*0.1+W*0.8*tM, my=H*0.32-Math.sin(Math.PI*tM)*H*0.22;
+      ctx.fillStyle='#ccd5ff'; ctx.beginPath(); ctx.arc(mx,my,W*0.018,0,Math.PI*2); ctx.fill();
+    }
+
+    // Ground
+    const groundY = H*0.62;
+    const gndGrd=ctx.createLinearGradient(0,groundY,0,H);
+    gndGrd.addColorStop(0, bg.grass||'#2d5a1a'); gndGrd.addColorStop(1,'#1a3a0a');
+    ctx.fillStyle=gndGrd; ctx.fillRect(0,groundY,W,H-groundY);
+
+    // Grass tufts
+    ctx.fillStyle=bg.grass||'#2d5a1a';
+    for(let x=0;x<W;x+=6) {
+      const gh=4+Math.sin(x*0.5)*2;
+      ctx.fillRect(x,groundY-gh,3,gh+3);
+    }
+
+    // Decorative flowers/elements in background
+    const decors=['🌸','🌼','🌿','🌱'];
+    decors.forEach((_,i) => {
+      const dx = W*(0.1 + i*0.22);
+      ctx.font=`${W*0.04}px serif`; ctx.textAlign='center';
+      ctx.fillText(decors[i], dx, groundY+3);
+    });
+
+    // Character — proportional to canvas height, like the screenshot
+    const charScale = H / 220; // ~1.6x on typical mobile
     ctx.save();
-    ctx.scale(2.5, 2.5);
-    drawChibiChar(ctx, 40, 72, _profileFacing||1, 'idle', Date.now()/50, cfg);
+    ctx.translate(W/2, groundY - 5);
+    ctx.scale(charScale, charScale);
+    if(typeof drawChibiChar==='function') drawChibiChar(ctx, 0, 0, _profileFacing||1, 'idle', Math.floor(Date.now()/100), cfg);
     ctx.restore();
+
+    // Name label overlay at bottom
+    ctx.fillStyle='rgba(0,0,0,0.45)';
+    ctx.fillRect(0,H-36,W,36);
+    ctx.fillStyle='#FFE600';
+    ctx.font='bold '+Math.round(W*0.05)+'px "Archivo Black",sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(S.name||'User', W/2, H-14);
   }, 50);
 
   // Customization sections — rendered separately in edit mode
@@ -7538,6 +7602,12 @@ function renderProfileEdit() {
   const cfg = getCharConfig();
 
   custEl.innerHTML = `
+    <!-- Preview karakter (sticky di atas) -->
+    <div style="position:sticky;top:0;z-index:5;background:var(--bg);padding:9px 0 7px;border-bottom:2px solid var(--yellow);margin-bottom:11px;">
+      <canvas id="profile-edit-preview" width="280" height="140"
+        style="display:block;margin:0 auto;width:100%;max-width:280px;height:auto;"></canvas>
+    </div>
+
     <!-- Kulit (terpisah) -->
     <div class="sec-hdr" style="margin-top:4px;"><div class="sec-title">Warna Kulit</div></div>
     <div style="margin-bottom:11px;">${renderColorPicker('skinColor','',cfg.skinColor)}</div>
@@ -7572,6 +7642,40 @@ function renderProfileEdit() {
 
     <div style="padding-bottom:80px;"></div>
     `;
+
+  // Draw preview
+  drawEditPreview();
+}
+
+function drawEditPreview() {
+  const canvas = $('profile-edit-preview'); if(!canvas) return;
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext('2d');
+  const cfg = getCharConfig();
+  const bg = typeof getProfileBgConfig==='function' ? getProfileBgConfig() : {top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'};
+
+  // Sky
+  const skyG = ctx.createLinearGradient(0,0,0,H);
+  skyG.addColorStop(0,bg.top); skyG.addColorStop(1,bg.bot);
+  ctx.fillStyle=skyG; ctx.fillRect(0,0,W,H);
+
+  // Ground
+  const gy = H*0.65;
+  ctx.fillStyle=bg.grass||'#2d5a1a'; ctx.fillRect(0,gy,W,H-gy);
+
+  // Char — centered, scaled
+  const scale = W / 140;
+  ctx.save();
+  ctx.translate(W/2, gy);
+  ctx.scale(scale, scale);
+  if(typeof drawChibiChar==='function') drawChibiChar(ctx, 0, 0, _profileFacing||1, 'idle', Math.floor(Date.now()/100), cfg);
+  ctx.restore();
+
+  // Label
+  ctx.fillStyle='rgba(255,204,0,0.9)';
+  ctx.font='bold 9px "IBM Plex Mono",monospace';
+  ctx.textAlign='center';
+  ctx.fillText('PREVIEW', W/2, H-4);
 }
 
 let _profileFacing = 1;
@@ -7595,11 +7699,20 @@ function renderColorPicker(key, label, currentVal) {
 
 function setCharColor(key, val) {
   const cfg = getCharConfig(); cfg[key] = val; saveCharConfig(cfg);
+  // Update color picker highlights without full re-render
+  document.querySelectorAll(`[onclick*="setCharColor('${key}'"]`).forEach(el=>{
+    const elColor = el.getAttribute('onclick').match(/'([^']+)'\)$/)?.[1];
+    el.style.border = elColor===val ? '2px solid var(--text)' : '2px solid var(--bc)';
+  });
+  drawEditPreview();
   renderProfilePage();
+  renderHomeAvatar();
 }
 function setCharStyle(key, val) {
   const cfg = getCharConfig(); cfg[key] = val; saveCharConfig(cfg);
+  renderProfileEdit();
   renderProfilePage();
+  renderHomeAvatar();
 }
 
 function getProfileBgConfig() {
@@ -7615,28 +7728,90 @@ function getProfileBgConfig() {
 
 function getShopItems() {
   return [
-    // Character accessories
-    { id:'hat_red',    name:'Topi Merah',    category:'character', price:3, apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#e83'; saveCharConfig(c); } },
-    { id:'hat_blue',   name:'Topi Biru',     category:'character', price:3, apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#4af'; saveCharConfig(c); } },
-    { id:'glasses_g',  name:'Kacamata Emas', category:'character', price:4, apply:()=>{ const c=getCharConfig(); c.accessory='glasses'; c.accColor='#ffd700'; saveCharConfig(c); } },
-    { id:'scarf_r',    name:'Syal Merah',    category:'character', price:3, apply:()=>{ const c=getCharConfig(); c.accessory='scarf'; c.accColor='#e83'; saveCharConfig(c); } },
-    { id:'hair_long',  name:'Rambut Panjang',category:'character', price:2, apply:()=>{ const c=getCharConfig(); c.hairStyle='long'; saveCharConfig(c); } },
-    { id:'hair_bun',   name:'Gaya Sanggul',  category:'character', price:2, apply:()=>{ const c=getCharConfig(); c.hairStyle='bun'; saveCharConfig(c); } },
-    // Profile backgrounds
-    { id:'pbg_sunset', name:'BG Senja',      category:'profile_bg', price:3,
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_sunset',top:'#c44a00',bot:'#8b1a00',grass:'#4a3000'})); } },
-    { id:'pbg_night',  name:'BG Malam',      category:'profile_bg', price:3,
+    // ── AKSESORIS KARAKTER (bentuk, bukan warna) ──
+    { id:'acc_hat_classic', name:'Topi Klasik', category:'character', price:3,
+      preview:'hat', previewColor:'#8B4513',
+      desc:'Topi cokelat klasik untuk petualang',
+      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#8B4513'; saveCharConfig(c); } },
+    { id:'acc_hat_cool',    name:'Topi Keren',  category:'character', price:3,
+      preview:'hat', previewColor:'#1a1a2e',
+      desc:'Topi hitam misterius',
+      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#1a1a2e'; saveCharConfig(c); } },
+    { id:'acc_hat_chef',    name:'Topi Chef',   category:'character', price:4,
+      preview:'hat', previewColor:'#ffffff',
+      desc:'Topi koki profesional, putih bersih',
+      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#f5f5f5'; saveCharConfig(c); } },
+    { id:'acc_glasses_round', name:'Kacamata Bulat', category:'character', price:3,
+      preview:'glasses', previewColor:'#1a1a1a',
+      desc:'Kacamata bulat klasik bergaya retro',
+      apply:()=>{ const c=getCharConfig(); c.accessory='glasses'; c.accColor='#1a1a1a'; saveCharConfig(c); } },
+    { id:'acc_glasses_gold',  name:'Kacamata Emas',  category:'character', price:4,
+      preview:'glasses', previewColor:'#ffd700',
+      desc:'Kacamata mewah frame emas',
+      apply:()=>{ const c=getCharConfig(); c.accessory='glasses'; c.accColor='#ffd700'; saveCharConfig(c); } },
+    { id:'acc_scarf_wool',  name:'Syal Wol', category:'character', price:3,
+      preview:'scarf', previewColor:'#c0392b',
+      desc:'Syal wol hangat berwarna merah',
+      apply:()=>{ const c=getCharConfig(); c.accessory='scarf'; c.accColor='#c0392b'; saveCharConfig(c); } },
+    { id:'acc_scarf_stripe',name:'Syal Strip', category:'character', price:3,
+      preview:'scarf', previewColor:'#2980b9',
+      desc:'Syal bergaris biru dan putih',
+      apply:()=>{ const c=getCharConfig(); c.accessory='scarf'; c.accColor='#2980b9'; saveCharConfig(c); } },
+    { id:'hair_long',  name:'Rambut Panjang', category:'character', price:2,
+      preview:'hair_long', previewColor:'#3a2000',
+      desc:'Rambut panjang terurai elegan',
+      apply:()=>{ const c=getCharConfig(); c.hairStyle='long'; saveCharConfig(c); } },
+    { id:'hair_bun',   name:'Gaya Sanggul',   category:'character', price:2,
+      preview:'hair_bun', previewColor:'#3a2000',
+      desc:'Sanggul rapi dan anggun',
+      apply:()=>{ const c=getCharConfig(); c.hairStyle='bun'; saveCharConfig(c); } },
+
+    // ── BACKGROUND PROFIL ──
+    { id:'pbg_default', name:'Lahan Biasa', category:'profile_bg', price:0,
+      bgDef:{top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'},
+      desc:'Background default, selalu tersedia',
+      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_default',top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'})); } },
+    { id:'pbg_sunset',  name:'Senja Emas',  category:'profile_bg', price:3,
+      bgDef:{top:'#ff6b35',bot:'#c0392b',grass:'#4a3000'},
+      desc:'Langit jingga hangat kala senja',
+      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_sunset',top:'#ff6b35',bot:'#c0392b',grass:'#4a3000'})); } },
+    { id:'pbg_night',   name:'Malam Bintang', category:'profile_bg', price:3,
+      bgDef:{top:'#050b1a',bot:'#0a1428',grass:'#1a2a0a'},
+      desc:'Malam gelap bertabur bintang',
       apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_night',top:'#050b1a',bot:'#0a1428',grass:'#1a2a0a'})); } },
-    { id:'pbg_spring', name:'BG Musim Semi', category:'profile_bg', price:4,
+    { id:'pbg_spring',  name:'Musim Semi',    category:'profile_bg', price:4,
+      bgDef:{top:'#87d4ef',bot:'#b8eecc',grass:'#4a8a2a'},
+      desc:'Langit cerah segar musim bunga',
       apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_spring',top:'#87d4ef',bot:'#b8eecc',grass:'#4a8a2a'})); } },
-    // Garden boosts
-    { id:'boost_water',name:'Jatah Siram +3', category:'garden', price:2,
-      apply:()=>{ const g=getGardenData(); g.waterCount=(g.waterCount||0)+3; saveGardenData(g); } },
-    { id:'boost_hoe',  name:'Cangkul +3',     category:'garden', price:2,
-      apply:()=>{ const g=getGardenData(); g.hoeCount=Math.min(5,(g.hoeCount||0)+3); saveGardenData(g); } },
-    { id:'fertilizer', name:'Pupuk Instan',   category:'garden', price:4,
-      desc:'Percepat panen semua tanaman 50%',
-      apply:()=>{ const g=getGardenData(); g.lands.forEach(l=>l.plots.forEach(p=>{ if(p.readyAt) p.readyAt=Math.max(Date.now(),p.readyAt-7200000); })); saveGardenData(g); } },
+    { id:'pbg_cherry',  name:'Sakura Pink',   category:'profile_bg', price:5,
+      bgDef:{top:'#ffb7c5',bot:'#ff69b4',grass:'#8a4a6a'},
+      desc:'Langit merah muda penuh bunga sakura',
+      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_cherry',top:'#ffb7c5',bot:'#ff69b4',grass:'#8a4a6a'})); } },
+    { id:'pbg_storm',   name:'Badai Abu',     category:'profile_bg', price:4,
+      bgDef:{top:'#2c3e50',bot:'#4a4a4a',grass:'#2d3a1a'},
+      desc:'Langit mendung dramatis',
+      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_storm',top:'#2c3e50',bot:'#4a4a4a',grass:'#2d3a1a'})); } },
+    { id:'pbg_aurora',  name:'Aurora Borealis', category:'profile_bg', price:6,
+      bgDef:{top:'#0a1a0f',bot:'#1a0a2f',grass:'#1a4a1a'},
+      desc:'Cahaya utara yang memukau',
+      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_aurora',top:'#0a1a0f',bot:'#1a0a2f',grass:'#1a4a1a'})); } },
+
+    // ── GARDEN ──
+    { id:'boost_water', name:'Jatah Siram +3', category:'garden', price:2,
+      preview:'💧', desc:'Tambah 3 jatah siram sekarang',
+      apply:()=>{ const g=getGardenData(); g.waterCount=(g.waterCount||0)+3; saveGardenData(g); if($("gdn-water-count"))$("gdn-water-count").textContent=g.waterCount; } },
+    { id:'boost_hoe',   name:'Cangkul +2',     category:'garden', price:2,
+      preview:'⛏️', desc:'Tambah 2 cangkul (max 5)',
+      apply:()=>{ const g=getGardenData(); g.hoeCount=Math.min(5,(g.hoeCount||0)+2); saveGardenData(g); if($("gdn-hoe-count"))$("gdn-hoe-count").textContent=g.hoeCount; } },
+    { id:'fertilizer',  name:'Pupuk Kilat',    category:'garden', price:4,
+      preview:'⚡', desc:'Percepat panen semua tanaman 4 jam',
+      apply:()=>{ const g=getGardenData(); g.lands.forEach(l=>l.plots.forEach(p=>{ if(p.readyAt) p.readyAt=Math.max(Date.now(),p.readyAt-14400000); })); saveGardenData(g); } },
+    { id:'medicine',    name:'Obat Tanaman',   category:'garden', price:3,
+      preview:'💊', desc:'Pulihkan semua tanaman layu sekarang',
+      apply:()=>{ const g=getGardenData(); g.lands.forEach(l=>l.plots.forEach(p=>{ if(p.wilted){p.wilted=false;p.lastWatered=Date.now();} })); saveGardenData(g); } },
+    { id:'land_slot',   name:'Lahan Baru',     category:'garden', price:5,
+      preview:'🌾', desc:'Buka lahan baru dengan 16 plot tambahan',
+      apply:()=>{ const g=getGardenData(); const locked=g.lands.find(l=>!l.unlocked); if(locked){locked.unlocked=true;saveGardenData(g);toast("🎉 Lahan baru terbuka!",'success');} else toast("Semua lahan sudah terbuka!",'info'); } },
   ];
 }
 
@@ -7656,23 +7831,81 @@ function renderMainShopContent(tab) {
   const g = getGardenData();
   const coins = g.coins || 0;
   const owned = JSON.parse(localStorage.getItem('oht_shop_owned') || '[]');
-  const items = getShopItems().filter(it => it.category === tab ||
-    (tab === 'profile_bg' && it.category === 'profile_bg') ||
-    (tab === 'garden' && it.category === 'garden'));
 
-  const _sc=$('mshop-coins')||$('shop-page-coins'); if(_sc) _sc.textContent=coins;
+  // Update coin displays
+  ['mshop-coins','shop-page-coins'].forEach(id=>{ const e=$(id); if(e) e.textContent=coins; });
+
+  const items = getShopItems().filter(it => it.category === tab);
+  if(!items.length) {
+    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:24px;text-align:center;">Belum ada item.</div>`;
+    return;
+  }
 
   el.innerHTML = items.map(it => {
-    const isOwned = owned.includes(it.id);
-    return `<div class="shop-item${isOwned?' owned':coins<it.price?' cant-afford':''}"
-      onclick="${isOwned?`applyShopItem('${it.id}')`:`buyShopItem('${it.id}')`}">
-      <div class="shop-item-info">
+    const isOwned = owned.includes(it.id) || it.price === 0;
+    const canAfford = coins >= it.price;
+
+    // Preview visual
+    let prevHtml = '';
+    if(it.bgDef) {
+      // BG preview box
+      const hasStars = it.bgDef.top < '#3';
+      prevHtml = `<div style="width:80px;height:60px;flex-shrink:0;position:relative;overflow:hidden;border:1.5px solid var(--bc);">
+        <div style="position:absolute;inset:0;background:linear-gradient(${it.bgDef.top},${it.bgDef.bot});"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:${it.bgDef.grass};"></div>
+        ${hasStars?`<div style="position:absolute;top:5px;left:8px;width:2px;height:2px;background:#fff;border-radius:50%;"></div>
+          <div style="position:absolute;top:10px;left:35px;width:1.5px;height:1.5px;background:#fff;border-radius:50%;"></div>
+          <div style="position:absolute;top:7px;right:12px;width:2px;height:2px;background:#fff;border-radius:50%;"></div>`:''}
+        ${it.id==='pbg_sunset'?`<div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:#ffd700;border-radius:50%;box-shadow:0 0 8px #ff9900;"></div>`:''}
+        ${it.id==='pbg_spring'?`<div style="position:absolute;top:6px;left:50%;transform:translateX(-50%);width:12px;height:12px;background:#ffe66d;border-radius:50%;box-shadow:0 0 6px #fff;"></div>`:''}
+        ${it.id==='pbg_cherry'?`<div style="position:absolute;top:4px;left:12px;font-size:9px;">🌸</div><div style="position:absolute;top:12px;right:10px;font-size:8px;">🌸</div>`:''}
+        ${it.id==='pbg_aurora'?`<div style="position:absolute;inset:0;background:linear-gradient(transparent 20%,rgba(0,255,120,.18),rgba(120,0,255,.12),transparent);"></div>`:''}
+        ${it.id==='pbg_night'?`<div style="position:absolute;top:5px;right:10px;font-size:8px;">🌙</div>`:''}
+        ${it.id==='pbg_storm'?`<div style="position:absolute;top:4px;left:20px;font-size:8px;">⛈️</div>`:''}
+      </div>`;
+    } else if(it.preview && /hat|glasses|scarf|hair/.test(it.preview)) {
+      prevHtml = `<canvas id="prev_${it.id.replace(/[^a-z0-9]/gi,'_')}" width="60" height="60"
+        style="flex-shrink:0;border:1.5px solid var(--bc);background:var(--surface);"></canvas>`;
+    } else if(it.preview) {
+      prevHtml = `<div style="width:60px;height:60px;flex-shrink:0;border:1.5px solid var(--bc);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:26px;">${it.preview}</div>`;
+    }
+
+    const btnLabel = isOwned ? '✅ TERAPKAN' : canAfford ? `🪙 ${it.price}` : `🪙 ${it.price} ✗`;
+    const cardClass = isOwned ? 'owned' : !canAfford ? 'cant-afford' : '';
+
+    return `<div class="shop-item-card ${cardClass}"
+      onclick="${isOwned||canAfford?`shopAction('${it.id}',${isOwned})`:''}">
+      ${prevHtml}
+      <div class="shop-item-info" style="flex:1;min-width:0;">
         <div class="shop-item-name">${it.name}</div>
         <div class="shop-item-desc">${it.desc||''}</div>
       </div>
-      <div class="shop-item-price">${isOwned?'✅ TERAPKAN':`🪙${it.price}`}</div>
+      <div style="flex-shrink:0;font-family:'Archivo Black',sans-serif;font-size:12px;
+        color:${isOwned?'var(--lime)':canAfford?'var(--yellow)':'#666'};text-align:right;min-width:60px;">
+        ${btnLabel}
+      </div>
     </div>`;
-  }).join('') || `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:14px;text-align:center;">Belum ada item di kategori ini.</div>`;
+  }).join('');
+
+  // Draw char previews on mini canvas
+  setTimeout(() => {
+    items.forEach(it => {
+      if(!it.preview || !/hat|glasses|scarf|hair/.test(it.preview)) return;
+      const cvs = $('prev_' + it.id.replace(/[^a-z0-9]/gi,'_')); if(!cvs) return;
+      const ctx = cvs.getContext('2d');
+      ctx.clearRect(0,0,60,60);
+      const previewCfg = {...getCharConfig()};
+      if(it.preview==='hat'||it.preview==='glasses'||it.preview==='scarf') {
+        previewCfg.accessory=it.preview; previewCfg.accColor=it.previewColor||'#888';
+      } else if(it.preview==='hair_long') { previewCfg.hairStyle='long'; }
+      else if(it.preview==='hair_bun')  { previewCfg.hairStyle='bun'; }
+      ctx.save();
+      ctx.translate(30, 52);
+      ctx.scale(0.62, 0.62);
+      drawChibiChar(ctx, 0, 0, 1, 'idle', 0, previewCfg);
+      ctx.restore();
+    });
+  }, 80);
 }
 
 function buyShopItem(id) {
@@ -7687,7 +7920,9 @@ function buyShopItem(id) {
   it.apply();
   const _sc2=$('mshop-coins')||$('shop-page-coins'); if(_sc2) _sc2.textContent=g.coins;
   if($('gdn-coins')) $('gdn-coins').textContent = g.coins;
-  renderMainShopContent(it.category);
+  const activTab = document.querySelector('[id^="mshop-tab-"].active');
+  if(activTab) renderMainShopContent(activTab.id.replace('mshop-tab-',''));
+  else renderMainShopContent(it.category);
   toast(`✅ ${it.name} dibeli!`, 'success');
   if(typeof renderProfilePage === 'function') renderProfilePage();
 }
@@ -7714,38 +7949,51 @@ function openMainShop() {
 // ════════════════════════════════════════════════════════════
 function renderHomeAvatar() {
   const canvas = $('xp-avatar-canvas'); if(!canvas) return;
+  const W = canvas.width, H = canvas.height;
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, W, H);
+
+  if(typeof drawChibiChar !== 'function' || typeof getCharConfig !== 'function') return;
   const cfg = getCharConfig();
-  // Background circle
-  const bg = getProfileBgConfig();
-  const grd = ctx.createLinearGradient(0,0,0,canvas.height);
-  grd.addColorStop(0, bg.top); grd.addColorStop(1, bg.bot);
-  ctx.fillStyle = grd;
-  ctx.beginPath();
-  ctx.arc(24, 28, 24, 0, Math.PI*2);
-  ctx.fill();
-  // Draw char scaled down
+  const bg  = typeof getProfileBgConfig === 'function' ? getProfileBgConfig() : {top:'#1a2d4a',bot:'#2d4a6a'};
+
+  // Save clean state, clip to circle
   ctx.save();
-  ctx.scale(0.85, 0.85);
-  if(typeof drawChibiChar === 'function') {
-    drawChibiChar(ctx, 28, 44, 1, 'idle', 0, cfg);
-  }
-  ctx.restore();
-  // Border
-  ctx.strokeStyle = 'var(--yellow)';
-  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(24, 28, 23, 0, Math.PI*2);
+  ctx.arc(W/2, H/2, W/2-1, 0, Math.PI*2);
+  ctx.clip();
+
+  // Sky gradient
+  const grd = ctx.createLinearGradient(0,0,0,H);
+  grd.addColorStop(0, bg.top || '#1a2d4a');
+  grd.addColorStop(1, bg.bot || '#2d4a6a');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0,0,W,H);
+
+  // Grass strip
+  ctx.fillStyle = bg.grass || '#2d5a1a';
+  ctx.fillRect(0, H*0.65, W, H*0.35);
+
+  // Draw char — positioned at center-bottom of circle
+  const scale = W / 100;
+  ctx.save();
+  ctx.translate(W/2, H*0.82);
+  ctx.scale(scale, scale);
+  drawChibiChar(ctx, 0, 0, 1, 'idle', 0, cfg);
+  ctx.restore();
+
+  ctx.restore(); // end clip
+
+  // Yellow border
+  ctx.strokeStyle = '#FFE600';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(W/2, H/2, W/2-1.5, 0, Math.PI*2);
   ctx.stroke();
 }
 
 // Hook renderHomeAvatar ke renderStats
-const _origRenderStats = renderStats;
-function renderStats() {
-  _origRenderStats();
-  if(typeof renderHomeAvatar === 'function') setTimeout(renderHomeAvatar, 50);
-}
+// renderHomeAvatar hook merged into renderStats directly
 
 // ════════════════════════════════════════════════════════════
 // JADWAL & PENGINGAT SYSTEM
@@ -7973,3 +8221,393 @@ function scheduleJadwalNext(j, timeStr) {
 
 // Schedule on app init
 setTimeout(scheduleAllJadwal, 2000);
+
+function shopAction(id, isOwned) {
+  if(isOwned) applyShopItem(id);
+  else buyShopItem(id);
+}
+
+// ════════════════════════════════════════════════════════════
+// FIREBASE — Friends & Chat System
+// ════════════════════════════════════════════════════════════
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCUSfLU3VCsCOhj1UAO8CFkHwsfWbk16RM",
+  authDomain: "oriashabittracker.firebaseapp.com",
+  projectId: "oriashabittracker",
+  storageBucket: "oriashabittracker.firebasestorage.app",
+  messagingSenderId: "115962126068",
+  appId: "1:115962126068:web:7934d7e91a66645e5048a1",
+  measurementId: "G-76M1KP4SQ3",
+  databaseURL: "https://oriashabittracker-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+let _fbApp = null, _fbAuth = null, _fbDb = null;
+let _fbUser = null;         // current Firebase user
+let _fbProfile = null;      // { username, xp, level, charConfig }
+let _chatFriendId = null;   // username sedang dichat
+let _chatListener = null;   // Firebase listener aktif
+let _friendsListener = null;
+
+function initFirebase() {
+  if(_fbApp) return;
+  try {
+    _fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
+    _fbAuth = firebase.auth();
+    _fbDb   = firebase.database();
+    _fbAuth.onAuthStateChanged(fbOnAuthChanged);
+    console.log('[Firebase] initialized');
+  } catch(e) {
+    console.error('[Firebase] init error:', e);
+  }
+}
+
+function fbOnAuthChanged(user) {
+  _fbUser = user;
+  if(user) {
+    // Load profile
+    _fbDb.ref('users/' + user.uid).once('value').then(snap => {
+      _fbProfile = snap.val();
+      if(!_fbProfile) {
+        // New user — create profile
+        const username = user.email.split('@')[0];
+        _fbProfile = { username, xp: S.xp||0, level: Math.max(1,Math.floor((S.xp||0)/100)+1), uid: user.uid };
+        _fbDb.ref('users/' + user.uid).set(_fbProfile);
+        _fbDb.ref('usernames/' + username).set(user.uid);
+      }
+      // Set online status
+      const presenceRef = _fbDb.ref('presence/' + _fbProfile.username);
+      presenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+      presenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+
+      // Sync XP to Firebase
+      _fbDb.ref('users/' + user.uid + '/xp').set(S.xp||0);
+      _fbDb.ref('users/' + user.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
+
+      renderFriendsMain();
+    });
+  } else {
+    renderFriendsLogin();
+  }
+}
+
+// ── Auth ──────────────────────────────────────────────────
+function fbLoginGoogle() {
+  if(!_fbAuth) { toast('Firebase belum siap','error'); return; }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  _fbAuth.signInWithPopup(provider)
+    .then(result => {
+      // Google user — username dari displayName atau email prefix
+      const user = result.user;
+      return _fbDb.ref('users/' + user.uid).once('value').then(snap => {
+        if(!snap.exists()) {
+          // First time Google login — buat profile
+          let username = (user.displayName || user.email.split('@')[0])
+            .toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+          // Pastikan username unik
+          return _fbDb.ref('usernames/' + username).once('value').then(usnap => {
+            if(usnap.exists()) username = username + '_' + Math.floor(Math.random()*999);
+            const profile = {
+              username, uid: user.uid,
+              xp: S.xp||0,
+              level: Math.max(1,Math.floor((S.xp||0)/100)+1),
+              displayName: user.displayName||username,
+              photoURL: user.photoURL||null
+            };
+            return Promise.all([
+              _fbDb.ref('users/' + user.uid).set(profile),
+              _fbDb.ref('usernames/' + username).set(user.uid)
+            ]);
+          });
+        }
+      });
+    })
+    .catch(e => {
+      const errEl = $('fb-auth-error');
+      if(errEl) errEl.textContent = e.message;
+      toast('Login gagal: ' + e.message, 'error');
+    });
+}
+
+function fbRegister() {
+  const username = ($('fb-username')?.value||'').trim().toLowerCase();
+  const pass = $('fb-password')?.value||'';
+  const errEl = $('fb-auth-error');
+
+  if(username.length < 3) { if(errEl) errEl.textContent='Username min 3 karakter'; return; }
+  if(pass.length < 6) { if(errEl) errEl.textContent='Password min 6 karakter'; return; }
+  if(errEl) errEl.textContent='';
+
+  // Check username availability
+  _fbDb.ref('usernames/' + username).once('value').then(snap => {
+    if(snap.exists()) {
+      if(errEl) errEl.textContent = 'Username sudah dipakai, coba yang lain';
+      return;
+    }
+    const email = username + '@oht.user';
+    _fbAuth.createUserWithEmailAndPassword(email, pass)
+      .then(() => { toast('✅ Akun dibuat!', 'success'); })
+      .catch(e => { if(errEl) errEl.textContent = fbErrMsg(e.code); });
+  });
+}
+
+function fbLogin() {
+  const username = ($('fb-username')?.value||'').trim().toLowerCase();
+  const pass = $('fb-password')?.value||'';
+  const errEl = $('fb-auth-error');
+  if(!username || !pass) { if(errEl) errEl.textContent='Isi username dan password'; return; }
+  if(errEl) errEl.textContent = '';
+  const email = username + '@oht.user';
+  _fbAuth.signInWithEmailAndPassword(email, pass)
+    .then(() => toast('✅ Masuk!', 'success'))
+    .catch(e => { if(errEl) errEl.textContent = fbErrMsg(e.code); });
+}
+
+function fbLogout() {
+  if(_fbProfile) {
+    _fbDb.ref('presence/' + _fbProfile.username).set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+  }
+  _fbAuth.signOut();
+  if(_chatListener) _chatListener(); // detach
+  if(_friendsListener) _friendsListener();
+}
+
+function fbErrMsg(code) {
+  const map = {
+    'auth/email-already-in-use': 'Username sudah dipakai',
+    'auth/wrong-password': 'Password salah',
+    'auth/user-not-found': 'Username tidak ditemukan',
+    'auth/too-many-requests': 'Terlalu banyak percobaan, coba lagi nanti',
+  };
+  return map[code] || 'Error: ' + code;
+}
+
+// ── UI Renders ────────────────────────────────────────────
+function renderFriendsLogin() {
+  const main = $('friends-main-section'); if(main) main.style.display='none';
+  const login = $('friends-auth-section'); if(login) login.style.display='block';
+}
+
+function renderFriendsMain() {
+  if(!_fbProfile) return;
+  const login = $('friends-auth-section'); if(login) login.style.display='block';
+  const main = $('friends-main-section'); if(main) main.style.display='block';
+  const loginForm = $('friends-login-form'); if(loginForm) loginForm.style.display='none';
+
+  const nameEl = $('fb-display-name');
+  if(nameEl) {
+    const displayName = _fbProfile.displayName || _fbProfile.username;
+    nameEl.textContent = displayName;
+  }
+  const idEl = $('fb-my-id'); if(idEl) idEl.textContent = _fbProfile.username;
+
+  loadFriendsList();
+}
+
+// ── Friends ───────────────────────────────────────────────
+function fbAddFriend() {
+  const targetUsername = ($('fb-add-id')?.value||'').trim().toLowerCase();
+  if(!targetUsername) return;
+  if(targetUsername === _fbProfile?.username) { toast('Itu kamu sendiri 😅','error'); return; }
+
+  // Check if username exists
+  _fbDb.ref('usernames/' + targetUsername).once('value').then(snap => {
+    if(!snap.exists()) { toast('User tidak ditemukan','error'); return; }
+    const targetUid = snap.val();
+    // Add to my friends list
+    _fbDb.ref('friends/' + _fbUser.uid + '/' + targetUid).set({
+      username: targetUsername, addedAt: firebase.database.ServerValue.TIMESTAMP
+    });
+    // Add me to their friends list
+    _fbDb.ref('friends/' + targetUid + '/' + _fbUser.uid).set({
+      username: _fbProfile.username, addedAt: firebase.database.ServerValue.TIMESTAMP
+    });
+    toast('✅ ' + targetUsername + ' ditambahkan!', 'success');
+    const inp = $('fb-add-id'); if(inp) inp.value='';
+    loadFriendsList();
+  });
+}
+
+function loadFriendsList() {
+  if(!_fbUser) return;
+  if(_friendsListener) _friendsListener(); // detach old
+
+  const ref = _fbDb.ref('friends/' + _fbUser.uid);
+  const handler = ref.on('value', snap => {
+    const friends = snap.val() || {};
+    renderFriendsList(friends);
+  });
+  _friendsListener = () => ref.off('value', handler);
+}
+
+function renderFriendsList(friends) {
+  const el = $('friends-list'); if(!el) return;
+  const entries = Object.values(friends);
+  if(!entries.length) {
+    el.innerHTML = `<div class="chat-empty">Belum ada teman.<br>Tambah teman dengan username mereka.</div>`;
+    return;
+  }
+
+  // Check online + unread for each
+  let html = '';
+  let pending = entries.length;
+  const results = [];
+
+  entries.forEach((f, i) => {
+    results[i] = { ...f, online: false, xp: 0, unread: 0 };
+  });
+
+  const renderAll = () => {
+    el.innerHTML = results.map(f => {
+      const xpBadge = f.xp ? `LVL ${Math.max(1,Math.floor(f.xp/100)+1)} · ${f.xp} XP` : '';
+      return `<div class="friend-card" onclick="openChat('${f.username}')">
+        <div class="friend-online-dot${f.online?' active':''}"></div>
+        <div class="friend-info">
+          <div class="friend-name">${f.username}</div>
+          <div class="friend-sub">${f.online?'🟢 Online':'⚫ Offline'}${xpBadge?' · '+xpBadge:''}</div>
+        </div>
+        ${f.unread>0?`<div class="friend-unread">${f.unread}</div>`:''}
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">chat ›</div>
+      </div>`;
+    }).join('');
+  };
+
+  entries.forEach((f, i) => {
+    // Online status
+    _fbDb.ref('presence/' + f.username).once('value').then(snap => {
+      results[i].online = snap.val()?.online === true;
+      // XP
+      _fbDb.ref('usernames/' + f.username).once('value').then(usnap => {
+        const uid = usnap.val();
+        if(uid) {
+          _fbDb.ref('users/' + uid + '/xp').once('value').then(xsnap => {
+            results[i].xp = xsnap.val()||0;
+            pending--;
+            if(pending<=0) renderAll();
+          });
+        } else { pending--; if(pending<=0) renderAll(); }
+      });
+    });
+  });
+}
+
+// ── Chat ──────────────────────────────────────────────────
+function openChat(friendUsername) {
+  _chatFriendId = friendUsername;
+
+  const chatArea = $('chat-area');
+  const friendsList = $('friends-list');
+  if(chatArea) chatArea.style.display='block';
+  if(friendsList) friendsList.style.display='none';
+
+  const nameEl = $('chat-friend-name'); if(nameEl) nameEl.textContent = friendUsername;
+
+  // Check online status
+  _fbDb.ref('presence/' + friendUsername).once('value').then(snap => {
+    const online = snap.val()?.online === true;
+    const dot = $('chat-friend-status');
+    if(dot) dot.className = 'friend-online-dot' + (online?' active':'');
+  });
+
+  // Load friend XP
+  _fbDb.ref('usernames/' + friendUsername).once('value').then(snap => {
+    const uid = snap.val();
+    if(uid) _fbDb.ref('users/'+uid+'/xp').once('value').then(xsnap => {
+      const xp = xsnap.val()||0;
+      const lvl = Math.max(1,Math.floor(xp/100)+1);
+      const el=$('chat-friend-xp'); if(el) el.textContent=`LVL ${lvl} · ${xp} XP`;
+    });
+  });
+
+  loadChatMessages();
+}
+
+function closeChat() {
+  _chatFriendId = null;
+  if(_chatListener) { _chatListener(); _chatListener=null; }
+  const chatArea = $('chat-area');
+  const friendsList = $('friends-list');
+  if(chatArea) chatArea.style.display='none';
+  if(friendsList) friendsList.style.display='block';
+}
+
+function getChatId(a, b) {
+  // Deterministic chat room ID dari dua username
+  return [a,b].sort().join('__');
+}
+
+function loadChatMessages() {
+  if(!_chatFriendId || !_fbProfile) return;
+  if(_chatListener) { _chatListener(); _chatListener=null; }
+
+  const chatId = getChatId(_fbProfile.username, _chatFriendId);
+  const ref = _fbDb.ref('chats/' + chatId).limitToLast(60);
+
+  const handler = ref.on('value', snap => {
+    const msgs = snap.val() || {};
+    renderChatMessages(Object.values(msgs));
+  });
+  _chatListener = () => ref.off('value', handler);
+}
+
+function renderChatMessages(msgs) {
+  const el = $('chat-messages'); if(!el) return;
+  if(!msgs.length) {
+    el.innerHTML = '<div class="chat-empty">Mulai percakapan! 👋</div>';
+    return;
+  }
+
+  el.innerHTML = msgs.sort((a,b)=>a.ts-b.ts).map(m => {
+    const isMine = m.from === _fbProfile?.username;
+    const time = m.ts ? new Date(m.ts).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="chat-bubble ${isMine?'mine':'theirs'}">
+      ${!isMine?`<span style="font-size:7px;font-weight:700;display:block;margin-bottom:2px;">${m.from}</span>`:''}
+      ${escapeHtml(m.text)}
+      <span class="chat-time">${time}</span>
+    </div>`;
+  }).join('');
+
+  // Scroll to bottom
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChatMsg() {
+  const inp = $('chat-input-text');
+  const text = (inp?.value||'').trim();
+  if(!text || !_chatFriendId || !_fbProfile) return;
+
+  const chatId = getChatId(_fbProfile.username, _chatFriendId);
+  _fbDb.ref('chats/' + chatId).push({
+    from: _fbProfile.username,
+    text: text,
+    ts: firebase.database.ServerValue.TIMESTAMP
+  });
+  inp.value = '';
+}
+
+function copyMyId() {
+  const id = _fbProfile?.username || '';
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(id).then(()=>toast('ID disalin!','success'));
+  } else {
+    toast(id,'info');
+  }
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Init friends page ──────────────────────────────────────
+function initFriendsPage() {
+  initFirebase();
+  closeChat();
+  if(_fbUser && _fbProfile) {
+    renderFriendsMain();
+  } else if(_fbUser) {
+    // Auth but no profile yet
+  } else {
+    renderFriendsLogin();
+  }
+}

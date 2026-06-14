@@ -1013,7 +1013,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .empty-title { font-family: 'Archivo Black', sans-serif; font-size: 12px; text-transform: uppercase; color: var(--text); }
 
 /* ── Streak board scrollable ── */
-#streak-board { max-height: 400px; overflow-y: auto; }
+#streak-board { /* no max-height constraint */ }
 /* ── Garden grid ── */
 /* ── Habit card pinned indicator ── */
 .habit-card[data-pinned="true"] {
@@ -1359,3 +1359,135 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .jadwal-time-chip{font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--bg);border:var(--bo);padding:2px 7px;color:var(--text);}
 .jadwal-days{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);}
 .jadwal-actions{display:flex;gap:5px;flex-shrink:0;}
+
+/* Profile page — full bleed canvas */
+#profile-page-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#profile-page-content .sec-hdr,
+#profile-page-content .analytics-card,
+#profile-page-content .sec-hdr + div {
+  padding-left: 11px;
+  padding-right: 11px;
+}
+#profile-customizer .sec-hdr {
+  padding-left: 11px;
+}
+#profile-customizer > div[style*="padding-bottom"] {
+  padding-left: 11px;
+  padding-right: 11px;
+}
+
+/* ── Avatar canvas di home ── */
+#xp-avatar-canvas {
+  flex-shrink: 0;
+  overflow: hidden;
+  vertical-align: top;
+}
+.xp-bar-section {
+  overflow: visible;
+  position: relative;
+}
+
+/* ── Shop item card (visual) ── */
+.shop-item-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px;
+  border: var(--bo);
+  margin-bottom: 9px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.shop-item-card:hover:not(.cant-afford) {
+  border-color: var(--yellow);
+  background: color-mix(in srgb, var(--yellow) 5%, transparent);
+}
+.shop-item-card.owned {
+  border-color: color-mix(in srgb, var(--lime) 50%, transparent);
+}
+.shop-item-card.cant-afford {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.shop-item-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+.shop-item-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: var(--sub);
+  line-height: 1.4;
+}
+
+/* ════════════════════════════════════════
+   FRIENDS & CHAT
+════════════════════════════════════════ */
+.friend-card {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 11px; border: var(--bo); margin-bottom: 7px;
+  cursor: pointer; transition: border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.friend-card:hover { border-color: var(--yellow); }
+.friend-online-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #555; flex-shrink: 0;
+}
+.friend-online-dot.active { background: #2ecc71; box-shadow: 0 0 5px #2ecc71; }
+.friend-avatar-canvas { border-radius: 0; flex-shrink: 0; }
+.friend-info { flex: 1; min-width: 0; }
+.friend-name {
+  font-family: 'Archivo Black', sans-serif; font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.friend-sub {
+  font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+  color: var(--sub); margin-top: 2px;
+}
+.friend-unread {
+  background: var(--yellow); color: var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 9px;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+/* Chat */
+.chat-messages-box {
+  height: 320px; overflow-y: auto; border: var(--bo);
+  padding: 9px; margin-bottom: 9px; display: flex;
+  flex-direction: column; gap: 7px;
+  background: var(--bg);
+}
+.chat-bubble {
+  max-width: 75%; padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  line-height: 1.5; border: 1.5px solid;
+}
+.chat-bubble.mine {
+  align-self: flex-end;
+  background: var(--yellow); color: var(--black);
+  border-color: color-mix(in srgb,var(--yellow) 60%,transparent);
+}
+.chat-bubble.theirs {
+  align-self: flex-start;
+  background: var(--surface); color: var(--text);
+  border-color: var(--bc);
+}
+.chat-bubble .chat-time {
+  font-size: 7px; opacity: .5; margin-top: 3px; display: block;
+}
+.chat-input-row {
+  display: flex; gap: 7px; position: sticky;
+  bottom: 0; background: var(--bg); padding: 7px 0;
+}
+.chat-empty {
+  text-align: center; padding: 36px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; color: var(--sub);
+}
