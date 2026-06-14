@@ -1506,6 +1506,7 @@ function navigate(page){
   if(page==='profile'){initProfilePage();}
   if(page==='shop'){initShopPage();}
   if(page==='friends'){initFriendsPage();}
+  if(page==='settings'){if(typeof renderSettingsAuth==='function') setTimeout(renderSettingsAuth,100);}
   if(page==='jadwal'){initJadwalPage();}
 
   // 6. Render - small timeout to ensure DOM paint completes
@@ -3821,6 +3822,7 @@ function closeMoreMenu() {
 function navigateMore(page) {
   closeMoreMenu();
   navigate(page);
+  if(page==='settings' && typeof renderSettingsAuth==='function') setTimeout(renderSettingsAuth,150);
 }
 
 // [navigate more-menu logic merged into original]
@@ -7445,6 +7447,7 @@ function startCharAnimation(landIdx) {
 
 function initProfilePage() {
   setProfileMode('view');
+  if(typeof renderProfileSocialSection==='function') setTimeout(renderProfileSocialSection,100);
 }
 
 function setProfileMode(mode) {
@@ -8286,6 +8289,8 @@ function fbOnAuthChanged(user) {
       _fbDb.ref('users/' + user.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
 
       renderFriendsMain();
+      renderSettingsAuth();
+      renderProfileSocialSection();
     });
   } else {
     renderFriendsLogin();
@@ -8702,56 +8707,7 @@ function copyFriendId(id) {
 
 // ── Update fbOnAuthChanged untuk numeric ID + render settings ──
 // Override fbOnAuthChanged tambah numId dan settings render
-const _origFbOnAuthChanged = fbOnAuthChanged;
-function fbOnAuthChanged(user) {
-  _fbUser = user;
-  if(user) {
-    _fbDb.ref('users/' + user.uid).once('value').then(snap => {
-      _fbProfile = snap.val();
-      if(!_fbProfile) {
-        // New user
-        let username = '';
-        if(user.displayName) {
-          username = user.displayName.toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
-        } else {
-          username = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
-        }
-        const numId = generateNumericId();
-        _fbProfile = {
-          username, uid: user.uid, numId,
-          xp: S.xp||0,
-          level: Math.max(1,Math.floor((S.xp||0)/100)+1),
-          displayName: user.displayName||username,
-        };
-        _fbDb.ref('users/' + user.uid).set(_fbProfile);
-        _fbDb.ref('usernames/' + username).set(user.uid);
-        _fbDb.ref('numIds/' + numId).set(user.uid);
-      } else if(!_fbProfile.numId) {
-        // Existing user without numId — generate
-        const numId = generateNumericId();
-        _fbProfile.numId = numId;
-        _fbDb.ref('users/' + user.uid + '/numId').set(numId);
-        _fbDb.ref('numIds/' + numId).set(user.uid);
-      }
-
-      // Online presence
-      const presRef = _fbDb.ref('presence/' + _fbProfile.username);
-      presRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-      presRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-
-      // Sync XP
-      _fbDb.ref('users/' + user.uid + '/xp').set(S.xp||0);
-      _fbDb.ref('users/' + user.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
-
-      renderFriendsMain();
-      renderSettingsAuth();
-      renderProfileSocialSection();
-    });
-  } else {
-    renderFriendsLogin();
-    renderSettingsAuth();
-  }
-}
+// fbOnAuthChanged override replaced with inline merge
 
 // ── Add friend by numeric ID ──
 function fbAddFriendByNumId(numId) {
@@ -8842,39 +8798,11 @@ function recordProfileVisit(ownerUid) {
   });
 }
 
-// Hook initProfilePage untuk record visit & render social section
-const _baseInitProfilePage = initProfilePage;
-function initProfilePage() {
-  _baseInitProfilePage();
-  renderProfileSocialSection();
-}
+// initProfilePage override removed
 
-// Hook navigate settings untuk render auth
-const _baseNavigate = navigate;
-function navigate(page) {
-  _baseNavigate(page);
-  if(page === 'settings') {
-    setTimeout(renderSettingsAuth, 100);
-  }
-}
+// navigate hook removed (merged inline)
 
-// ── Update fbAddFriend to use numId ──
-// Override input di friends page untuk pakai numId
-function renderFriendsMain() {
-  if(!_fbProfile) return;
-  const login = $('friends-auth-section'); if(login) login.style.display='block';
-  const main = $('friends-main-section'); if(main) main.style.display='block';
-  const loginForm = $('friends-login-form'); if(loginForm) loginForm.style.display='none';
-
-  const nameEl = $('fb-display-name');
-  if(nameEl) nameEl.textContent = _fbProfile.displayName||_fbProfile.username;
-  const idEl = $('fb-my-id');
-  if(idEl) {
-    idEl.textContent = _fbProfile.numId || _fbProfile.username;
-    idEl.title = 'Tap untuk copy';
-  }
-  loadFriendsList();
-}
+// renderFriendsMain duplicate removed
 
 // Override copyMyId untuk numId
 function copyMyId() {
@@ -8911,9 +8839,4 @@ function fbAddFriend() {
   }
 }
 
-// ── navigateMore hook untuk settings ──
-const _origNavigateMore = navigateMore;
-function navigateMore(page) {
-  _origNavigateMore(page);
-  if(page==='settings') setTimeout(renderSettingsAuth, 150);
-}
+// navigateMore hook removed (merged inline)
