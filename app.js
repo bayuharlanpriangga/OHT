@@ -8268,33 +8268,70 @@ function initFirebase() {
 
 function fbOnAuthChanged(user) {
   _fbUser = user;
-  if(user) {
-    // Load profile
-    _fbDb.ref('users/' + user.uid).once('value').then(snap => {
-      _fbProfile = snap.val();
-      if(!_fbProfile) {
-        // New user — create profile
-        const username = user.email.split('@')[0];
-        _fbProfile = { username, xp: S.xp||0, level: Math.max(1,Math.floor((S.xp||0)/100)+1), uid: user.uid };
-        _fbDb.ref('users/' + user.uid).set(_fbProfile);
-        _fbDb.ref('usernames/' + username).set(user.uid);
-      }
-      // Set online status
-      const presenceRef = _fbDb.ref('presence/' + _fbProfile.username);
-      presenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-      presenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-
-      // Sync XP to Firebase
-      _fbDb.ref('users/' + user.uid + '/xp').set(S.xp||0);
-      _fbDb.ref('users/' + user.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
-
-      renderFriendsMain();
-      renderSettingsAuth();
-      renderProfileSocialSection();
-    });
-  } else {
+  if(!user) {
+    _fbProfile = null;
     renderFriendsLogin();
+    renderSettingsAuth();
+    return;
   }
+
+  _fbDb.ref('users/' + user.uid).once('value').then(snap => {
+    _fbProfile = snap.val();
+
+    if(!_fbProfile) {
+      // User baru — buat profil dengan ID 6 digit
+      let rawName = (user.displayName || user.email || 'user').split('@')[0];
+      let baseUsername = rawName.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15) || 'user';
+      const numId = generateNumericId();
+
+      const createProfile = (uname) => {
+        _fbDb.ref('usernames/' + uname).once('value').then(usnap => {
+          if(usnap.exists()) {
+            createProfile(uname + String(Math.floor(Math.random()*99)));
+          } else {
+            _fbProfile = {
+              username: uname,
+              displayName: user.displayName || uname,
+              uid: user.uid,
+              numId: numId,
+              xp: S.xp||0,
+              level: Math.max(1, Math.floor((S.xp||0)/100)+1)
+            };
+            _fbDb.ref('users/' + user.uid).set(_fbProfile);
+            _fbDb.ref('usernames/' + uname).set(user.uid);
+            _fbDb.ref('numIds/' + numId).set(user.uid);
+            _afterFbLogin();
+          }
+        });
+      };
+      createProfile(baseUsername);
+      return;
+    }
+
+    // User lama — pastikan punya numId
+    if(!_fbProfile.numId) {
+      const numId = generateNumericId();
+      _fbProfile.numId = numId;
+      _fbDb.ref('users/' + user.uid + '/numId').set(numId);
+      _fbDb.ref('numIds/' + numId).set(user.uid);
+    }
+    _afterFbLogin();
+  });
+}
+
+function _afterFbLogin() {
+  if(!_fbUser || !_fbProfile) return;
+  // Online presence
+  const presRef = _fbDb.ref('presence/' + _fbProfile.username);
+  presRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+  presRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+  // Sync XP
+  _fbDb.ref('users/' + _fbUser.uid + '/xp').set(S.xp||0);
+  _fbDb.ref('users/' + _fbUser.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
+  // Render semua
+  renderFriendsMain();
+  renderSettingsAuth();
+  renderProfileSocialSection();
 }
 
 // ── Auth ──────────────────────────────────────────────────
@@ -8633,7 +8670,7 @@ function renderSettingsAuth() {
 
   if(_fbUser && _fbProfile) {
     // Logged in
-    const numId = _fbProfile.numId || '------';
+    const numId = _fbProfile.numId || '...';
     el.innerHTML = `
       <div style="background:var(--surface);border:var(--bo);padding:14px;">
         <div style="display:flex;align-items:center;gap:11px;margin-bottom:11px;">
@@ -8840,3 +8877,120 @@ function fbAddFriend() {
 }
 
 // navigateMore hook removed (merged inline)
+
+// ════════════════════════════════════════
+// FRIENDS — View Manager & Search
+// ════════════════════════════════════════
+function showFriendsView(view) {
+  ['list','search','chat'].forEach(v => {
+    const el = $('friends-view-' + v);
+    if(el) el.style.display = v === view ? 'block' : 'none';
+  });
+  if(view === 'list') loadFriendsList();
+  if(view === 'search') {
+    const inp = $('fb-search-input');
+    if(inp) { inp.value=''; inp.focus(); }
+    const res = $('friends-search-result');
+    if(res) res.innerHTML = '';
+  }
+}
+
+function fbSearchFriend(query) {
+  query = query.trim();
+  const res = $('friends-search-result');
+  if(!res) return;
+  if(query.length < 2) { res.innerHTML=''; return; }
+
+  res.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:9px;">Mencari...</div>`;
+
+  const isNumId = /^\d{4,6}$/.test(query);
+
+  const showResult = (uid, profile) => {
+    if(!uid || !profile) {
+      res.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:14px;text-align:center;">Tidak ditemukan 😕</div>`;
+      return;
+    }
+    const isMe = uid === _fbUser?.uid;
+    const isFriend = false; // TODO: check friend list
+    const lvl = Math.max(1, Math.floor((profile.xp||0)/100)+1);
+    res.innerHTML = `
+      <div class="friend-card" style="cursor:default;">
+        <div>
+          <div class="friend-name">${profile.displayName||profile.username}</div>
+          <div class="friend-sub">@${profile.username} · ID: ${profile.numId||'—'}</div>
+          <div class="friend-sub">LVL ${lvl} · ${profile.xp||0} XP</div>
+        </div>
+        ${isMe ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);">Ini kamu</div>' :
+          `<button class="btn btn-sm btn-primary" onclick="fbAddFriendDirect('${uid}','${profile.username}','${profile.numId||''}')">+ TAMBAH</button>`}
+      </div>`;
+  };
+
+  if(isNumId) {
+    _fbDb.ref('numIds/' + query).once('value').then(snap => {
+      if(!snap.exists()) { showResult(null, null); return; }
+      const uid = snap.val();
+      _fbDb.ref('users/' + uid).once('value').then(usnap => showResult(uid, usnap.val()));
+    });
+  } else {
+    // Search by username
+    const uname = query.toLowerCase().replace(/[^a-z0-9_]/g,'');
+    _fbDb.ref('usernames/' + uname).once('value').then(snap => {
+      if(!snap.exists()) { showResult(null, null); return; }
+      const uid = snap.val();
+      _fbDb.ref('users/' + uid).once('value').then(usnap => showResult(uid, usnap.val()));
+    });
+  }
+}
+
+function fbAddFriendDirect(targetUid, targetUsername, targetNumId) {
+  if(!_fbUser || !_fbProfile) return;
+  _fbDb.ref('friends/' + _fbUser.uid + '/' + targetUid).set({
+    username: targetUsername, numId: targetNumId,
+    displayName: targetUsername,
+    addedAt: firebase.database.ServerValue.TIMESTAMP
+  });
+  _fbDb.ref('friends/' + targetUid + '/' + _fbUser.uid).set({
+    username: _fbProfile.username, numId: _fbProfile.numId||'',
+    displayName: _fbProfile.displayName||_fbProfile.username,
+    addedAt: firebase.database.ServerValue.TIMESTAMP
+  });
+  toast('✅ ' + targetUsername + ' ditambahkan!', 'success');
+  showFriendsView('list');
+}
+
+// Override openChat untuk pakai view system
+function openChat(friendUsername) {
+  _chatFriendId = friendUsername;
+  showFriendsView('chat');
+  const nameEl = $('chat-friend-name'); if(nameEl) nameEl.textContent = friendUsername;
+  _fbDb.ref('presence/' + friendUsername).once('value').then(snap => {
+    const online = snap.val()?.online === true;
+    const dot = $('chat-friend-status');
+    if(dot) dot.className = 'friend-online-dot' + (online?' active':'');
+  });
+  _fbDb.ref('usernames/' + friendUsername).once('value').then(snap => {
+    const uid = snap.val();
+    if(uid) _fbDb.ref('users/'+uid+'/xp').once('value').then(xsnap => {
+      const xp = xsnap.val()||0;
+      const el=$('chat-friend-xp'); if(el) el.textContent=`LVL ${Math.max(1,Math.floor(xp/100)+1)} · ${xp} XP`;
+    });
+  });
+  loadChatMessages();
+}
+
+function closeChat() {
+  _chatFriendId = null;
+  if(_chatListener) { _chatListener(); _chatListener=null; }
+  showFriendsView('list');
+}
+
+// Override initFriendsPage
+function initFriendsPage() {
+  initFirebase();
+  if(_fbUser && _fbProfile) {
+    renderFriendsMain();
+    showFriendsView('list');
+  } else {
+    renderFriendsLogin();
+  }
+}

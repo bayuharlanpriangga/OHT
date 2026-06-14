@@ -895,49 +895,60 @@
 
   <!-- Logged in state -->
   <div id="friends-main-section" style="display:none;">
-    <!-- Header user -->
-    <div class="sec-hdr">
-      <div style="display:flex;align-items:center;gap:9px;">
-        <div class="friend-online-dot active"></div>
-        <div class="sec-title" id="fb-display-name">-</div>
+
+    <!-- View: Friends List (default) -->
+    <div id="friends-view-list">
+      <div class="sec-hdr">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div class="friend-online-dot active"></div>
+          <div class="sec-title" id="fb-display-name">-</div>
+        </div>
+        <button class="btn btn-xs btn-primary" onclick="showFriendsView('search')">🔍 Cari</button>
       </div>
-      <button class="btn btn-xs" onclick="fbLogout()">Keluar</button>
-    </div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;">
-      ID kamu: <strong id="fb-my-id" style="color:var(--yellow);user-select:all;cursor:pointer;" onclick="copyMyId()"></strong>
-      <span style="font-size:7px;opacity:.6;"> (tap untuk copy)</span>
-    </div>
-
-    <!-- Add friend -->
-    <div style="display:flex;gap:7px;margin-bottom:14px;">
-      <input type="text" id="fb-add-id" class="form-input" placeholder="Username teman..."
-        style="flex:1;font-size:11px;" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
-      <button class="btn btn-sm btn-primary" onclick="fbAddFriend()">+ TAMBAH</button>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;">
+        ID kamu: <strong id="fb-my-id" style="color:var(--yellow);cursor:pointer;letter-spacing:2px;" onclick="copyMyId()"></strong>
+        <span style="font-size:7px;opacity:.5;"> (tap copy)</span>
+      </div>
+      <div id="friends-list"></div>
+      <div class="chat-empty" style="display:none;" id="friends-empty">Belum ada teman. Tap 🔍 Cari untuk cari teman.</div>
     </div>
 
-    <!-- Friends list -->
-    <div class="sec-hdr"><div class="sec-title">Daftar Teman</div></div>
-    <div id="friends-list"></div>
+    <!-- View: Search -->
+    <div id="friends-view-search" style="display:none;">
+      <div class="sec-hdr">
+        <button class="btn btn-xs" onclick="showFriendsView('list')">‹ Kembali</button>
+        <div class="sec-title">Cari Teman</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <input type="text" id="fb-search-input" class="form-input"
+          placeholder="Masukkan ID (123456) atau username..."
+          style="width:100%;margin-bottom:7px;font-size:13px;"
+          oninput="fbSearchFriend(this.value)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">
+          Cari dengan ID 6 angka atau nama pengguna
+        </div>
+      </div>
+      <div id="friends-search-result"></div>
+    </div>
 
-    <!-- Chat area (shown when friend selected) -->
-    <div id="chat-area" style="display:none;">
+    <!-- View: Chat -->
+    <div id="friends-view-chat" style="display:none;">
       <div class="sec-hdr">
         <div style="display:flex;align-items:center;gap:7px;">
-          <button class="btn btn-xs" onclick="closeChat()">‹</button>
+          <button class="btn btn-xs" onclick="showFriendsView('list')">‹</button>
           <div class="friend-online-dot" id="chat-friend-status"></div>
           <div class="sec-title" id="chat-friend-name">-</div>
         </div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);" id="chat-friend-xp"></div>
       </div>
-      <!-- Messages -->
       <div id="chat-messages" class="chat-messages-box"></div>
-      <!-- Input -->
       <div class="chat-input-row">
         <input type="text" id="chat-input-text" class="form-input" placeholder="Ketik pesan..."
           style="flex:1;" maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
         <button class="btn btn-primary" onclick="sendChatMsg()">KIRIM</button>
       </div>
     </div>
+
   </div>
 </div></div>
 
