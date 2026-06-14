@@ -1491,3 +1491,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; color: var(--sub);
 }
+
+/* Prevent horizontal overflow dari canvas/elemen apapun */
+.page-content {
+  overflow-x: hidden;
+}
+#profile-page-content {
+  overflow-x: hidden;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}

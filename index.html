@@ -321,6 +321,12 @@
 
 <!-- ══ SETTINGS ══ -->
 <div class="page" id="page-settings"><div class="page-content">
+  <!-- Firebase Auth Section -->
+  <div class="sec-hdr"><div class="sec-title">Akun Teman</div></div>
+  <div id="settings-auth-block" style="margin-bottom:14px;">
+    <!-- Dirender oleh JS: login form atau info akun -->
+  </div>
+  <div class="sec-hdr"><div class="sec-title">Pengaturan</div></div>
   <div class="search-bar-wrap" style="margin-bottom:11px;">
     <span class="search-ico"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--sub)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
     <input type="text" class="search-bar" placeholder="Search settings..."  oninput="filterSettings(this.value)">
@@ -873,49 +879,15 @@
   <div id="friends-auth-section">
     <div class="sec-hdr"><div class="sec-title">👥 Teman</div></div>
     <div id="friends-login-form">
-      <div style="background:var(--surface);border:var(--bo);padding:16px;margin-bottom:11px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);margin-bottom:14px;line-height:1.6;">
-          Login untuk terhubung dengan teman.
+      <div style="background:var(--surface);border:var(--bo);padding:24px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:11px;">🔐</div>
+        <div style="font-family:'Archivo Black',sans-serif;font-size:13px;margin-bottom:7px;">Belum Login</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:14px;line-height:1.6;">
+          Login dulu di halaman Setelan untuk menggunakan fitur teman.
         </div>
-
-        <!-- Google Login (primary) -->
-        <button onclick="fbLoginGoogle()" style="
-          width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
-          padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;
-          font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--text);
-          margin-bottom:11px;transition:border-color .15s;
-          -webkit-tap-highlight-color:transparent;
-        " onmouseover="this.style.borderColor='var(--yellow)'" onmouseout="this.style.borderColor='var(--bc)'">
-          <svg width="18" height="18" viewBox="0 0 48 48">
-            <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.8 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4c-7.8 0-14.5 4.4-18.1 10.7z"/>
-            <path fill="#4CAF50" d="M24 44c5.2 0 10-1.9 13.6-5.1l-6.3-5.2C29.5 35.6 26.9 36 24 36c-5.1 0-9.5-3.3-11.2-8L6.1 33.1C9.6 39.5 16.3 44 24 44z"/>
-            <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.3 5.2C41 35.4 44 30.1 44 24c0-1.3-.1-2.7-.4-4z"/>
-          </svg>
-          Masuk dengan Google
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="navigateMore('settings')">
+          Pergi ke Setelan →
         </button>
-
-        <!-- Divider -->
-        <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px;">
-          <div style="flex:1;height:1px;background:var(--bc);"></div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">atau</div>
-          <div style="flex:1;height:1px;background:var(--bc);"></div>
-        </div>
-
-        <!-- Username/password (secondary) -->
-        <div class="form-group">
-          <label class="form-label">USERNAME</label>
-          <input type="text" id="fb-username" class="form-input" placeholder="min 3 karakter, huruf/angka" maxlength="20"
-            style="text-transform:lowercase;" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
-        </div>
-        <div class="form-group">
-          <label class="form-label">PASSWORD</label>
-          <input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter">
-        </div>
-        <div style="display:flex;gap:7px;margin-top:4px;">
-          <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button>
-          <button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button>
-        </div>
         <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>
       </div>
     </div>
@@ -978,10 +950,12 @@
       <button class="btn btn-xs" onclick="setProfileMode('edit')">✏️ Edit</button>
     </div>
     <div id="profile-canvas-wrap"></div>
-    <div style="display:flex;gap:7px;margin-top:11px;padding-bottom:24px;">
+    <div style="display:flex;gap:7px;margin-top:11px;">
       <button class="btn btn-sm" style="flex:1;justify-content:center;" onclick="rotateProfileChar()">↺ Rotasi</button>
       <button class="btn btn-sm" style="flex:1;justify-content:center;" onclick="openMainShop()">🛒 Shop</button>
     </div>
+    <!-- ID & Visitors -->
+    <div id="profile-social-section" style="margin-top:11px;padding-bottom:24px;"></div>
   </div>
   <!-- Edit mode (hidden by default) -->
   <div id="profile-edit-mode" style="display:none;">

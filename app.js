@@ -7470,11 +7470,12 @@ function renderProfilePage() {
   const coins = getGardenData().coins || 0;
 
   // Canvas full viewport width (bleed ke edge)
-  const pageW = window.innerWidth;
-  const canvasH = Math.round(pageW * 0.80); // taller for more BG
+  const pageEl = $('profile-page-content') || document.querySelector('#page-profile .page-content');
+  const pageW = pageEl ? pageEl.offsetWidth : Math.min(window.innerWidth, 600);
+  const canvasH = Math.round(pageW * 0.58);
 
   el.innerHTML = `
-    <div style="position:relative;width:100vw;left:50%;transform:translateX(-50%);cursor:pointer;margin-bottom:0;" onclick="rotateProfileChar()" title="Tap untuk rotasi">
+    <div style="position:relative;width:100%;cursor:pointer;margin-bottom:0;" onclick="rotateProfileChar()" title="Tap untuk rotasi">
       <canvas id="profile-char-canvas" width="${pageW}" height="${canvasH}"
         style="display:block;width:100%;height:auto;"></canvas>
       <div style="position:absolute;bottom:11px;right:11px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,255,255,.6);">↺ Tap rotasi</div>
@@ -7576,8 +7577,8 @@ function renderProfilePage() {
       ctx.fillText(decors[i], dx, groundY+3);
     });
 
-    // Character — proportional to canvas height, like the screenshot
-    const charScale = H / 220; // ~1.6x on typical mobile
+    // Character — game-style proportional, not too large
+    const charScale = Math.min(H / 380, 1.4); // max 1.4x
     ctx.save();
     ctx.translate(W/2, groundY - 5);
     ctx.scale(charScale, charScale);
@@ -8610,4 +8611,309 @@ function initFriendsPage() {
   } else {
     renderFriendsLogin();
   }
+}
+
+// ════════════════════════════════════════════════════════════
+// FIREBASE — Numeric ID, Settings Auth, Profile Visitors
+// ════════════════════════════════════════════════════════════
+
+// Generate 6-digit numeric ID unik
+function generateNumericId() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+// Render auth block di Settings page
+function renderSettingsAuth() {
+  const el = $('settings-auth-block'); if(!el) return;
+
+  if(_fbUser && _fbProfile) {
+    // Logged in
+    const numId = _fbProfile.numId || '------';
+    el.innerHTML = `
+      <div style="background:var(--surface);border:var(--bo);padding:14px;">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:11px;">
+          <div class="friend-online-dot active"></div>
+          <div>
+            <div style="font-family:'Archivo Black',sans-serif;font-size:13px;">${_fbProfile.displayName||_fbProfile.username}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">@${_fbProfile.username}</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border:var(--bo);padding:9px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:2px;">ID TEMAN</div>
+            <div style="font-family:'Archivo Black',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:4px;">${numId}</div>
+          </div>
+          <button class="btn btn-xs" onclick="copyFriendId('${numId}')">📋 COPY</button>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;">
+          Bagikan ID ini ke teman untuk bisa saling terhubung.
+        </div>
+        <button class="btn" style="width:100%;justify-content:center;" onclick="fbLogout()">🚪 Keluar dari Akun</button>
+      </div>`;
+  } else {
+    // Not logged in
+    el.innerHTML = `
+      <div style="background:var(--surface);border:var(--bo);padding:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">
+          Login untuk terhubung dengan teman menggunakan ID numerik 6 digit.
+        </div>
+        <button onclick="fbLoginGoogle()" style="
+          width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+          padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;
+          font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--text);
+          margin-bottom:9px;-webkit-tap-highlight-color:transparent;
+        ">
+          <svg width="16" height="16" viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.8 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4c-7.8 0-14.5 4.4-18.1 10.7z"/>
+            <path fill="#4CAF50" d="M24 44c5.2 0 10-1.9 13.6-5.1l-6.3-5.2C29.5 35.6 26.9 36 24 36c-5.1 0-9.5-3.3-11.2-8L6.1 33.1C9.6 39.5 16.3 44 24 44z"/>
+            <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.3 5.2C41 35.4 44 30.1 44 24c0-1.3-.1-2.7-.4-4z"/>
+          </svg>
+          Masuk dengan Google
+        </button>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+          <div style="flex:1;height:1px;background:var(--bc);"></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">atau username</div>
+          <div style="flex:1;height:1px;background:var(--bc);"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">USERNAME</label>
+          <input type="text" id="fb-username" class="form-input" placeholder="huruf/angka"
+            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
+        </div>
+        <div class="form-group">
+          <label class="form-label">PASSWORD</label>
+          <input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter">
+        </div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button>
+          <button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button>
+        </div>
+        <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>
+      </div>`;
+  }
+}
+
+function copyFriendId(id) {
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(id).then(()=>toast('ID '+id+' disalin!','success'));
+  } else toast('ID: '+id,'info');
+}
+
+// ── Update fbOnAuthChanged untuk numeric ID + render settings ──
+// Override fbOnAuthChanged tambah numId dan settings render
+const _origFbOnAuthChanged = fbOnAuthChanged;
+function fbOnAuthChanged(user) {
+  _fbUser = user;
+  if(user) {
+    _fbDb.ref('users/' + user.uid).once('value').then(snap => {
+      _fbProfile = snap.val();
+      if(!_fbProfile) {
+        // New user
+        let username = '';
+        if(user.displayName) {
+          username = user.displayName.toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+        } else {
+          username = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+        }
+        const numId = generateNumericId();
+        _fbProfile = {
+          username, uid: user.uid, numId,
+          xp: S.xp||0,
+          level: Math.max(1,Math.floor((S.xp||0)/100)+1),
+          displayName: user.displayName||username,
+        };
+        _fbDb.ref('users/' + user.uid).set(_fbProfile);
+        _fbDb.ref('usernames/' + username).set(user.uid);
+        _fbDb.ref('numIds/' + numId).set(user.uid);
+      } else if(!_fbProfile.numId) {
+        // Existing user without numId — generate
+        const numId = generateNumericId();
+        _fbProfile.numId = numId;
+        _fbDb.ref('users/' + user.uid + '/numId').set(numId);
+        _fbDb.ref('numIds/' + numId).set(user.uid);
+      }
+
+      // Online presence
+      const presRef = _fbDb.ref('presence/' + _fbProfile.username);
+      presRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+      presRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+
+      // Sync XP
+      _fbDb.ref('users/' + user.uid + '/xp').set(S.xp||0);
+      _fbDb.ref('users/' + user.uid + '/level').set(Math.max(1,Math.floor((S.xp||0)/100)+1));
+
+      renderFriendsMain();
+      renderSettingsAuth();
+      renderProfileSocialSection();
+    });
+  } else {
+    renderFriendsLogin();
+    renderSettingsAuth();
+  }
+}
+
+// ── Add friend by numeric ID ──
+function fbAddFriendByNumId(numId) {
+  if(!numId || !_fbProfile) return;
+  numId = numId.trim();
+  if(numId === _fbProfile.numId) { toast('Itu ID kamu sendiri 😅','error'); return; }
+  _fbDb.ref('numIds/' + numId).once('value').then(snap => {
+    if(!snap.exists()) { toast('ID tidak ditemukan','error'); return; }
+    const targetUid = snap.val();
+    _fbDb.ref('users/' + targetUid + '/username').once('value').then(usnap => {
+      const targetUsername = usnap.val();
+      _fbDb.ref('friends/' + _fbUser.uid + '/' + targetUid).set({
+        username: targetUsername, numId, addedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+      _fbDb.ref('friends/' + targetUid + '/' + _fbUser.uid).set({
+        username: _fbProfile.username, numId: _fbProfile.numId,
+        addedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+      toast('✅ Teman ditambahkan!', 'success');
+      loadFriendsList();
+    });
+  });
+}
+
+// ── Profile: ID display + visitors ──
+function renderProfileSocialSection() {
+  const el = $('profile-social-section'); if(!el) return;
+
+  if(!_fbUser || !_fbProfile) {
+    el.innerHTML = `
+      <div style="background:var(--surface);border:var(--bo);padding:11px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">
+          Login di Setelan untuk mendapatkan ID teman
+        </div>
+      </div>`;
+    return;
+  }
+
+  const numId = _fbProfile.numId || '------';
+
+  // Record kunjungan ke profil sendiri (skip)
+  // Load 3 pengunjung terakhir
+  _fbDb.ref('visitors/' + _fbUser.uid).orderByChild('ts').limitToLast(3).once('value').then(snap => {
+    const visitors = [];
+    snap.forEach(child => visitors.unshift(child.val()));
+
+    el.innerHTML = `
+      <!-- ID Card -->
+      <div style="background:var(--surface);border:var(--bo);padding:11px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:3px;">ID TEMAN</div>
+          <div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--yellow);letter-spacing:4px;">${numId}</div>
+        </div>
+        <button class="btn btn-xs" onclick="copyFriendId('${numId}')">📋 COPY</button>
+      </div>
+      <!-- Visitors -->
+      <div style="background:var(--surface);border:var(--bo);padding:11px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px;">👀 Pengunjung Terakhir</div>
+        ${visitors.length ? visitors.map(v => `
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;">@${v.username}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">${timeAgo(v.ts)}</div>
+          </div>`).join('') :
+          `<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">Belum ada pengunjung</div>`}
+      </div>`;
+  });
+}
+
+function timeAgo(ts) {
+  if(!ts) return '';
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff/60000);
+  const h = Math.floor(diff/3600000);
+  const d = Math.floor(diff/86400000);
+  if(d>0) return d+'h lalu';
+  if(h>0) return h+'j lalu';
+  if(m>0) return m+'m lalu';
+  return 'baru saja';
+}
+
+// Record visitor saat buka profile page
+function recordProfileVisit(ownerUid) {
+  if(!_fbUser || !_fbProfile || ownerUid === _fbUser.uid) return;
+  _fbDb.ref('visitors/' + ownerUid).push({
+    username: _fbProfile.username,
+    numId: _fbProfile.numId||'',
+    ts: firebase.database.ServerValue.TIMESTAMP
+  });
+}
+
+// Hook initProfilePage untuk record visit & render social section
+const _baseInitProfilePage = initProfilePage;
+function initProfilePage() {
+  _baseInitProfilePage();
+  renderProfileSocialSection();
+}
+
+// Hook navigate settings untuk render auth
+const _baseNavigate = navigate;
+function navigate(page) {
+  _baseNavigate(page);
+  if(page === 'settings') {
+    setTimeout(renderSettingsAuth, 100);
+  }
+}
+
+// ── Update fbAddFriend to use numId ──
+// Override input di friends page untuk pakai numId
+function renderFriendsMain() {
+  if(!_fbProfile) return;
+  const login = $('friends-auth-section'); if(login) login.style.display='block';
+  const main = $('friends-main-section'); if(main) main.style.display='block';
+  const loginForm = $('friends-login-form'); if(loginForm) loginForm.style.display='none';
+
+  const nameEl = $('fb-display-name');
+  if(nameEl) nameEl.textContent = _fbProfile.displayName||_fbProfile.username;
+  const idEl = $('fb-my-id');
+  if(idEl) {
+    idEl.textContent = _fbProfile.numId || _fbProfile.username;
+    idEl.title = 'Tap untuk copy';
+  }
+  loadFriendsList();
+}
+
+// Override copyMyId untuk numId
+function copyMyId() {
+  const id = _fbProfile?.numId || _fbProfile?.username || '';
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(id).then(()=>toast('ID '+id+' disalin!','success'));
+  } else toast('ID: '+id, 'info');
+}
+
+// Override fbAddFriend untuk coba numId dulu, fallback ke username
+function fbAddFriend() {
+  const input = ($('fb-add-id')?.value||'').trim();
+  if(!input) return;
+  // Jika input 6 digit angka → pakai numId
+  if(/^\d{6}$/.test(input)) {
+    fbAddFriendByNumId(input);
+  } else {
+    // Coba sebagai username
+    const targetUsername = input.toLowerCase().replace(/[^a-z0-9_]/g,'');
+    if(targetUsername === _fbProfile?.username) { toast('Itu kamu sendiri 😅','error'); return; }
+    _fbDb.ref('usernames/' + targetUsername).once('value').then(snap => {
+      if(!snap.exists()) { toast('User tidak ditemukan. Coba pakai ID 6 digit.','error'); return; }
+      const targetUid = snap.val();
+      _fbDb.ref('friends/' + _fbUser.uid + '/' + targetUid).set({
+        username: targetUsername, addedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+      _fbDb.ref('friends/' + targetUid + '/' + _fbUser.uid).set({
+        username: _fbProfile.username, addedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+      toast('✅ '+targetUsername+' ditambahkan!','success');
+      const inp=$('fb-add-id'); if(inp)inp.value='';
+      loadFriendsList();
+    });
+  }
+}
+
+// ── navigateMore hook untuk settings ──
+const _origNavigateMore = navigateMore;
+function navigateMore(page) {
+  _origNavigateMore(page);
+  if(page==='settings') setTimeout(renderSettingsAuth, 150);
 }
