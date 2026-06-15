@@ -746,7 +746,7 @@ function habitCard(h,view,pfx){
     const today=new Date();const dim=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
     const ml=h.monthLog||{};const doneDays=Object.values(ml).filter(Boolean).length;
     const pctM=Math.round(doneDays/Math.max(1,today.getDate())*100);
-    extra=`<div class="monthly-prog-wrap"><div class="monthly-prog-track"><div class="monthly-prog-fill" style="width:${pctM}%;background:${h.color}"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;">${doneDays}/${today.getDate()}d</span></div><div class="monthly-days-grid">${Array.from({length:dim},(_,i)=>{const day=i+1,td2=today.getDate();const cls=day===td2?'today':(day<td2?(ml[day]?'done':'missed'):'future');return `<div class="mday ${cls}"></div>`;}).join('')}</div>`;
+    extra=`<div class="monthly-prog-wrap"><div class="monthly-prog-track"><div class="monthly-prog-fill" style="width:${pctM}%;background:${h.color}"></div></div><span style="font-family:var(--font-mono, monospace);font-size:8px;font-weight:700;">${doneDays}/${today.getDate()}d</span></div><div class="monthly-days-grid">${Array.from({length:dim},(_,i)=>{const day=i+1,td2=today.getDate();const cls=day===td2?'today':(day<td2?(ml[day]?'done':'missed'):'future');return `<div class="mday ${cls}"></div>`;}).join('')}</div>`;
   }
   return `<div class="habit-card${done?' completed':''}${stackReady?' stacked-ready':''}" id="${pfx}-${h.id}" draggable="true"
     ondragstart="dragStart(event,'${h.id}','${pfx}')" ondragover="dragOver(event)" ondrop="dragDrop(event,'${h.id}')" ondragleave="dragLeave(event)" ondragend="dragEnd()">
@@ -805,7 +805,7 @@ function renderTodayHabits(){
     const gicons = {morning:'🌅',afternoon:'☀️',evening:'🌙',night:'🌃',anytime:'⚡'};
     Object.entries(groups).forEach(([time, habits]) => {
       if(!habits.length) return;
-      html += `<div style="font-family:'IBM Plex Mono',monospace;font-size:7px;text-transform:uppercase;color:var(--sub);letter-spacing:1px;padding:5px 0 3px;">${gicons[time]} ${glabels[time]}</div>`;
+      html += `<div style="font-family:var(--font-mono, monospace);font-size:7px;text-transform:uppercase;color:var(--sub);letter-spacing:1px;padding:5px 0 3px;">${gicons[time]} ${glabels[time]}</div>`;
       html += habits.map(h=>habitCard(h,'daily','th')).join('');
     });
     if(!html) html = getEmptyState('habits');
@@ -975,8 +975,8 @@ function earnFreeze(amount,reason){
 function renderFreezeLog(){
   const el=$('freeze-log-list');if(!el)return;
   const log=S.freezeLog||[];
-  if(!log.length){el.innerHTML=`<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:13px;">No freeze activity yet</div>`;return;}
-  el.innerHTML=log.slice(0,30).map(l=>`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--bg);font-size:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);flex-shrink:0;min-width:60px;">${l.date}</span><span style="flex:1;">${l.reason}</span><span style="font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:9px;color:${l.earned?'var(--cyan)':'var(--orange)'};">${l.earned?'+'+l.earned+'❄':'-1❄'}</span></div>`).join('');
+  if(!log.length){el.innerHTML=`<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:13px;">No freeze activity yet</div>`;return;}
+  el.innerHTML=log.slice(0,30).map(l=>`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--bg);font-size:10px;"><span style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);flex-shrink:0;min-width:60px;">${l.date}</span><span style="flex:1;">${l.reason}</span><span style="font-weight:700;font-family:var(--font-mono, monospace);font-size:9px;color:${l.earned?'var(--cyan)':'var(--orange)'};">${l.earned?'+'+l.earned+'❄':'-1❄'}</span></div>`).join('');
 }
 
 // ── MISSIONS ───────────────────────────────────────────────
@@ -998,7 +998,7 @@ function updateMissions(){
 function renderMissions(){
   const el=$('missions-list');if(!el)return;
   if(!S.missions?.length)S.missions=MISSIONS.map(m=>({...m,progress:0,completed:false}));
-  el.innerHTML=S.missions.map(m=>{const pct=Math.min(100,Math.round(((m.progress||0)/m.goal)*100));return `<div class="mission-card"><div class="mc-header"><div class="mc-icon">${m.icon}</div><div style="flex:1;"><div class="mc-title">${m.title}</div><div class="mc-reward">❄ +${m.reward} Freeze${m.reward>1?'s':''}</div></div>${m.completed?'<div class="mc-status-done">✓ DONE</div>':''}</div><div class="mc-desc">${m.desc}</div>${!m.completed?`<div class="mc-prog-track"><div class="mc-prog-fill" style="width:${pct}%"></div></div><div class="mc-footer"><span>${m.progress||0}/${m.goal}</span><span>${pct}%</span></div>`:`<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--lime);">✓ ${m.reward} freeze${m.reward>1?'s':''} earned</div>`}</div>`;}).join('');
+  el.innerHTML=S.missions.map(m=>{const pct=Math.min(100,Math.round(((m.progress||0)/m.goal)*100));return `<div class="mission-card"><div class="mc-header"><div class="mc-icon">${m.icon}</div><div style="flex:1;"><div class="mc-title">${m.title}</div><div class="mc-reward">❄ +${m.reward} Freeze${m.reward>1?'s':''}</div></div>${m.completed?'<div class="mc-status-done">✓ DONE</div>':''}</div><div class="mc-desc">${m.desc}</div>${!m.completed?`<div class="mc-prog-track"><div class="mc-prog-fill" style="width:${pct}%"></div></div><div class="mc-footer"><span>${m.progress||0}/${m.goal}</span><span>${pct}%</span></div>`:`<div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--lime);">✓ ${m.reward} freeze${m.reward>1?'s':''} earned</div>`}</div>`;}).join('');
 }
 
 // ── ACHIEVEMENTS ───────────────────────────────────────────
@@ -1051,8 +1051,8 @@ function makeStreakCard(name, streak, best, label='') {
     <div class="streak-fire" style="font-size:22px;">${t.fire}</div>
     <div class="streak-num" style="color:${t.c};font-size:32px;">${s}</div>
     <div class="streak-name" style="font-size:10px;">${label||name}</div>
-    <div class="streak-badge" style="background:${t.bg};border:1px solid ${t.border};color:${t.c};font-size:7px;padding:2px 7px;margin-top:4px;font-family:'IBM Plex Mono',monospace;">${t.label}</div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-top:3px;">BEST: ${best||0}</div>
+    <div class="streak-badge" style="background:${t.bg};border:1px solid ${t.border};color:${t.c};font-size:7px;padding:2px 7px;margin-top:4px;font-family:var(--font-mono, monospace);">${t.label}</div>
+    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-top:3px;">BEST: ${best||0}</div>
   </div>`;
 }
 
@@ -1180,11 +1180,11 @@ function renderReport(){
       const avgHi=hi.length?Math.round(hi.reduce((s,d)=>s+d.completion,0)/hi.length):0;
       const avgLo=lo.length?Math.round(lo.reduce((s,d)=>s+d.completion,0)/lo.length):0;
       const diff=avgHi-avgLo;
-      mc.innerHTML=`<div style="font-family:'Archivo Black',sans-serif;font-size:11px;margin-bottom:8px;">MOOD × COMPLETION <span style="font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--sub);">(${corr.length} days)</span></div>
+      mc.innerHTML=`<div style="font-family:sans-serif;font-weight:900;font-size:11px;margin-bottom:8px;">MOOD × COMPLETION <span style="font-size:9px;font-family:var(--font-mono, monospace);color:var(--sub);">(${corr.length} days)</span></div>
       <div style="display:flex;gap:11px;margin-bottom:9px;">
-        <div style="flex:1;text-align:center;"><div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--lime)">${avgHi}%</div><div style="font-size:8px;color:var(--sub);">On 😊🔥 days</div></div>
-        <div style="flex:1;text-align:center;"><div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--red)">${avgLo}%</div><div style="font-size:8px;color:var(--sub);">On 😫😕 days</div></div>
-        <div style="flex:1;text-align:center;"><div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:${diff>0?'var(--lime)':'var(--red)'}">${diff>0?'+':''}${diff}%</div><div style="font-size:8px;color:var(--sub);">Difference</div></div>
+        <div style="flex:1;text-align:center;"><div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--lime)">${avgHi}%</div><div style="font-size:8px;color:var(--sub);">On 😊🔥 days</div></div>
+        <div style="flex:1;text-align:center;"><div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--red)">${avgLo}%</div><div style="font-size:8px;color:var(--sub);">On 😫😕 days</div></div>
+        <div style="flex:1;text-align:center;"><div style="font-family:sans-serif;font-weight:900;font-size:20px;color:${diff>0?'var(--lime)':'var(--red)'}">${diff>0?'+':''}${diff}%</div><div style="font-size:8px;color:var(--sub);">Difference</div></div>
       </div>
       <div style="display:flex;gap:2px;align-items:flex-end;height:44px;">${corr.slice(-14).map(d=>`<div style="flex:1;height:${d.completion}%;max-height:44px;min-height:2px;background:${['','#FF1744','#FF6B00','#FFE600','#AAFF00','#00F5D4'][d.mood]||'#eee'};border:1px solid var(--bc);" title="${d.date}: mood ${MOOD_EMOJIS[d.mood]}, ${d.completion}%"></div>`).join('')}</div>`;
     }
@@ -1465,7 +1465,7 @@ function selFreq(el,f){document.querySelectorAll('.freq-btn').forEach(x=>x.class
 
 // ── TEMPLATES ──────────────────────────────────────────────
 function buildTemplateGrid(){const grid=$('template-grid');if(!grid)return;grid.innerHTML=HABIT_TEMPLATES.map(t=>`<div class="template-card" id="tc-${t.id}" onclick="selectTemplate('${t.id}')"><div class="tc-icon">${t.icon}</div><div class="tc-title">${t.title}</div><div class="tc-count">${t.count} habits</div></div>`).join('');}
-function selectTemplate(id){S.selTemplate=id;document.querySelectorAll('.template-card').forEach(c=>c.classList.toggle('selected',c.id===`tc-${id}`));const t=HABIT_TEMPLATES.find(x=>x.id===id);const prev=$('template-preview');if(prev&&t){prev.style.display='block';prev.innerHTML=`<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;margin-bottom:5px;">INCLUDES:</div>`+t.habits.map(h=>`<div style="display:flex;align-items:center;gap:5px;font-size:10px;padding:2px 0;border-bottom:1px solid var(--bg);">${h.icon} ${h.name}<span style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-left:auto;">${h.freq}</span></div>`).join('');}}
+function selectTemplate(id){S.selTemplate=id;document.querySelectorAll('.template-card').forEach(c=>c.classList.toggle('selected',c.id===`tc-${id}`));const t=HABIT_TEMPLATES.find(x=>x.id===id);const prev=$('template-preview');if(prev&&t){prev.style.display='block';prev.innerHTML=`<div style="font-family:var(--font-mono, monospace);font-size:8px;font-weight:700;text-transform:uppercase;margin-bottom:5px;">INCLUDES:</div>`+t.habits.map(h=>`<div style="display:flex;align-items:center;gap:5px;font-size:10px;padding:2px 0;border-bottom:1px solid var(--bg);">${h.icon} ${h.name}<span style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-left:auto;">${h.freq}</span></div>`).join('');}}
 function applyTemplate(){if(!S.selTemplate){toast('Select a template!','error');return;}const t=HABIT_TEMPLATES.find(x=>x.id===S.selTemplate);if(!t)return;t.habits.forEach(d=>{S.habits.push({id:'h'+Date.now()+Math.floor(Math.random()*9999),...d,completedToday:false,currentProgress:0,streak:0,bestStreak:0,totalDone:0,weekLog:Array(7).fill(false),monthLog:{},todayXp:0,baseTarget:d.target,createdAt:new Date().toISOString()});});toast(`✅ ${t.count} habits from "${t.title}" added!`,'success');S.selTemplate=null;document.querySelectorAll('.template-card').forEach(c=>c.classList.remove('selected'));const prev=$('template-preview');if(prev)prev.style.display='none';updateMissions();save();renderAll();closeModal('modal-templates');}
 
 // ── NAVIGATION ─────────────────────────────────────────────
@@ -1741,10 +1741,10 @@ function openDayDetail(dateStr) {
   const moodEntry = S.moodLog && S.moodLog[dateStr];
   const MOOD_E2 = ['','😫','😕','😐','😊','🔥'];
   const moodSection = moodEntry ? `<div style="display:flex;gap:9px;align-items:center;padding:7px 0;border-bottom:1px solid var(--bg);margin-bottom:7px;">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">MOOD</span>
+    <span style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">MOOD</span>
     <span style="font-size:16px;">${MOOD_E2[moodEntry.mood||0]||'—'}</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">ENERGY</span>
-    <span style="font-family:'Archivo Black',sans-serif;font-size:13px;color:var(--cyan);">${moodEntry.energy||0}/5</span>
+    <span style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">ENERGY</span>
+    <span style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--cyan);">${moodEntry.energy||0}/5</span>
     <div style="display:flex;gap:2px;">${Array.from({length:5},(_,i)=>`<div style="width:6px;height:6px;border:1.5px solid ${i<(moodEntry.energy||0)?'var(--lime)':'#444'};background:${i<(moodEntry.energy||0)?'var(--lime)':'transparent'};"></div>`).join('')}</div>
   </div>` : '';
   if (!doneHabits.length) {
@@ -1752,7 +1752,7 @@ function openDayDetail(dateStr) {
   } else {
     const totalXp = doneHabits.reduce((s, h) => s + (h.xp || 10), 0);
     const ic_fn = (icon, color) => { const ic=HABIT_ICONS.find(x=>x.id===icon)||HABIT_ICONS[0]; return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${color||'currentColor'}" stroke-width="2" stroke-linecap="round">${ic.svg}</svg>`; };
-    body.innerHTML = moodSection + `<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:9px;">${doneHabits.length} habit${doneHabits.length!==1?'s':''} · +${totalXp} XP</div>`
+    body.innerHTML = moodSection + `<div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-bottom:9px;">${doneHabits.length} habit${doneHabits.length!==1?'s':''} · +${totalXp} XP</div>`
       + doneHabits.map(h => `<div class="cal-detail-habit">${ic_fn(h.icon, h.color||'currentColor')}<span class="cdh-name">${h.name}</span><span class="cdh-xp">+${h.xp} XP</span></div>`).join('');
   }
 
@@ -1765,7 +1765,7 @@ function openDayDetail(dateStr) {
       cd.innerHTML = `<div class="cal-detail-date">${dateStr}</div><div class="cal-empty-day">No habits completed on this day.</div>`;
     } else {
       const totalXp = doneHabits.reduce((s, h) => s + (h.xp || 10), 0);
-      cd.innerHTML = `<div class="cal-detail-date">${dateStr}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:9px;">${doneHabits.length} habit${doneHabits.length!==1?'s':''} completed · +${totalXp} XP</div>`
+      cd.innerHTML = `<div class="cal-detail-date">${dateStr}</div><div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-bottom:9px;">${doneHabits.length} habit${doneHabits.length!==1?'s':''} completed · +${totalXp} XP</div>`
         + doneHabits.map(h => `<div class="cal-detail-habit"><span class="cdh-icon">${h.icon}</span><span class="cdh-name">${h.name}</span><span class="cdh-xp">+${h.xp} XP</span></div>`).join('');
     }
   }
@@ -2000,10 +2000,10 @@ function renderSleepLog() {
     const quality = l.hours >= 8 ? '🟢' : l.hours >= 6 ? '🟡' : '🔴';
     const pct = Math.min(100, Math.round(l.hours / 9 * 100));
     return `<div class="sleep-entry">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);min-width:55px;">${l.date}</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);min-width:55px;">${l.date}</div>
       <div style="font-size:9px;">${l.bed}→${l.wake}</div>
       <div class="sleep-bar-wrap"><div class="sleep-bar-fill" style="width:${pct}%"></div></div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:11px;flex-shrink:0;">${l.hours}h ${quality}</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:11px;flex-shrink:0;">${l.hours}h ${quality}</div>
     </div>`;
   }).join('');
 }
@@ -2044,7 +2044,7 @@ function renderIntention() {
   const today = todayStr();
   const intent = S.intentions && S.intentions[today];
   if (intent) {
-    el.innerHTML = `<div style="background:var(--black);border:2px solid var(--yellow);padding:9px 11px;font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--yellow);">🎯 ${intent}</div>`;
+    el.innerHTML = `<div style="background:var(--black);border:2px solid var(--yellow);padding:9px 11px;font-family:sans-serif;font-weight:900;font-size:12px;color:var(--yellow);">🎯 ${intent}</div>`;
   } else {
     el.innerHTML = `<div style="font-size:10px;color:var(--sub);">No intention set yet today.</div>`;
   }
@@ -2400,7 +2400,7 @@ function renderArchive() {
   el.innerHTML = archived.map(h => `<div class="archive-card">
     <span style="font-size:16px;">${h.icon}</span>
     <div style="flex:1;"><div style="font-size:11px;font-weight:700;">${h.name}</div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">Archived ${h.archivedAt||'?'} · 🔥 best ${h.bestStreak||0}</div></div>
+    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">Archived ${h.archivedAt||'?'} · 🔥 best ${h.bestStreak||0}</div></div>
     <button class="btn btn-xs btn-success" onclick="unarchiveHabit('${h.id}')">↩</button>
     <button class="btn btn-xs btn-danger" onclick="confirmDelete('${h.id}')">🗑</button>
   </div>`).join('');
@@ -2437,7 +2437,7 @@ function showLevelUp(level, name) {
       <div class="levelup-lbl">LEVEL UP!</div>
       <div class="levelup-num" id="levelup-num">${level}</div>
       <div class="levelup-name" id="levelup-name">${name}</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#888;margin-top:7px;">TAP TO CONTINUE</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:#888;margin-top:7px;">TAP TO CONTINUE</div>
     </div>`;
     ov.onclick = () => { ov.classList.remove('show'); };
     document.body.appendChild(ov);
@@ -3094,7 +3094,7 @@ function renderAntiHabits() {
         </div>
         ${a.trigger ? `<div style="font-size:9px;color:var(--sub);margin-bottom:3px;">Trigger: ${a.trigger}</div>` : ''}
         <div class="anti-progress"><div class="anti-fill" style="width:${pct}%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-top:2px;">
+        <div style="display:flex;justify-content:space-between;font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-top:2px;">
           <span>🔥 ${a.streak||0} days clean</span><span>Best: ${a.bestStreak||0}</span>
         </div>
       </div>
@@ -3103,7 +3103,7 @@ function renderAntiHabits() {
         ${!loggedToday ? `
           <button class="anti-resist-btn" onclick="resistAntiHabit('${a.id}')">✓ CLEAN</button>
           <button class="anti-resist-btn failed" onclick="failAntiHabit('${a.id}')">✗ FAILED</button>
-        ` : `<div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--lime);text-align:center;">${a.failedToday?'FAILED':'CLEAN ✓'}</div>`}
+        ` : `<div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--lime);text-align:center;">${a.failedToday?'FAILED':'CLEAN ✓'}</div>`}
         <button class="btn btn-xs btn-danger" onclick="deleteAntiHabit('${a.id}')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button>
       </div>
     </div>`;
@@ -3181,7 +3181,7 @@ function renderRituals() {
           <div class="ritual-title">${r.name}</div>
           <div class="ritual-meta">${(r.time||"").toUpperCase()} · ${done}/${total} done</div>
         </div>
-        <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:${pct===100?'var(--lime)':color}">${pct}%</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:${pct===100?'var(--lime)':color}">${pct}%</div>
         <button class="btn btn-xs btn-danger" onclick="event.stopPropagation();deleteRitual('${r.id}')" style="margin-left:5px;padding:3px 6px;">×</button>
       </div>
       <div class="ritual-prog-wrap">
@@ -3196,11 +3196,11 @@ function renderRituals() {
             <div class="rhc${h.completedToday?' done':''}" onclick="toggleHabit('${h.id}','th');setTimeout(()=>renderRituals(),100);">${h.completedToday?'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--black)" stroke-width="2.5" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
             <span style="display:flex;align-items:center;gap:5px;flex:1;">${svg}<span style="font-size:11px;font-weight:600;${h.completedToday?'text-decoration:line-through;opacity:.6;':''}">${h.name}</span></span>
             ${h.scheduledTime?`<span class="ritual-time-badge">${h.scheduledTime}</span>`:''}
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--orange);">🔥${h.streak||0}</span>
+            <span style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--orange);">🔥${h.streak||0}</span>
           </div>`;
         }).join('')}
       </div>
-      ${pct<100?`<button class="start-ritual-btn" onclick="startRitual('${r.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><polygon points="5 3 19 12 5 21 5 3"/></svg> START RITUAL</button>`:`<div style="background:var(--lime);padding:8px;text-align:center;font-family:'Archivo Black',sans-serif;font-size:10px;color:var(--black);">✓ RITUAL COMPLETE</div>`}
+      ${pct<100?`<button class="start-ritual-btn" onclick="startRitual('${r.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><polygon points="5 3 19 12 5 21 5 3"/></svg> START RITUAL</button>`:`<div style="background:var(--lime);padding:8px;text-align:center;font-family:sans-serif;font-weight:900;font-size:10px;color:var(--black);">✓ RITUAL COMPLETE</div>`}
     </div>`;
   }).join('');
 }
@@ -3242,9 +3242,9 @@ function openHabitDetail(id) {
     <!-- Strength + Stats -->
     <div style="display:flex;gap:9px;align-items:center;background:var(--surface);border:var(--bo-t);padding:11px;margin-bottom:11px;box-shadow:var(--sha-sm);">
       <div style="flex:1;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);text-transform:uppercase;margin-bottom:3px;">Habit Strength</div>
-        <div style="font-family:'Archivo Black',sans-serif;font-size:32px;color:${sc};line-height:1;">${strength}%</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:${sc};">${strength>=85?'EXCELLENT':strength>=65?'STRONG':strength>=40?'BUILDING':strength>=20?'WEAK':'JUST STARTING'}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);text-transform:uppercase;margin-bottom:3px;">Habit Strength</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:32px;color:${sc};line-height:1;">${strength}%</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:8px;color:${sc};">${strength>=85?'EXCELLENT':strength>=65?'STRONG':strength>=40?'BUILDING':strength>=20?'WEAK':'JUST STARTING'}</div>
       </div>
       <div style="flex:1;height:8px;background:#eee;border:var(--bo);overflow:hidden;align-self:flex-end;margin-bottom:12px;">
         <div style="height:100%;width:${strength}%;background:${sc};transition:width .6s;"></div>
@@ -3259,7 +3259,7 @@ function openHabitDetail(id) {
       <div class="hd-stat"><div class="hd-stat-val">${Math.round(strength)}%</div><div class="hd-stat-lbl">Consistency</div></div>
     </div>
     <!-- 30-day trend -->
-    <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+    <div style="font-family:sans-serif;font-weight:900;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
       <div style="width:9px;height:9px;background:var(--text);"></div><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 30-Day Trend
     </div>
     <div class="hd-trend-chart">
@@ -3275,7 +3275,7 @@ function openHabitDetail(id) {
       }).join('')}
     </div>
     <!-- Mini calendar -->
-    <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+    <div style="font-family:sans-serif;font-weight:900;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
       <div style="width:9px;height:9px;background:var(--text);"></div><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg> Last 4 Weeks
     </div>
     <div class="hd-mini-cal">
@@ -3297,21 +3297,21 @@ function openHabitDetail(id) {
       return (wDone||mDone)?`<div style="display:flex;gap:5px;margin-bottom:11px;">${wDone?'<div class="perfect-week-badge">🏆 PERFECT WEEK</div>':''}${mDone?'<div class="perfect-month-badge">🌟 PERFECT MONTH</div>':''}</div>`:'';
     })()}
     <!-- Completion notes -->
-    <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+    <div style="font-family:sans-serif;font-weight:900;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
       <div style="width:9px;height:9px;background:var(--text);"></div>Completion Notes
     </div>
     ${Object.entries(notes).length ? Object.entries(notes).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10).map(([date,note])=>`<div class="hd-note-row"><div class="hd-note-date">${date}</div><div>${note}</div></div>`).join('') : `<div style="font-size:10px;color:var(--sub);padding:7px;">No notes yet. Add notes when completing habits.</div>`}
     <!-- Science Tip -->
     <div style="background:rgba(123,47,190,.1);border:1.5px solid var(--purple);padding:9px 11px;margin-bottom:11px;">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--purple);text-transform:uppercase;margin-bottom:4px;"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M12 2a7 7 0 017 7c0 3.87-3 5-3 9H8c0-4-3-5.13-3-9a7 7 0 017-7z"/><line x1="8" y1="22" x2="16" y2="22"/><line x1="12" y1="18" x2="12" y2="22"/></svg> SCIENCE TIP</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--purple);text-transform:uppercase;margin-bottom:4px;"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M12 2a7 7 0 017 7c0 3.87-3 5-3 9H8c0-4-3-5.13-3-9a7 7 0 017-7z"/><line x1="8" y1="22" x2="16" y2="22"/><line x1="12" y1="18" x2="12" y2="22"/></svg> SCIENCE TIP</div>
       <div style="font-size:10px;line-height:1.5;">${getHabitTip(h.category||'custom')}</div>
     </div>
     <!-- <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> Milestone Badges -->
-    <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+    <div style="font-family:sans-serif;font-weight:900;font-size:10px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
       <div style="width:9px;height:9px;background:var(--text);"></div><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> Milestone Badges
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;">
-      ${MILESTONE_BADGES.map(b=>{const earned=(h.bestStreak||0)>=b.days;return `<div style="padding:4px 8px;border:1.5px solid ${earned?b.color:'#444'};font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;color:${earned?b.color:'#444'};${earned?`background:${b.color}22;`:''}">${b.icon} ${b.label}</div>`;}).join('')}
+      ${MILESTONE_BADGES.map(b=>{const earned=(h.bestStreak||0)>=b.days;return `<div style="padding:4px 8px;border:1.5px solid ${earned?b.color:'#444'};font-family:var(--font-mono, monospace);font-size:8px;font-weight:700;color:${earned?b.color:'#444'};${earned?`background:${b.color}22;`:''}">${b.icon} ${b.label}</div>`;}).join('')}
     </div>
     <!-- Next Badge -->
     ${(()=>{const next=getNextBadge(h);return next?`<div style="font-size:10px;color:var(--sub);margin-bottom:11px;">Next: <strong style="color:${next.color}">${next.icon} ${next.label}</strong> at ${next.days} day streak (${next.days-(h.bestStreak||0)} to go)</div>`:'<div style="font-size:10px;color:var(--lime);margin-bottom:11px;">🏆 All badges earned!</div>';})()}
@@ -3378,7 +3378,7 @@ function renderGoals() {
         </div>
         <div style="flex:1;">
           <div class="goal-title">${g.name}</div>
-          ${daysLeft!==null?`<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">${daysLeft} days left · ${g.targetDate}</div>`:''}
+          ${daysLeft!==null?`<div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">${daysLeft} days left · ${g.targetDate}</div>`:''}
         </div>
         <div class="goal-prog">${done}/${total}</div>
         <button class="btn btn-xs" onclick="deleteGoal('${g.id}')" style="margin-left:5px;padding:3px 6px;color:var(--red);">×</button>
@@ -3389,7 +3389,7 @@ function renderGoals() {
           if (!h) return '';
           const ic = HABIT_ICONS.find(x=>x.id===h.icon);
           const svg = (ic && ic.svg)?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${ic.svg}</svg>`:'';
-          return `<div class="gh-row"><div class="gh-dot${h.completedToday?' done':''}"></div>${svg}<span style="flex:1;${h.completedToday?'text-decoration:line-through;opacity:.5;':''}">${h.name}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--orange);">🔥${h.streak||0}</span></div>`;
+          return `<div class="gh-row"><div class="gh-dot${h.completedToday?' done':''}"></div>${svg}<span style="flex:1;${h.completedToday?'text-decoration:line-through;opacity:.5;':''}">${h.name}</span><span style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--orange);">🔥${h.streak||0}</span></div>`;
         }).join('')}
       </div>
     </div>`;
@@ -3452,7 +3452,7 @@ Freq: daily,weekdays,weekends,3x/week,weekly`;
 function renderAISuggestions(habits, goal) {
   const result = $('ai-suggestions-result'); if (!result) return;
   if (!habits.length) { result.innerHTML = `<div style="font-size:10px;color:var(--red);">Could not generate suggestions. Try again.</div>`; return; }
-  result.innerHTML = `<div style="font-family:'Archivo Black',sans-serif;font-size:10px;color:var(--cyan);margin:9px 0 7px;text-transform:uppercase;">For: "${goal}"</div>` +
+  result.innerHTML = `<div style="font-family:sans-serif;font-weight:900;font-size:10px;color:var(--cyan);margin:9px 0 7px;text-transform:uppercase;">For: "${goal}"</div>` +
     habits.map((h,i) => {
       const ic = HABIT_ICONS.find(x=>x.id===h.icon) || HABIT_ICONS[0] || {svg:''};
       const svg = ic.svg ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">${ic.svg}</svg>` : '';
@@ -3534,7 +3534,7 @@ function renderCapsules() {
       <div class="capsule-sealed ${c.opened?'open':''}">${c.opened?'✉ OPEN':'🔒 SEALED'}</div>
       <div class="capsule-date">📬 ${c.opened?'Opened':'Opens'}: ${c.openDate}</div>
       <div class="capsule-preview">Sealed on ${c.sealedDate} · ${c.statsAtSealing?.habits||0} habits · ${c.statsAtSealing?.xp||0} XP at time of writing</div>
-      ${c.opened ? `<div class="capsule-reveal"><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);text-transform:uppercase;margin-bottom:5px;">Dear Future Me...</div><div class="capsule-reveal-text">${c.letter}</div></div>` : `<div style="font-size:10px;color:#666;font-style:italic;padding:7px;border:1px dashed #444;">Your letter is sealed until ${c.openDate}</div>`}
+      ${c.opened ? `<div class="capsule-reveal"><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);text-transform:uppercase;margin-bottom:5px;">Dear Future Me...</div><div class="capsule-reveal-text">${c.letter}</div></div>` : `<div style="font-size:10px;color:#666;font-style:italic;padding:7px;border:1px dashed #444;">Your letter is sealed until ${c.openDate}</div>`}
       <button class="btn btn-xs btn-danger" onclick="deleteCapsule('${c.id}')" style="margin-top:7px;">Delete</button>
     </div>`;
   }).join('');
@@ -3563,7 +3563,7 @@ function renderROI() {
       <div class="roi-card"><div class="roi-lbl">Active Days</div><div class="roi-big">${activeDays}</div></div>
       <div class="roi-card"><div class="roi-lbl">Total XP</div><div class="roi-big">${totalXp}</div></div>
     </div>
-    <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;margin-bottom:9px;">Per Habit ROI</div>
+    <div style="font-family:sans-serif;font-weight:900;font-size:10px;text-transform:uppercase;margin-bottom:9px;">Per Habit ROI</div>
     ${[...ah].sort((a,b)=>(b.totalDone||0)-(a.totalDone||0)).slice(0,8).map(h => {
       const hrs = ((h.totalDone||0)*0.5).toFixed(1);
       const consistency = getHabitStrength(h);
@@ -3574,10 +3574,10 @@ function renderROI() {
         <div style="width:34px;height:34px;background:${h.color}22;border:2px solid ${h.color};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${svg}</div>
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h.name}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">${h.totalDone||0} done · ~${hrs}h · 🔥${h.bestStreak||0} best</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">${h.totalDone||0} done · ~${hrs}h · 🔥${h.bestStreak||0} best</div>
           <div style="height:4px;background:#eee;border:1px solid #ccc;overflow:hidden;margin-top:3px;"><div style="height:100%;width:${consistency}%;background:${sc};"></div></div>
         </div>
-        <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:${sc};flex-shrink:0;">${consistency}%</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:${sc};flex-shrink:0;">${consistency}%</div>
       </div>`;
     }).join('')}`;
 }
@@ -3625,7 +3625,7 @@ function openBackfill() {
     const d = new Date(ds+'T12:00:00');
     const dn = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
     return `<div style="margin-bottom:11px;">
-      <div style="font-family:'Archivo Black',sans-serif;font-size:10px;color:var(--yellow);margin-bottom:5px;">${dn}, ${ds}</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:10px;color:var(--yellow);margin-bottom:5px;">${dn}, ${ds}</div>
       ${S.habits.filter(h=>isDueDateStr(h,ds)).map(h=>{
         const snap = S.lockedDays&&S.lockedDays[ds];
         const alreadyDone = snap?!!snap.find(s=>s.habitId===h.id&&s.completed):false;
@@ -3864,7 +3864,7 @@ function renderHabitBadges(h) {
   const earned = getHabitBadges(h);
   if (!earned.length) return '';
   return earned.slice(-2).map(b =>
-    `<span style="font-size:10px;padding:1px 4px;border:1px solid ${b.color};color:${b.color};font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;">${b.icon} ${b.label}</span>`
+    `<span style="font-size:10px;padding:1px 4px;border:1px solid ${b.color};color:${b.color};font-family:var(--font-mono, monospace);font-size:7px;font-weight:700;">${b.icon} ${b.label}</span>`
   ).join('');
 }
 
@@ -3913,7 +3913,7 @@ function showUndoToast(label, fn) {
   t.className = 'toast info undo-toast';
   t.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:9px;max-width:300px;';
   t.innerHTML = `<span style="flex:1;font-size:10px;">${label}</span>
-    <button onclick="doUndo(this)" style="background:var(--black);color:var(--yellow);border:1.5px solid var(--yellow);padding:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;">UNDO</button>`;
+    <button onclick="doUndo(this)" style="background:var(--black);color:var(--yellow);border:1.5px solid var(--yellow);padding:3px 8px;font-family:var(--font-mono, monospace);font-size:9px;font-weight:700;cursor:pointer;">UNDO</button>`;
   t._undoFn = fn;
   tc.appendChild(t);
   const timer = setTimeout(() => { if (t.parentNode) t.remove(); }, 4500);
@@ -3958,8 +3958,8 @@ function renderBestTimeCard() {
     <div style="display:flex;align-items:center;gap:11px;">
       <div style="font-size:36px;">${periodIcons[analysis.period]}</div>
       <div>
-        <div style="font-family:'Archivo Black',sans-serif;font-size:22px;color:var(--yellow);line-height:1;">${analysis.display}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);text-transform:uppercase;margin-top:2px;">Peak ${analysis.period} · ${analysis.count} completions</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:22px;color:var(--yellow);line-height:1;">${analysis.display}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);text-transform:uppercase;margin-top:2px;">Peak ${analysis.period} · ${analysis.count} completions</div>
         <div style="font-size:10px;color:var(--muted);margin-top:3px;">Schedule your hardest habits around this time.</div>
       </div>
     </div>`;
@@ -4081,7 +4081,7 @@ function showContextMenu(habitId, x, y) {
     { icon:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>', label:'Archive', fn:`archiveHabit('${habitId}');closeContextMenu();` },
     { icon:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FF1744" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>', label:'Delete', fn:`closeContextMenu();confirmDelete('${habitId}');`, color:'var(--red)' },
   ];
-  menu.innerHTML = `<div style="padding:7px 11px;border-bottom:1px solid #333;font-family:'Archivo Black',sans-serif;font-size:10px;color:var(--yellow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.icon?'':''} ${h.name}</div>`
+  menu.innerHTML = `<div style="padding:7px 11px;border-bottom:1px solid #333;font-family:sans-serif;font-weight:900;font-size:10px;color:var(--yellow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.icon?'':''} ${h.name}</div>`
     + items.map(it => `<div onclick="${it.fn}" style="display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;border-bottom:1px solid #1a1a1a;color:${it.color||'var(--text)'};" onmouseenter="this.style.background='rgba(255,230,0,.1)'" onmouseleave="this.style.background=''">${it.icon}<span style="font-size:11px;font-weight:600;">${it.label}</span></div>`).join('');
 
   // Position: ensure on screen
@@ -4298,12 +4298,12 @@ function renderTodayAntiHabitsMini() {
   const today = todayStr();
   el.style.display = 'block';
   el.innerHTML = `<div style="background:var(--black);border:var(--bo-t);border-color:var(--red);padding:8px 11px;margin-bottom:0;">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RESIST TODAY</div>
+    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RESIST TODAY</div>
     <div style="display:flex;gap:5px;flex-wrap:wrap;">
       ${anti.map(a => {
         const logged = a.lastResisted === today;
         return `<div style="display:flex;align-items:center;gap:5px;padding:4px 8px;border:1.5px solid ${logged?'var(--lime)':'var(--red)'};background:${logged?'rgba(170,255,0,.1)':'rgba(255,23,68,.08)'};">
-          <span style="font-family:'Archivo Black',sans-serif;font-size:11px;color:${logged?'var(--lime)':'var(--red)'};">${a.streak||0}</span>
+          <span style="font-family:sans-serif;font-weight:900;font-size:11px;color:${logged?'var(--lime)':'var(--red)'};">${a.streak||0}</span>
           <span style="font-size:10px;font-weight:700;">${a.name.length>12?a.name.slice(0,11)+'…':a.name}</span>
           ${!logged?`<button onclick="resistAntiHabit('${a.id}');renderTodayAntiHabitsMini();" style="background:var(--lime);border:var(--bo);padding:2px 5px;font-size:8px;font-weight:700;cursor:pointer;color:var(--black);">CLEAN</button>`:'<span style="font-size:9px;color:var(--lime);">✓</span>'}
         </div>`;
@@ -4323,14 +4323,14 @@ function renderTodayGoalsMini() {
     else {
       gel.style.display = 'block';
       gel.innerHTML = `<div style="background:var(--surface);border:var(--bo-t);border-color:var(--cyan);padding:8px 11px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">GOALS</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">GOALS</div>
         ${goals.slice(0,3).map(g => {
           const habits = (g.habitIds||[]).map(id=>S.habits.find(h=>h.id===id)).filter(Boolean);
           const done = habits.filter(h=>h?.completedToday).length;
           const pct = habits.length ? Math.round(done/habits.length*100) : 0;
           return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
             <span style="flex:1;font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.name}</span>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:${pct===100?'var(--lime)':'var(--cyan)'};">${done}/${habits.length}</span>
+            <span style="font-family:var(--font-mono, monospace);font-size:9px;color:${pct===100?'var(--lime)':'var(--cyan)'};">${done}/${habits.length}</span>
             <div style="width:50px;height:5px;background:#eee;border:1px solid #ccc;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${pct===100?'var(--lime)':'var(--cyan)'};"></div></div>
           </div>`;
         }).join('')}
@@ -4345,7 +4345,7 @@ function renderTodayGoalsMini() {
       rel.style.display = 'block';
       const RITUAL_TIME_ICONS2 = {morning:'🌅',afternoon:'☀️',evening:'🌙',anytime:'⚡'};
       rel.innerHTML = `<div style="background:var(--surface);border:var(--bo-t);border-color:var(--orange);padding:8px 11px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RITUALS</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RITUALS</div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
           ${rituals.slice(0,4).map(r => {
             const habits = r.habitIds.map(id=>S.habits.find(h=>h.id===id)).filter(Boolean);
@@ -4354,7 +4354,7 @@ function renderTodayGoalsMini() {
             const color = {morning:'#FF6B00',afternoon:'#FFE600',evening:'#7B2FBE',anytime:'#00F5D4'}[r.time]||'var(--cyan)';
             return `<div onclick="navigate('goals')" style="padding:4px 9px;border:1.5px solid ${color};cursor:pointer;display:flex;align-items:center;gap:5px;">
               <span style="font-size:10px;font-weight:700;">${r.name.length>10?r.name.slice(0,9)+'…':r.name}</span>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:${pct===100?'var(--lime)':color};">${pct}%</span>
+              <span style="font-family:var(--font-mono, monospace);font-size:9px;color:${pct===100?'var(--lime)':color};">${pct}%</span>
             </div>`;
           }).join('')}
         </div>
@@ -4561,14 +4561,14 @@ function showPerfectDay() {
   el.innerHTML = `
     <div style="text-align:center;padding:24px;max-width:320px;">
       <div style="font-size:64px;animation:pdBounce .6s ease;">🏆</div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:28px;color:var(--yellow);margin:11px 0 5px;text-transform:uppercase;letter-spacing:2px;">PERFECT DAY!</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cyan);margin-bottom:11px;">${done}/${total} HABITS COMPLETE</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:28px;color:var(--yellow);margin:11px 0 5px;text-transform:uppercase;letter-spacing:2px;">PERFECT DAY!</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:11px;color:var(--cyan);margin-bottom:11px;">${done}/${total} HABITS COMPLETE</div>
       <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#ccc;line-height:1.5;margin-bottom:18px;">"You do not rise to the level of your goals. You fall to the level of your systems."</div>
       <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;">
-        <div style="padding:7px 14px;border:2px solid var(--yellow);font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);">+${done*10} XP EARNED</div>
-        <div style="padding:7px 14px;border:2px solid var(--lime);font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--lime);">STREAK PROTECTED</div>
+        <div style="padding:7px 14px;border:2px solid var(--yellow);font-family:var(--font-mono, monospace);font-size:9px;color:var(--yellow);">+${done*10} XP EARNED</div>
+        <div style="padding:7px 14px;border:2px solid var(--lime);font-family:var(--font-mono, monospace);font-size:9px;color:var(--lime);">STREAK PROTECTED</div>
       </div>
-      <button onclick="this.closest('#perfect-day-overlay').remove()" style="margin-top:18px;background:var(--yellow);border:none;padding:11px 28px;font-family:'Archivo Black',sans-serif;font-size:12px;cursor:pointer;color:var(--black);letter-spacing:1px;">LET'S GO →</button>
+      <button onclick="this.closest('#perfect-day-overlay').remove()" style="margin-top:18px;background:var(--yellow);border:none;padding:11px 28px;font-family:sans-serif;font-weight:900;font-size:12px;cursor:pointer;color:var(--black);letter-spacing:1px;">LET'S GO →</button>
     </div>`;
   document.body.appendChild(el);
   haptic('levelup');
@@ -4667,7 +4667,7 @@ function renderWeeklySchedule() {
   el.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:9px;">
       ${days.map((d,i) => `
-        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;padding:4px 2px;background:${i===todayIdx?'var(--yellow)':'var(--surface)'};color:${i===todayIdx?'var(--black)':'var(--sub)'};border:var(--bo);">
+        <div style="text-align:center;font-family:var(--font-mono, monospace);font-size:7px;font-weight:700;padding:4px 2px;background:${i===todayIdx?'var(--yellow)':'var(--surface)'};color:${i===todayIdx?'var(--black)':'var(--sub)'};border:var(--bo);">
           ${d}<br><span style="font-size:8px;font-weight:400;">${dayHabits[i].length}</span>
         </div>
       `).join('')}
@@ -4727,7 +4727,7 @@ function renderHabitCorrelations() {
         <div style="font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.h1} <span style="color:var(--cyan)">↔</span> ${c.h2}</div>
         <div style="font-size:8px;color:var(--sub);margin-top:2px;">Done together ${c.both} times</div>
       </div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:18px;color:${c.pct>=80?'var(--lime)':c.pct>=60?'var(--cyan)':'var(--yellow)'};">${c.pct}%</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:18px;color:${c.pct>=80?'var(--lime)':c.pct>=60?'var(--cyan)':'var(--yellow)'};">${c.pct}%</div>
     </div>
   `).join('');
 }
@@ -4767,7 +4767,7 @@ function renderHabitWeather() {
     <div style="display:flex;align-items:center;gap:13px;padding:9px 13px;background:var(--black);border:2px solid ${w.color};">
       <div style="font-size:32px;">${w.icon}</div>
       <div>
-        <div style="font-family:'Archivo Black',sans-serif;font-size:14px;color:${w.color};">${w.label}</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:14px;color:${w.color};">${w.label}</div>
         <div style="font-size:10px;color:#aaa;margin-top:2px;">${w.desc}</div>
       </div>
     </div>`;
@@ -5001,7 +5001,7 @@ function renderNutrMealLog() {
   const el = $('nutr-meal-log'); if(!el) return;
   const meals = getTodayNutrLog();
   if(!meals.length) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:18px;">Belum ada makanan yang diconsume hari ini.</div>`;
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:18px;">Belum ada makanan yang diconsume hari ini.</div>`;
     return;
   }
   el.innerHTML = meals.map((m,i) => `
@@ -5011,7 +5011,7 @@ function renderNutrMealLog() {
         <div class="nutr-meal-name">${m.name}${m.portion&&m.portion!==1?' <span style="font-size:8px;opacity:.6;">×'+m.portion+'</span>':''}</div>
         <div class="nutr-meal-meta">P:${m.protein}g · K:${m.carbs}g · L:${m.fat}g · ${m.time||''}</div>
       </div>
-      <div class="nutr-meal-kcal">${m.kcal}<span style="font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:400;"> kkal</span></div>
+      <div class="nutr-meal-kcal">${m.kcal}<span style="font-family:var(--font-mono, monospace);font-size:7px;font-weight:400;"> kkal</span></div>
       <div class="nutr-meal-del" onclick="deleteNutrMeal(${i})" title="Hapus">×</div>
     </div>`).join('');
 }
@@ -5057,9 +5057,9 @@ async function doNutrScan() {
   loadingEl.className = 'nutr-scan-loading';
   loadingEl.id = 'nutr-loading';
   loadingEl.innerHTML = `
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);letter-spacing:1px;">MENGANALISA MAKANAN...</div>
+    <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--yellow);letter-spacing:1px;">MENGANALISA MAKANAN...</div>
     <div class="nutr-scan-loading-bar"><div class="nutr-scan-loading-fill"></div></div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">Claude Vision sedang memproses foto</div>`;
+    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">Claude Vision sedang memproses foto</div>`;
   card.appendChild(loadingEl);
 
   const targets = getNutrTargets();
@@ -5165,8 +5165,8 @@ function renderNutrResult(result, totals, targets) {
     const lim = targets[k];
     return `<div class="nutr-result-cell${isOver?' over-limit':''}">
       <div class="nutr-result-cell-name">${NUTR_LABELS[k]}</div>
-      <div class="nutr-result-cell-val">${scaled[k]}<span style="font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:400;"> ${NUTR_UNITS[k]}</span></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:6.5px;color:${isOver?'var(--red)':'var(--sub)'};margin-top:2px;">sdh: ${alreadyConsumed} → ${afterConsume}/${lim}</div>
+      <div class="nutr-result-cell-val">${scaled[k]}<span style="font-family:var(--font-mono, monospace);font-size:7px;font-weight:400;"> ${NUTR_UNITS[k]}</span></div>
+      <div style="font-family:var(--font-mono, monospace);font-size:6.5px;color:${isOver?'var(--red)':'var(--sub)'};margin-top:2px;">sdh: ${alreadyConsumed} → ${afterConsume}/${lim}</div>
     </div>`;
   }).join('');
 
@@ -5178,7 +5178,7 @@ function renderNutrResult(result, totals, targets) {
         <div class="nutr-result-name">${result.emoji||'🍽️'} ${result.name||'Makanan'}</div>
         <div class="nutr-result-desc">${result.description||''} · ${result.serving||'1 porsi'}</div>
       </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);text-align:right;">${confBadge}<br>estimasi</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);text-align:right;">${confBadge}<br>estimasi</div>
     </div>
     <div class="nutr-result-kcal">${scaled.kcal}</div>
     <div class="nutr-result-kcal-lbl">kkal per ${result.serving||'porsi'}</div>
@@ -5187,7 +5187,7 @@ function renderNutrResult(result, totals, targets) {
       <div class="nutr-portion-btn" onclick="adjustPortion(-0.5)">−</div>
       <div class="nutr-portion-val" id="nutr-portion-disp">×${_nutrPortion}</div>
       <div class="nutr-portion-btn" onclick="adjustPortion(0.5)">+</div>
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">(0.5 = setengah porsi)</span>
+      <span style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">(0.5 = setengah porsi)</span>
     </div>
     ${warningHtml}
     <div class="nutr-result-grid">${cellsHtml}</div>`;
@@ -5402,19 +5402,19 @@ function renderReportWaterDisplay() {
     const log = JSON.parse(localStorage.getItem('oht_water_log') || '{}');
     const data = log[d];
     if(!data) {
-      el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
+      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
       return;
     }
     if(data.mode === 'ml') {
       const pct = Math.min(100, Math.round((data.ml||0) / 2000 * 100));
       el.innerHTML = `<div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;">
-        <div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--yellow);">${data.ml||0}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">/ 2000 ml</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--yellow);">${data.ml||0}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">/ 2000 ml</div>
       </div>
       <div style="width:100%;height:8px;background:#222;border:1px solid var(--bc);overflow:hidden;">
         <div style="height:100%;width:${pct}%;background:var(--yellow);transition:width .4s;"></div>
       </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:4px;">${pct}% dari target harian</div>`;
+      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-top:4px;">${pct}% dari target harian</div>`;
     } else {
       const g = data.glasses || 0;
       const target = 8;
@@ -5426,7 +5426,7 @@ function renderReportWaterDisplay() {
       el.innerHTML = `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">${cups}</div>
         <div style="display:flex;align-items:center;gap:9px;">
           <div style="flex:1;height:4px;background:#222;overflow:hidden;"><div style="height:100%;width:${pct}%;background:var(--yellow);"></div></div>
-          <div style="font-family:'Archivo Black',sans-serif;font-size:11px;color:var(--yellow);">${g}/${target}</div>
+          <div style="font-family:sans-serif;font-weight:900;font-size:11px;color:var(--yellow);">${g}/${target}</div>
         </div>`;
     }
   } catch(e) { el.innerHTML = '<div style="color:var(--sub);font-size:9px;">Error.</div>'; }
@@ -5439,14 +5439,14 @@ function renderReportSleepDisplay() {
     const log = JSON.parse(localStorage.getItem('oht_sleep_log') || '{}');
     const entries = log[d] || [];
     if(!entries.length) {
-      el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
+      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
       return;
     }
     el.innerHTML = entries.map(e => {
-      const dur = e.duration ? `<span style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${e.duration}h</span>` : '';
+      const dur = e.duration ? `<span style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${e.duration}h</span>` : '';
       return `<div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--bc);">
         <span style="font-size:16px;">🌙</span>
-        <div style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:9px;">Tidur ${e.bed||'?'} → Bangun ${e.wake||'?'}</div>
+        <div style="flex:1;font-family:var(--font-mono, monospace);font-size:9px;">Tidur ${e.bed||'?'} → Bangun ${e.wake||'?'}</div>
         ${dur}
       </div>`;
     }).join('');
@@ -5480,7 +5480,7 @@ function renderReportGardenSnap() {
   // Check lockedDays for that date
   const snap = S.lockedDays && S.lockedDays[d];
   if(!snap) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:12px;">Belum ada data garden untuk tanggal ini.</div>`;
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:12px;">Belum ada data garden untuk tanggal ini.</div>`;
     return;
   }
   const done = snap.filter(s=>s.completed).length;
@@ -5489,8 +5489,8 @@ function renderReportGardenSnap() {
   el.innerHTML = `<div style="display:flex;align-items:center;gap:11px;">
     <div style="font-size:28px;">${pct===100?'🌳':pct>=60?'🌿':pct>=30?'🌱':'🌰'}</div>
     <div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${pct}%</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">${done}/${total} habits selesai</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${pct}%</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">${done}/${total} habits selesai</div>
     </div>
     <div style="flex:1;height:6px;background:#222;border:1px solid var(--bc);overflow:hidden;">
       <div style="height:100%;width:${pct}%;background:var(--lime);transition:width .5s;"></div>
@@ -5505,7 +5505,7 @@ function renderReportNutritionLog() {
     const log = JSON.parse(localStorage.getItem('oht_nutr_log')||'{}');
     const meals = log[d] || [];
     if(!meals.length) {
-      el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:8px;">Tidak ada data nutrisi.</div>`;
+      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:8px;">Tidak ada data nutrisi.</div>`;
       return;
     }
     const totKcal = meals.reduce((s,m)=>s+(m.kcal||0),0);
@@ -5513,15 +5513,15 @@ function renderReportNutritionLog() {
     const totC = meals.reduce((s,m)=>s+(m.carbs||0),0);
     const totF = meals.reduce((s,m)=>s+(m.fat||0),0);
     el.innerHTML = `<div style="display:flex;gap:11px;flex-wrap:wrap;margin-bottom:9px;">
-      <div><div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${totKcal}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">kkal</div></div>
-      <div><div style="font-family:'Archivo Black',sans-serif;font-size:16px;">${totP}g</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">protein</div></div>
-      <div><div style="font-family:'Archivo Black',sans-serif;font-size:16px;">${totC}g</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">karbo</div></div>
-      <div><div style="font-family:'Archivo Black',sans-serif;font-size:16px;">${totF}g</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">lemak</div></div>
+      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${totKcal}</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">kkal</div></div>
+      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totP}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">protein</div></div>
+      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totC}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">karbo</div></div>
+      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totF}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">lemak</div></div>
     </div>
     ${meals.map(m=>`<div style="display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid var(--bc);">
       <span style="font-size:16px;">${m.emoji||'🍽️'}</span>
-      <div style="flex:1;"><div style="font-family:'Archivo Black',sans-serif;font-size:10px;">${m.name}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">${m.time||''} · P:${m.protein}g K:${m.carbs}g L:${m.fat}g</div></div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:11px;color:var(--yellow);">${m.kcal}kkal</div>
+      <div style="flex:1;"><div style="font-family:sans-serif;font-weight:900;font-size:10px;">${m.name}</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">${m.time||''} · P:${m.protein}g K:${m.carbs}g L:${m.fat}g</div></div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:11px;color:var(--yellow);">${m.kcal}kkal</div>
     </div>`).join('')}`;
   } catch(e) {
     el.innerHTML = '<div style="color:var(--sub);font-size:9px;padding:8px;">Error loading nutrition data.</div>';
@@ -5636,7 +5636,7 @@ function renderWellnessSleepLog(d, isToday) {
   const log = S.sleepLog || [];
   const entries = log.filter(l => l.date === d);
   if(!entries.length) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:9px;">Belum ada log tidur${isToday ? '.' : ' untuk tanggal ini.'}</div>`;
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);padding:9px;">Belum ada log tidur${isToday ? '.' : ' untuk tanggal ini.'}</div>`;
     return;
   }
   el.innerHTML = entries.map(l => {
@@ -5645,7 +5645,7 @@ function renderWellnessSleepLog(d, isToday) {
     return `<div class="sleep-entry">
       <div style="font-size:9px;color:var(--sub);">🌙 ${l.bed} → ☀️ ${l.wake}</div>
       <div class="sleep-bar-wrap"><div class="sleep-bar-fill" style="width:${pct}%"></div></div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:12px;flex-shrink:0;">${l.hours}h ${quality}</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:12px;flex-shrink:0;">${l.hours}h ${quality}</div>
     </div>`;
   }).join('');
 }
@@ -5695,7 +5695,7 @@ function renderNutrDailyTracker(date) {
 
   if(!meals.length) {
     el.innerHTML = `<div class="analytics-card" style="text-align:center;padding:14px;">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">Belum ada makanan yang dicatat hari ini.</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Belum ada makanan yang dicatat hari ini.</div>
     </div>`;
     return;
   }
@@ -5717,7 +5717,7 @@ function renderNutrDailyTracker(date) {
     const pct = Math.min(100, Math.round(totals[k]/(targets[k]||1)*100));
     const over = totals[k] > targets[k];
     return `<div style="margin-bottom:8px;">
-      <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8px;margin-bottom:3px;">
+      <div style="display:flex;justify-content:space-between;font-family:var(--font-mono, monospace);font-size:8px;margin-bottom:3px;">
         <span style="color:${over?'var(--red)':'var(--sub)'};">${labels[k]}</span>
         <span style="color:${over?'var(--red)':'var(--text)'};">${Math.round(totals[k])} / ${targets[k]} ${units[k]}</span>
       </div>
@@ -5732,14 +5732,14 @@ function renderNutrDailyTracker(date) {
     const pct = Math.min(100, Math.round(totals[k]/(targets[k]||1)*100));
     const over = totals[k] > targets[k];
     return `<div style="flex:1;background:var(--bg);border:var(--bo);padding:6px 8px;">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:${over?'var(--red)':'var(--sub)'};">${labels[k]}</div>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:11px;color:${over?'var(--red)':'var(--text)'};">${Math.round(totals[k])}<span style="font-size:7px;font-weight:400;"> ${units[k]}</span></div>
+      <div style="font-family:var(--font-mono, monospace);font-size:7px;color:${over?'var(--red)':'var(--sub)'};">${labels[k]}</div>
+      <div style="font-family:sans-serif;font-weight:900;font-size:11px;color:${over?'var(--red)':'var(--text)'};">${Math.round(totals[k])}<span style="font-size:7px;font-weight:400;"> ${units[k]}</span></div>
       <div style="height:3px;background:#222;margin-top:3px;"><div style="height:100%;width:${pct}%;background:${over?'var(--red)':colors[k]};"></div></div>
     </div>`;
   }).join('');
 
   el.innerHTML = `<div class="analytics-card" style="margin-bottom:9px;">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:9px;text-transform:uppercase;letter-spacing:1px;">Progress Nutrisi Harian</div>
+    <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-bottom:9px;text-transform:uppercase;letter-spacing:1px;">Progress Nutrisi Harian</div>
     ${mainBars}
     <div style="display:flex;gap:5px;margin-top:5px;">${miniCells}</div>
   </div>`;
@@ -5750,7 +5750,7 @@ function renderNutrMealLog(date) {
   const log = getNutrLog();
   const meals = log[date] || [];
   if(!meals.length) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:14px;">Belum ada makanan yang dicatat.</div>`;
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:14px;">Belum ada makanan yang dicatat.</div>`;
     return;
   }
   el.innerHTML = meals.map((m,i) => `
@@ -5760,7 +5760,7 @@ function renderNutrMealLog(date) {
         <div class="nutr-meal-name">${m.name}${m.portion&&m.portion!==1?` <span style="font-size:8px;opacity:.6;">×${m.portion}</span>`:''}</div>
         <div class="nutr-meal-meta">P:${m.protein}g · K:${m.carbs}g · L:${m.fat}g${m.time?' · '+m.time:''}</div>
       </div>
-      <div class="nutr-meal-kcal">${m.kcal}<span style="font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:400;"> kkal</span></div>
+      <div class="nutr-meal-kcal">${m.kcal}<span style="font-family:var(--font-mono, monospace);font-size:7px;font-weight:400;"> kkal</span></div>
       ${date===todayStr()?`<div class="nutr-meal-del" onclick="deleteNutrMeal(${i},'${date}')">×</div>`:''}
     </div>`).join('');
 }
@@ -6125,11 +6125,11 @@ function renderWellnessStreakCards() {
       <div style="display:flex;align-items:center;gap:14px;">
         <div style="font-size:36px;">💧</div>
         <div style="flex:1;">
-          <div style="font-family:'Archivo Black',sans-serif;font-size:28px;color:var(--yellow);">${s}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">HARI BERTURUT-TURUT</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:2px;">Target: ${targetLabel} · Best: ${best} hari</div>
+          <div style="font-family:sans-serif;font-weight:900;font-size:28px;color:var(--yellow);">${s}</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">HARI BERTURUT-TURUT</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-top:2px;">Target: ${targetLabel} · Best: ${best} hari</div>
         </div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);text-align:right;">${badge}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--yellow);text-align:right;">${badge}</div>
       </div>`;
   }
 
@@ -6143,11 +6143,11 @@ function renderWellnessStreakCards() {
       <div style="display:flex;align-items:center;gap:14px;">
         <div style="font-size:36px;">😴</div>
         <div style="flex:1;">
-          <div style="font-family:'Archivo Black',sans-serif;font-size:28px;color:var(--yellow);">${s}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">HARI BERTURUT-TURUT</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:2px;">Target: ≥${cfg.sleepHours}h/malam · Best: ${best} hari</div>
+          <div style="font-family:sans-serif;font-weight:900;font-size:28px;color:var(--yellow);">${s}</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">HARI BERTURUT-TURUT</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-top:2px;">Target: ≥${cfg.sleepHours}h/malam · Best: ${best} hari</div>
         </div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);text-align:right;">${badge}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--yellow);text-align:right;">${badge}</div>
       </div>`;
   }
 }
@@ -7481,42 +7481,42 @@ function renderProfilePage() {
     <div style="position:relative;width:100%;cursor:pointer;margin-bottom:0;" onclick="rotateProfileChar()" title="Tap untuk rotasi">
       <canvas id="profile-char-canvas" width="${pageW}" height="${canvasH}"
         style="display:block;width:100%;height:auto;"></canvas>
-      <div style="position:absolute;bottom:11px;right:11px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,255,255,.6);">↺ Tap rotasi</div>
+      <div style="position:absolute;bottom:11px;right:11px;font-family:var(--font-mono, monospace);font-size:8px;color:rgba(255,255,255,.6);">↺ Tap rotasi</div>
     </div>
     <!-- Stats panel -->
     <div style="background:var(--surface);border:var(--bo-t);padding:14px;margin-bottom:11px;">
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
         <div style="flex:1;">
-          <div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--yellow);">${S.name||'User'}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">Level ${lvl} · ${LVL_NAMES?LVL_NAMES[Math.min(lvl-1,LVL_NAMES.length-1)]:'Starter'}</div>
+          <div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--yellow);">${S.name||'User'}</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Level ${lvl} · ${LVL_NAMES?LVL_NAMES[Math.min(lvl-1,LVL_NAMES.length-1)]:'Starter'}</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-family:'Archivo Black',sans-serif;font-size:22px;color:var(--yellow);">🪙 ${coins}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">COIN</div>
+          <div style="font-family:sans-serif;font-weight:900;font-size:22px;color:var(--yellow);">🪙 ${coins}</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">COIN</div>
         </div>
       </div>
       <!-- XP bar -->
-      <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:4px;">
+      <div style="display:flex;justify-content:space-between;font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-bottom:4px;">
         <span>XP</span><span>${xpInLevel}/100</span>
       </div>
       <div style="height:8px;background:#222;border:1px solid var(--bc);overflow:hidden;margin-bottom:4px;">
         <div style="height:100%;width:${xpInLevel}%;background:var(--yellow);transition:width .6s;"></div>
       </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">${xp} XP total · menuju level ${lvl+1}</div>
+      <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">${xp} XP total · menuju level ${lvl+1}</div>
     </div>
     <!-- Stats grid -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:11px;">
       <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${S.habits?.filter(h=>!h.archived).length||0}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">HABITS</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.filter(h=>!h.archived).length||0}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">HABITS</div>
       </div>
       <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${S.habits?.reduce((m,h)=>Math.max(m,h.bestStreak||0),0)||0}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">BEST STREAK</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.reduce((m,h)=>Math.max(m,h.bestStreak||0),0)||0}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">BEST STREAK</div>
       </div>
       <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:'Archivo Black',sans-serif;font-size:16px;color:var(--yellow);">${S.habits?.reduce((s,h)=>s+(h.totalDone||0),0)||0}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">TOTAL SELESAI</div>
+        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.reduce((s,h)=>s+(h.totalDone||0),0)||0}</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">TOTAL SELESAI</div>
       </div>
     </div>`;
 
@@ -7693,7 +7693,7 @@ function rotateProfileChar() {
 function renderColorPicker(key, label, currentVal) {
   const colors = ['#3a2000','#f5c5a3','#d4a070','#c8855a','#5c3a1e','#4a90d9','#e83535','#2d4a8a','#4aaa55','#aa44aa','#f5a623','#1a1a1a','#ffffff','#888888'];
   return `<div style="margin-bottom:7px;width:100%;">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:4px;text-transform:uppercase;">${label}</div>
+    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-bottom:4px;text-transform:uppercase;">${label}</div>
     <div style="display:flex;gap:5px;flex-wrap:wrap;">
       ${colors.map(c=>`<div onclick="setCharColor('${key}','${c}')"
         style="width:22px;height:22px;background:${c};border:2px solid ${c===currentVal?'var(--yellow)':'var(--bc)'};cursor:pointer;"></div>`).join('')}
@@ -7841,7 +7841,7 @@ function renderMainShopContent(tab) {
 
   const items = getShopItems().filter(it => it.category === tab);
   if(!items.length) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:24px;text-align:center;">Belum ada item.</div>`;
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);padding:24px;text-align:center;">Belum ada item.</div>`;
     return;
   }
 
@@ -7884,7 +7884,7 @@ function renderMainShopContent(tab) {
         <div class="shop-item-name">${it.name}</div>
         <div class="shop-item-desc">${it.desc||''}</div>
       </div>
-      <div style="flex-shrink:0;font-family:'Archivo Black',sans-serif;font-size:12px;
+      <div style="flex-shrink:0;font-family:sans-serif;font-weight:900;font-size:12px;
         color:${isOwned?'var(--lime)':canAfford?'var(--yellow)':'#666'};text-align:right;min-width:60px;">
         ${btnLabel}
       </div>
@@ -8031,7 +8031,7 @@ function renderJadwalList() {
   const el = $('jadwal-list'); if(!el) return;
   const jadwals = getJadwalData();
   if(!jadwals.length) {
-    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);text-align:center;padding:24px;">
+    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:24px;">
       Belum ada jadwal. Tap + TAMBAH untuk mulai.
     </div>`; return;
   }
@@ -8125,7 +8125,7 @@ function buildJadwalTimesList() {
   container.innerHTML=_jadwalTimes.map((t,i)=>`
     <div style="display:flex;align-items:center;gap:7px;">
       <input type="time" value="${t}" onchange="updateJadwalTime(${i},this.value)"
-        style="flex:1;font-family:'Archivo Black',sans-serif;font-size:14px;background:var(--surface);border:var(--bo-t);color:var(--text);padding:6px 9px;">
+        style="flex:1;font-family:sans-serif;font-weight:900;font-size:14px;background:var(--surface);border:var(--bo-t);color:var(--text);padding:6px 9px;">
       ${_jadwalTimes.length>1?`<button class="btn btn-xs btn-danger" onclick="removeJadwalTime(${i})">✕</button>`:''}
     </div>`).join('');
 }
@@ -8511,7 +8511,7 @@ function renderFriendsList(friends) {
           <div class="friend-sub">${f.online?'🟢 Online':'⚫ Offline'}${xpBadge?' · '+xpBadge:''}</div>
         </div>
         ${f.unread>0?`<div class="friend-unread">${f.unread}</div>`:''}
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);">chat ›</div>
+        <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">chat ›</div>
       </div>`;
     }).join('');
   };
@@ -8668,72 +8668,67 @@ function generateNumericId() {
 function renderSettingsAuth() {
   const el = $('settings-auth-block'); if(!el) return;
 
-  if(_fbUser && _fbProfile) {
-    // Logged in
-    const numId = _fbProfile.numId || '...';
-    el.innerHTML = `
-      <div style="background:var(--surface);border:var(--bo);padding:14px;">
-        <div style="display:flex;align-items:center;gap:11px;margin-bottom:11px;">
-          <div class="friend-online-dot active"></div>
-          <div>
-            <div style="font-family:'Archivo Black',sans-serif;font-size:13px;">${_fbProfile.displayName||_fbProfile.username}</div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">@${_fbProfile.username}</div>
-          </div>
-        </div>
-        <div style="background:var(--bg);border:var(--bo);padding:9px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:2px;">ID TEMAN</div>
-            <div style="font-family:'Archivo Black',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:4px;">${numId}</div>
-          </div>
-          <button class="btn btn-xs" onclick="copyFriendId('${numId}')">📋 COPY</button>
-        </div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;">
-          Bagikan ID ini ke teman untuk bisa saling terhubung.
-        </div>
-        <button class="btn" style="width:100%;justify-content:center;" onclick="fbLogout()">🚪 Keluar dari Akun</button>
-      </div>`;
-  } else {
+  if(!_fbUser || !_fbProfile) {
     // Not logged in
-    el.innerHTML = `
-      <div style="background:var(--surface);border:var(--bo);padding:14px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">
-          Login untuk terhubung dengan teman menggunakan ID numerik 6 digit.
-        </div>
-        <button onclick="fbLoginGoogle()" style="
-          width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
-          padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;
-          font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--text);
-          margin-bottom:9px;-webkit-tap-highlight-color:transparent;
-        ">
-          <svg width="16" height="16" viewBox="0 0 48 48">
-            <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.8 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4c-7.8 0-14.5 4.4-18.1 10.7z"/>
-            <path fill="#4CAF50" d="M24 44c5.2 0 10-1.9 13.6-5.1l-6.3-5.2C29.5 35.6 26.9 36 24 36c-5.1 0-9.5-3.3-11.2-8L6.1 33.1C9.6 39.5 16.3 44 24 44z"/>
-            <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.3 5.2C41 35.4 44 30.1 44 24c0-1.3-.1-2.7-.4-4z"/>
-          </svg>
-          Masuk dengan Google
-        </button>
-        <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
-          <div style="flex:1;height:1px;background:var(--bc);"></div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">atau username</div>
-          <div style="flex:1;height:1px;background:var(--bc);"></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">USERNAME</label>
-          <input type="text" id="fb-username" class="form-input" placeholder="huruf/angka"
-            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
-        </div>
-        <div class="form-group">
-          <label class="form-label">PASSWORD</label>
-          <input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter">
-        </div>
-        <div style="display:flex;gap:7px;">
-          <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button>
-          <button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button>
-        </div>
-        <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>
-      </div>`;
+    el.innerHTML = '<div style="background:var(--surface);border:var(--bo);padding:14px;">' +
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">Login untuk terhubung dengan teman.</div>' +
+      '<button onclick="fbLoginGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;font-family:\'Archivo Black\',sans-serif;font-size:12px;color:var(--text);margin-bottom:9px;">' +
+        '<svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/></svg>' +
+        'Masuk dengan Google' +
+      '</button>' +
+      '<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;"><div style="flex:1;height:1px;background:var(--bc);"></div><div style="font-family:\'IBM Plex Mono\',monospace;font-size:7px;color:var(--sub);">atau</div><div style="flex:1;height:1px;background:var(--bc);"></div></div>' +
+      '<div class="form-group"><label class="form-label">USERNAME</label><input type="text" id="fb-username" class="form-input" placeholder="huruf/angka" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,\'\')"></div>' +
+      '<div class="form-group"><label class="form-label">PASSWORD</label><input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter"></div>' +
+      '<div style="display:flex;gap:7px;"><button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button><button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button></div>' +
+      '<div id="fb-auth-error" style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>' +
+    '</div>';
+    return;
   }
+
+  // Logged in
+  const googleLinked = (_fbUser.providerData||[]).some(function(p){return p.providerId==='google.com';});
+  const emailLinked  = (_fbUser.providerData||[]).some(function(p){return p.providerId==='password';});
+  const googleEmail  = (_fbUser.providerData||[]).find(function(p){return p.providerId==='google.com';})?.email || _fbUser.email || '';
+
+  let html = '<div style="background:var(--surface);border:var(--bo);padding:14px;">';
+
+  // Header
+  html += '<div style="display:flex;align-items:center;gap:11px;margin-bottom:14px;">';
+  html += '<div class="friend-online-dot active"></div>';
+  html += '<div><div style="font-family:\'Archivo Black\',sans-serif;font-size:14px;">' + (_fbProfile.displayName||_fbProfile.username) + '</div>';
+  html += '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);">@' + _fbProfile.username + '</div></div></div>';
+
+  // Label
+  html += '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:7px;color:var(--sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px;">Akun Terhubung</div>';
+
+  // Google row
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bc);">';
+  html += '<div style="display:flex;align-items:center;gap:9px;">';
+  html += '<svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/></svg>';
+  html += '<div><div style="font-family:\'Archivo Black\',sans-serif;font-size:10px;">Google</div>';
+  if(googleLinked) html += '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);">' + googleEmail + '</div>';
+  html += '</div></div>';
+  if(googleLinked) {
+    if(emailLinked) html += '<button class="btn btn-xs" style="border-color:#f44;color:#f44;" onclick="fbUnlinkGoogle()">Lepas</button>';
+    else html += '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--lime);">✅</span>';
+  } else {
+    html += '<button class="btn btn-xs" onclick="fbLinkGoogle()">Hubungkan</button>';
+  }
+  html += '</div>';
+
+  // Email/password row
+  if(emailLinked) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bc);">';
+    html += '<div><div style="font-family:\'Archivo Black\',sans-serif;font-size:10px;">Email / Password</div>';
+    html += '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);">' + (_fbUser.email||'') + '</div></div>';
+    if(googleLinked) html += '<button class="btn btn-xs" style="border-color:#f44;color:#f44;" onclick="fbUnlinkEmail()">Lepas</button>';
+    else html += '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--lime);">✅</span>';
+    html += '</div>';
+  }
+
+  html += '<button class="btn" style="width:100%;justify-content:center;margin-top:11px;" onclick="fbLogout()">🚪 Keluar</button>';
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 function copyFriendId(id) {
@@ -8774,42 +8769,39 @@ function renderProfileSocialSection() {
   const el = $('profile-social-section'); if(!el) return;
 
   if(!_fbUser || !_fbProfile) {
-    el.innerHTML = `
-      <div style="background:var(--surface);border:var(--bo);padding:11px;text-align:center;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">
-          Login di Setelan untuk mendapatkan ID teman
-        </div>
-      </div>`;
+    el.innerHTML = "<div style='padding:11px;text-align:center;font-size:8px;color:var(--sub);border:var(--bo);'>Login di Setelan untuk mendapatkan ID</div>";
     return;
   }
 
-  const numId = _fbProfile.numId || '------';
+  const numId = _fbProfile.numId || '---';
 
-  // Record kunjungan ke profil sendiri (skip)
-  // Load 3 pengunjung terakhir
-  _fbDb.ref('visitors/' + _fbUser.uid).orderByChild('ts').limitToLast(3).once('value').then(snap => {
+  _fbDb.ref('visitors/' + _fbUser.uid).orderByChild('ts').limitToLast(3).once('value').then(function(snap) {
     const visitors = [];
-    snap.forEach(child => visitors.unshift(child.val()));
+    snap.forEach(function(child) { visitors.unshift(child.val()); });
 
-    el.innerHTML = `
-      <!-- ID Card -->
-      <div style="background:var(--surface);border:var(--bo);padding:11px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:3px;">ID TEMAN</div>
-          <div style="font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--yellow);letter-spacing:4px;">${numId}</div>
-        </div>
-        <button class="btn btn-xs" onclick="copyFriendId('${numId}')">📋 COPY</button>
-      </div>
-      <!-- Visitors -->
-      <div style="background:var(--surface);border:var(--bo);padding:11px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px;">👀 Pengunjung Terakhir</div>
-        ${visitors.length ? visitors.map(v => `
-          <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;">@${v.username}</div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">${timeAgo(v.ts)}</div>
-          </div>`).join('') :
-          `<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);">Belum ada pengunjung</div>`}
-      </div>`;
+    let html = "";
+    // ID Card
+    html += "<div style='background:var(--surface);border:var(--bo);padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;'>";
+    html += "<div><div style='font-size:7px;color:var(--sub);margin-bottom:4px;letter-spacing:1px;'>ID</div>";
+    html += "<div style='font-family:Archivo Black,sans-serif;font-weight:900;font-size:24px;color:var(--yellow);letter-spacing:5px;'>" + numId + "</div></div>";
+    html += "<button class='btn btn-xs' onclick=\"copyFriendId('" + numId + "')\" >📋 COPY</button></div>";
+
+    // Visitors
+    html += "<div style='background:var(--surface);border:var(--bo);padding:14px 16px;'>";
+    html += "<div style='font-size:7px;color:var(--sub);margin-bottom:9px;text-transform:uppercase;letter-spacing:1px;'>👀 Pengunjung Terakhir</div>";
+
+    if(visitors.length) {
+      visitors.forEach(function(v) {
+        html += "<div style='display:flex;align-items:center;gap:9px;margin-bottom:7px;'>";
+        html += "<div style='font-size:10px;'>@" + v.username + "</div>";
+        html += "<div style='font-size:7px;color:var(--sub);'>" + timeAgo(v.ts) + "</div>";
+        html += "</div>";
+      });
+    } else {
+      html += "<div style='font-size:8px;color:var(--sub);'>Belum ada pengunjung</div>";
+    }
+    html += "</div>";
+    el.innerHTML = html;
   });
 }
 
@@ -8901,28 +8893,28 @@ function fbSearchFriend(query) {
   if(!res) return;
   if(query.length < 2) { res.innerHTML=''; return; }
 
-  res.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:9px;">Mencari...</div>`;
+  res.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--sub);padding:9px;">Mencari...</div>';
 
   const isNumId = /^\d{4,6}$/.test(query);
 
   const showResult = (uid, profile) => {
     if(!uid || !profile) {
-      res.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--sub);padding:14px;text-align:center;">Tidak ditemukan 😕</div>`;
+      res.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--sub);padding:14px;text-align:center;">Tidak ditemukan</div>';
       return;
     }
     const isMe = uid === _fbUser?.uid;
-    const isFriend = false; // TODO: check friend list
+    window._searchResult = {uid, profile};
     const lvl = Math.max(1, Math.floor((profile.xp||0)/100)+1);
-    res.innerHTML = `
-      <div class="friend-card" style="cursor:default;">
-        <div>
-          <div class="friend-name">${profile.displayName||profile.username}</div>
-          <div class="friend-sub">@${profile.username} · ID: ${profile.numId||'—'}</div>
-          <div class="friend-sub">LVL ${lvl} · ${profile.xp||0} XP</div>
-        </div>
-        ${isMe ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);">Ini kamu</div>' :
-          `<button class="btn btn-sm btn-primary" onclick="fbAddFriendDirect('${uid}','${profile.username}','${profile.numId||''}')">+ TAMBAH</button>`}
-      </div>`;
+    res.innerHTML = '<div class="friend-card" style="cursor:default;display:flex;align-items:center;justify-content:space-between;">' +
+      '<div>' +
+        '<div class="friend-name">' + (profile.displayName||profile.username) + '</div>' +
+        '<div class="friend-sub">@' + profile.username + ' · ID: ' + (profile.numId||'—') + '</div>' +
+        '<div class="friend-sub">LVL ' + lvl + ' · ' + (profile.xp||0) + ' XP</div>' +
+      '</div>' +
+      (isMe ? '<div style="font-size:8px;color:var(--sub);">Ini kamu</div>' :
+'<button class="btn btn-sm btn-primary" onclick="fbAddFriendFromResult()">+ TAMBAH</button>'
+      ) +
+    '</div>';
   };
 
   if(isNumId) {
@@ -8972,7 +8964,7 @@ function openChat(friendUsername) {
     const uid = snap.val();
     if(uid) _fbDb.ref('users/'+uid+'/xp').once('value').then(xsnap => {
       const xp = xsnap.val()||0;
-      const el=$('chat-friend-xp'); if(el) el.textContent=`LVL ${Math.max(1,Math.floor(xp/100)+1)} · ${xp} XP`;
+      const el=$('chat-friend-xp'); if(el) el.textContent='LVL ' + Math.max(1,Math.floor(xp/100)+1) + ' · ' + xp + ' XP';
     });
   });
   loadChatMessages();
@@ -8993,4 +8985,55 @@ function initFriendsPage() {
   } else {
     renderFriendsLogin();
   }
+}
+
+// ── Link / Unlink akun ────────────────────────────────────
+function fbLinkGoogle() {
+  if(!_fbAuth || !_fbUser) return;
+  const provider = new firebase.auth.GoogleAuthProvider();
+  _fbUser.linkWithPopup(provider)
+    .then(() => {
+      toast('✅ Google berhasil dihubungkan!', 'success');
+      renderSettingsAuth();
+    })
+    .catch(e => {
+      if(e.code === 'auth/credential-already-in-use') {
+        toast('Akun Google ini sudah dipakai user lain', 'error');
+      } else {
+        toast('Gagal: ' + e.message, 'error');
+      }
+    });
+}
+
+function fbUnlinkGoogle() {
+  if(!_fbUser) return;
+  // Hanya boleh unlink kalau masih ada provider lain (email)
+  const providers = _fbUser.providerData.map(p => p.providerId);
+  if(providers.length <= 1) {
+    toast('Tidak bisa dilepas — ini satu-satunya metode login kamu', 'error');
+    return;
+  }
+  if(!confirm('Lepas Google dari akun ini?')) return;
+  _fbUser.unlink('google.com')
+    .then(() => { toast('Google dilepas', 'info'); renderSettingsAuth(); })
+    .catch(e => toast('Gagal: ' + e.message, 'error'));
+}
+
+function fbUnlinkEmail() {
+  if(!_fbUser) return;
+  const providers = _fbUser.providerData.map(p => p.providerId);
+  if(providers.length <= 1) {
+    toast('Tidak bisa dilepas — ini satu-satunya metode login kamu', 'error');
+    return;
+  }
+  if(!confirm('Lepas Email/Password dari akun ini?')) return;
+  _fbUser.unlink('password')
+    .then(() => { toast('Email dilepas', 'info'); renderSettingsAuth(); })
+    .catch(e => toast('Gagal: ' + e.message, 'error'));
+}
+
+function fbAddFriendFromResult() {
+  const r = window._searchResult;
+  if(!r) return;
+  fbAddFriendDirect(r.uid, r.profile.username, r.profile.numId||'');
 }
