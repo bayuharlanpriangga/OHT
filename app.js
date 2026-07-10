@@ -1410,7 +1410,7 @@ function resetForm(){
   $('edit-id').value='';$('inp-name').value='';
   const _notes=$('inp-notes');if(_notes)_notes.value='';
   $('inp-target').value='1';
-  $('inp-cat').value='health';$('inp-freq').value='daily';
+  $('inp-freq').value='daily';
   const _stake=$('inp-stake');if(_stake)_stake.value='';
   const pt=$('inp-time');if(pt)pt.value='';
   const pp=$('inp-prog');if(pp)pp.value='none';
@@ -1418,6 +1418,11 @@ function resetForm(){
   document.querySelectorAll('.emoji-opt').forEach((e,i)=>e.classList.toggle('sel',i===0));
   document.querySelectorAll('.color-opt').forEach((e,i)=>e.classList.toggle('sel',i===0));
   document.querySelectorAll('.freq-btn').forEach((e,i)=>e.classList.toggle('sel',i===0));
+  // Reset custom-select triggers to their defaults
+  const progCfg=SELECT_CONFIGS.prog.options.find(o=>o.value==='none');
+  const progT=$('trigger-prog');
+  if(progT&&progCfg){const i=progT.querySelector('.cst-icon');const l=progT.querySelector('.cst-label');if(i)i.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${progCfg.svg}</svg>`;if(l)l.textContent=progCfg.label;}
+  const tv=$('time-trigger-val');if(tv)tv.textContent='Tap to set time';
   $('modal-title').textContent='ADD NEW HABIT';
 }
 function updateProgDifficultyVisibility(){
@@ -1428,30 +1433,23 @@ function saveHabit(){
   const name=$('inp-name').value.trim();if(!name){toast('Enter a habit name!','error');return;}
   const editId=$('edit-id').value;
   const progressive=$('inp-prog')?.value||'none';
-  const data={name,icon:$('sel-emoji').value,color:$('sel-color').value,category:$('inp-cat').value,freq:$('inp-freq').value,target:parseInt($('inp-target').value)||1,notes:$('inp-notes').value,progressive,stack:$('inp-stack')?.value||'',stake:$('inp-stake')?.value||'',scheduledTime:$('inp-time')?.value||'',difficulty:$('inp-difficulty')?.value||'medium'};
+  const data={name,icon:$('sel-emoji').value,color:$('sel-color').value,category:$('inp-cat')?.value||'health',freq:$('inp-freq').value,target:parseInt($('inp-target').value)||1,notes:$('inp-notes').value,progressive,stack:$('inp-stack')?.value||'',stake:$('inp-stake')?.value||'',scheduledTime:$('inp-time')?.value||'',difficulty:$('inp-difficulty')?.value||'medium'};
   if(editId){const h=S.habits.find(x=>x.id===editId);if(h){Object.assign(h,data);if(data.progressive!=='none')h.baseTarget=h.baseTarget||data.target;}toast(`"${name}" updated!`,'info');}
   else{S.habits.push({id:'h'+Date.now(),...data,completedToday:false,currentProgress:0,streak:0,bestStreak:0,totalDone:0,weekLog:Array(7).fill(false),monthLog:{},todayXp:0,baseTarget:data.target,createdAt:new Date().toISOString()});toast(`"${name}" added!`,'success');}
   _invalidateStrengthCache();updateMissions();save();renderAll();closeModal('modal-add');
 }
 function editHabit(id){
   const h=S.habits.find(x=>x.id===id);if(!h)return;
-  populateStackPicker(id);
-  $('edit-id').value=id;$('inp-name').value=h.name;$('inp-notes').value=h.notes||'';$('inp-target').value=h.target||1;$('inp-cat').value=h.category||'health';$('inp-freq').value=h.freq||'daily';$('sel-emoji').value=h.icon;$('sel-color').value=h.color;
-  if($('inp-stake'))$('inp-stake').value=h.stake||'';if($('inp-prog'))$('inp-prog').value=h.progressive||'none';if($('inp-stack'))$('inp-stack').value=h.stack||'';if($('inp-time'))$('inp-time').value=h.scheduledTime||'';
+  $('edit-id').value=id;$('inp-name').value=h.name;$('inp-notes').value=h.notes||'';$('inp-target').value=h.target||1;$('inp-freq').value=h.freq||'daily';$('sel-emoji').value=h.icon;$('sel-color').value=h.color;
+  if($('inp-stake'))$('inp-stake').value=h.stake||'';if($('inp-prog'))$('inp-prog').value=h.progressive||'none';if($('inp-time'))$('inp-time').value=h.scheduledTime||'';
   // Select emoji by id (SVG-based picker)
   document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.toggle('sel',(e.getAttribute('onclick')||'').includes(`'${h.icon}'`)));
   document.querySelectorAll('.color-opt').forEach(e=>e.classList.toggle('sel',(e.getAttribute('onclick')||'').includes(h.color)));
   document.querySelectorAll('.freq-btn').forEach(e=>e.classList.toggle('sel',(e.getAttribute('onclick')||'').includes(`'${h.freq||'daily'}'`)));
   // Sync SVG triggers
-  const catCfg=SELECT_CONFIGS.cat.options.find(o=>o.value===(h.category||'health'));
-  const catT=$('trigger-cat');
-  if(catT&&catCfg){const i=catT.querySelector('.cst-icon');const l=catT.querySelector('.cst-label');if(i)i.innerHTML=catCfg.svg?`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${catCfg.svg}</svg>`:catCfg.icon||'';if(l)l.textContent=catCfg.label;}
   const progCfg=SELECT_CONFIGS.prog.options.find(o=>o.value===(h.progressive||'none'));
   const progT=$('trigger-prog');
   if(progT&&progCfg){const i=progT.querySelector('.cst-icon');const l=progT.querySelector('.cst-label');if(i)i.innerHTML=progCfg.svg?`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${progCfg.svg}</svg>`:progCfg.icon||'';if(l)l.textContent=progCfg.label;}
-  const parent=h.stack?S.habits.find(x=>x.id===h.stack):null;
-  const stackT=$('trigger-stack');
-  if(stackT){const i=stackT.querySelector('.cst-icon');const l=stackT.querySelector('.cst-label');if(parent){if(i){const pic=HABIT_ICONS.find(x=>x.id===parent.icon);i.innerHTML=pic?`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${pic.svg}</svg>`:parent.icon;}if(l)l.textContent=parent.name;}else{if(i)i.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>';if(l)l.textContent='— None —';}}
   // Sync time trigger
   const tv=$('time-trigger-val');if(tv)tv.textContent=h.scheduledTime||'Tap to set time';
   $('modal-title').textContent='EDIT HABIT';
@@ -1535,7 +1533,7 @@ function toggleDark(){S.darkMode=!S.darkMode;applyDark(S.darkMode);save();}
 // ── ONBOARDING ─────────────────────────────────────────────
 function showOnboarding(){$('onboarding').classList.add('open');}
 function obNext(step){if(step<0)return;if(step===2){const n=$('ob-name-input').value.trim();if(n)S.name=n;}document.querySelectorAll('.onboard-step').forEach((s,i)=>s.classList.toggle('active',i===step));document.querySelectorAll('.onboard-dot').forEach((d,i)=>d.classList.toggle('active',i===step));}
-function obFinish(){const n=$('ob-name-input').value.trim();if(n)S.name=n;S.onboardDone=true;S.freezes=3;S.freezeLog=[{date:todayStr(),reason:'Welcome gift',earned:3,used:false}];$('onboarding').classList.remove('open');save();seedDemo();renderAll();restoreMoodUI();toast(`🦁 Welcome, ${S.name}! You got 3 ❄ freezes!`,'success');}
+function obFinish(){const n=$('ob-name-input').value.trim();if(n)S.name=n;S.onboardDone=true;S.freezes=3;S.freezeLog=[{date:todayStr(),reason:'Welcome gift',earned:3,used:false}];$('onboarding').classList.remove('open');save();renderAll();restoreMoodUI();toast(`🦁 Welcome, ${S.name}! You got 3 ❄ freezes!`,'success');}
 
 // ── SETTINGS ───────────────────────────────────────────────
 function saveName(){const n=$('st-name').value.trim();if(!n)return;S.name=n;save();renderStats();toast('👤 Name saved!','success');}
@@ -1546,23 +1544,6 @@ function resetAll(){if(!confirm('DELETE ALL DATA?'))return;localStorage.removeIt
 // ── TOAST / CONFETTI ───────────────────────────────────────
 function toast(msg,type='info'){const tc=$('toast-container');if(!tc)return;const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=typeof msg==='string'?msg:msg;tc.appendChild(t);setTimeout(()=>{t.classList.add('removing');setTimeout(()=>t.remove(),320);},2600);}
 function confetti(n){const CC=['#FFE600','#FF3CAC','#00F5D4','#AAFF00','#FF6B00','#0057FF'];for(let i=0;i<n;i++){setTimeout(()=>{const el=document.createElement('div');el.className='confetti-piece';el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${CC[i%CC.length]};animation-duration:${.8+Math.random()*.8}s;animation-delay:${Math.random()*.2}s;width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;border-radius:${Math.random()>.5?'50%':'0'};`;document.body.appendChild(el);setTimeout(()=>el.remove(),2000);},i*35);}}
-
-// ── SEED DEMO ──────────────────────────────────────────────
-function seedDemo(){
-  if(S.habits.length>0)return;
-  const demos=[
-    {name:'Morning Run',icon:'run',color:'#FF3CAC',category:'health',freq:'daily',target:1,notes:'20 min',progressive:'slow',stack:'',stake:'',scheduledTime:'06:30'},
-    {name:'Read 30 min',icon:'book',color:'#0057FF',category:'mind',freq:'daily',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:'21:00'},
-    {name:'Drink 8 Glasses',icon:'water',color:'#00F5D4',category:'wellness',freq:'daily',target:8,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Meditate',icon:'meditate',color:'#7B2FBE',category:'wellness',freq:'daily',target:1,notes:'10 min',progressive:'none',stack:'',stake:'',scheduledTime:'07:00'},
-    {name:'Study Code',icon:'code',color:'#FFE600',category:'productivity',freq:'weekdays',target:1,notes:'Deep focus',progressive:'medium',stack:'',stake:'',scheduledTime:''},
-    {name:'Deep Clean',icon:'clean',color:'#AAFF00',category:'wellness',freq:'weekly',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Review Goals',icon:'target',color:'#FF6B00',category:'productivity',freq:'weekly',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Budget Review',icon:'money',color:'#00BCD4',category:'finance',freq:'monthly',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ];
-  demos.forEach(d=>{const streak=Math.floor(Math.random()*9);S.habits.push({id:'hd'+Date.now()+Math.floor(Math.random()*9999),...d,completedToday:false,currentProgress:0,streak,bestStreak:streak+Math.floor(Math.random()*6),totalDone:Math.floor(Math.random()*40),weekLog:Array(7).fill(false).map(()=>Math.random()>.4),monthLog:{},todayXp:0,baseTarget:d.target,paused:false,createdAt:new Date(Date.now()-Math.random()*30*864e5).toISOString()});});
-  save();
-}
 
 // ── START ──────────────────────────────────────────────────
 init();
@@ -5936,6 +5917,13 @@ function resetWater() {
 
 // initWellnessPage override removed
 
+function getWellnessConfig() {
+  const defaults = {waterMode:'cups', waterCups:8, waterMl:2000, sleepHours:7};
+  try {
+    const raw = localStorage.getItem('oht_wellness_config');
+    return raw ? Object.assign({}, defaults, JSON.parse(raw)) : defaults;
+  } catch(e) { return defaults; }
+}
 function saveWellnessConfig(cfg) {
   try { localStorage.setItem('oht_wellness_config', JSON.stringify(cfg)); } catch(e) {}
 }
@@ -7472,52 +7460,71 @@ function renderProfilePage() {
   const xpInLevel = xp % 100;
   const coins = getGardenData().coins || 0;
 
-  // Canvas full viewport width (bleed ke edge)
+  // Habit breakdown by frequency
+  const activeHabits = (S.habits||[]).filter(h=>!h.archived);
+  const dailyCount = activeHabits.filter(h=>DAILY_FREQS.includes(h.freq)).length;
+  const weeklyCount = activeHabits.filter(h=>h.freq==='weekly').length;
+  const monthlyCount = activeHabits.filter(h=>h.freq==='monthly').length;
+  const bestStreak = (S.habits||[]).reduce((m,h)=>Math.max(m,h.bestStreak||0),0);
+  const ownedSkins = (()=>{try{return JSON.parse(localStorage.getItem('oht_shop_owned')||'[]').length;}catch{return 0;}})();
+
+  // Canvas full viewport width (bleed ke edge), tinggi cukup untuk kartu identitas + karakter
   const pageEl = $('profile-page-content') || document.querySelector('#page-profile .page-content');
   const pageW = pageEl ? pageEl.offsetWidth : Math.min(window.innerWidth, 600);
-  const canvasH = Math.round(pageW * 0.58);
+  const canvasH = Math.max(260, Math.round(pageW * 0.78));
 
   el.innerHTML = `
-    <div style="position:relative;width:100%;cursor:pointer;margin-bottom:0;" onclick="rotateProfileChar()" title="Tap untuk rotasi">
+    <div style="position:relative;width:100%;height:${canvasH}px;overflow:hidden;margin-bottom:0;">
       <canvas id="profile-char-canvas" width="${pageW}" height="${canvasH}"
-        style="display:block;width:100%;height:auto;"></canvas>
-      <div style="position:absolute;bottom:11px;right:11px;font-family:var(--font-mono, monospace);font-size:8px;color:rgba(255,255,255,.6);">↺ Tap rotasi</div>
-    </div>
-    <!-- Stats panel -->
-    <div style="background:var(--surface);border:var(--bo-t);padding:14px;margin-bottom:11px;">
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
-        <div style="flex:1;">
-          <div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--yellow);">${S.name||'User'}</div>
-          <div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Level ${lvl} · ${LVL_NAMES?LVL_NAMES[Math.min(lvl-1,LVL_NAMES.length-1)]:'Starter'}</div>
+        style="position:absolute;inset:0;display:block;width:100%;height:100%;cursor:pointer;" onclick="rotateProfileChar()" title="Tap untuk rotasi karakter"></canvas>
+
+      <!-- Identity card overlay (kiri) — background tetap terlihat, tidak menimpa penuh -->
+      <div style="position:relative;z-index:1;display:flex;align-items:flex-start;height:100%;padding:12px;box-sizing:border-box;pointer-events:none;">
+        <div style="pointer-events:auto;width:60%;max-width:290px;background:rgba(10,10,15,.58);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border:1px solid rgba(255,255,255,.16);padding:12px;border-radius:3px;">
+          <div style="font-family:'Archivo Black',sans-serif;font-weight:900;font-size:17px;color:var(--yellow);line-height:1.15;">${S.name||'User'}</div>
+          <div style="font-family:var(--font-mono, monospace);font-size:9px;color:rgba(255,255,255,.75);margin-bottom:8px;">Level ${lvl} · ${typeof LVL_NAMES!=='undefined'&&LVL_NAMES?LVL_NAMES[Math.min(lvl-1,LVL_NAMES.length-1)]:'Starter'}</div>
+
+          <div id="profile-id-row" style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+            <span style="font-family:var(--font-mono, monospace);font-size:7px;color:rgba(255,255,255,.5);letter-spacing:1px;">ID</span>
+            <span id="profile-id-value" style="font-family:var(--font-mono, monospace);font-size:10px;color:#fff;letter-spacing:1px;">---</span>
+            <button id="profile-id-copy-btn" onclick="event.stopPropagation();" style="display:none;background:none;border:none;padding:2px;cursor:pointer;color:rgba(255,255,255,.85);" title="Salin ID">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono, monospace);font-size:7px;color:rgba(255,255,255,.5);margin-bottom:3px;">
+            <span>XP</span><span>${xpInLevel}/100</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);overflow:hidden;margin-bottom:10px;">
+            <div style="height:100%;width:${xpInLevel}%;background:var(--yellow);"></div>
+          </div>
+
+          <div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.45);letter-spacing:1px;margin-bottom:4px;">HABIT</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:9px;">
+            <div style="text-align:center;">
+              <div style="font-family:sans-serif;font-weight:900;font-size:13px;color:#fff;">${dailyCount}</div>
+              <div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">DAILY</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:sans-serif;font-weight:900;font-size:13px;color:#fff;">${weeklyCount}</div>
+              <div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">WEEKLY</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:sans-serif;font-weight:900;font-size:13px;color:#fff;">${monthlyCount}</div>
+              <div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">MONTHLY</div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(255,255,255,.15);">
+            <div><div style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--yellow);">🔥 ${bestStreak}</div><div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">BEST STREAK</div></div>
+            <div style="text-align:right;"><div style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--yellow);">🎨 ${ownedSkins}</div><div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">SKIN DIMILIKI</div></div>
+          </div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-family:sans-serif;font-weight:900;font-size:22px;color:var(--yellow);">🪙 ${coins}</div>
-          <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">COIN</div>
-        </div>
       </div>
-      <!-- XP bar -->
-      <div style="display:flex;justify-content:space-between;font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-bottom:4px;">
-        <span>XP</span><span>${xpInLevel}/100</span>
-      </div>
-      <div style="height:8px;background:#222;border:1px solid var(--bc);overflow:hidden;margin-bottom:4px;">
-        <div style="height:100%;width:${xpInLevel}%;background:var(--yellow);transition:width .6s;"></div>
-      </div>
-      <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">${xp} XP total · menuju level ${lvl+1}</div>
-    </div>
-    <!-- Stats grid -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:11px;">
-      <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.filter(h=>!h.archived).length||0}</div>
-        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">HABITS</div>
-      </div>
-      <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.reduce((m,h)=>Math.max(m,h.bestStreak||0),0)||0}</div>
-        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">BEST STREAK</div>
-      </div>
-      <div style="background:var(--surface);border:var(--bo);padding:9px;text-align:center;">
-        <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${S.habits?.reduce((s,h)=>s+(h.totalDone||0),0)||0}</div>
-        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">TOTAL SELESAI</div>
-      </div>
+
+      <div style="position:absolute;top:9px;right:9px;z-index:1;background:rgba(10,10,15,.58);border:1px solid rgba(255,255,255,.16);padding:5px 9px;border-radius:3px;font-family:sans-serif;font-weight:900;font-size:12px;color:var(--yellow);pointer-events:none;">🪙 ${coins}</div>
+
+      <div style="position:absolute;bottom:7px;right:9px;z-index:1;font-family:var(--font-mono, monospace);font-size:8px;color:rgba(255,255,255,.65);pointer-events:none;">↺ Tap karakter untuk rotasi</div>
     </div>`;
 
   // Draw full scene on profile canvas
@@ -7572,33 +7579,26 @@ function renderProfilePage() {
       ctx.fillRect(x,groundY-gh,3,gh+3);
     }
 
-    // Decorative flowers/elements in background
-    const decors=['🌸','🌼','🌿','🌱'];
-    decors.forEach((_,i) => {
-      const dx = W*(0.1 + i*0.22);
-      ctx.font=`${W*0.04}px serif`; ctx.textAlign='center';
-      ctx.fillText(decors[i], dx, groundY+3);
+    // Decorative flowers/elements — hanya di sisi kanan agar tidak tertutup kartu identitas
+    const decors=['🌼','🌿','🌱'];
+    decors.forEach((d,i) => {
+      const dx = W*(0.63 + i*0.12);
+      ctx.font=`${W*0.035}px serif`; ctx.textAlign='center';
+      ctx.fillText(d, dx, groundY+3);
     });
 
-    // Character — game-style proportional, not too large
+    // Character — diposisikan di sisi kanan, kartu identitas ada di kiri
     const charScale = Math.min(H / 380, 1.4); // max 1.4x
     ctx.save();
-    ctx.translate(W/2, groundY - 5);
+    ctx.translate(W*0.76, groundY - 5);
     ctx.scale(charScale, charScale);
     if(typeof drawChibiChar==='function') drawChibiChar(ctx, 0, 0, _profileFacing||1, 'idle', Math.floor(Date.now()/100), cfg);
     ctx.restore();
-
-    // Name label overlay at bottom
-    ctx.fillStyle='rgba(0,0,0,0.45)';
-    ctx.fillRect(0,H-36,W,36);
-    ctx.fillStyle='#FFE600';
-    ctx.font='bold '+Math.round(W*0.05)+'px "Archivo Black",sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText(S.name||'User', W/2, H-14);
   }, 50);
 
   // Customization sections — rendered separately in edit mode
   renderProfileEdit();
+  renderProfileSocialSection();
 }
 
 function renderProfileEdit() {
@@ -8332,6 +8332,7 @@ function _afterFbLogin() {
   renderFriendsMain();
   renderSettingsAuth();
   renderProfileSocialSection();
+  const lm=$('modal-login');if(lm&&lm.classList.contains('open'))closeModal('modal-login');
 }
 
 // ── Auth ──────────────────────────────────────────────────
@@ -8669,19 +8670,8 @@ function renderSettingsAuth() {
   const el = $('settings-auth-block'); if(!el) return;
 
   if(!_fbUser || !_fbProfile) {
-    // Not logged in
-    el.innerHTML = '<div style="background:var(--surface);border:var(--bo);padding:14px;">' +
-      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">Login untuk terhubung dengan teman.</div>' +
-      '<button onclick="fbLoginGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;font-family:\'Archivo Black\',sans-serif;font-size:12px;color:var(--text);margin-bottom:9px;">' +
-        '<svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/></svg>' +
-        'Masuk dengan Google' +
-      '</button>' +
-      '<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;"><div style="flex:1;height:1px;background:var(--bc);"></div><div style="font-family:\'IBM Plex Mono\',monospace;font-size:7px;color:var(--sub);">atau</div><div style="flex:1;height:1px;background:var(--bc);"></div></div>' +
-      '<div class="form-group"><label class="form-label">USERNAME</label><input type="text" id="fb-username" class="form-input" placeholder="huruf/angka" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,\'\')"></div>' +
-      '<div class="form-group"><label class="form-label">PASSWORD</label><input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter"></div>' +
-      '<div style="display:flex;gap:7px;"><button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button><button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button></div>' +
-      '<div id="fb-auth-error" style="font-family:\'IBM Plex Mono\',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>' +
-    '</div>';
+    // Not logged in — cukup tombol LOGIN, form lengkap ada di modal-login
+    el.innerHTML = '<button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="openModal(\'modal-login\')">LOGIN</button>';
     return;
   }
 
@@ -8766,26 +8756,27 @@ function fbAddFriendByNumId(numId) {
 
 // ── Profile: ID display + visitors ──
 function renderProfileSocialSection() {
-  const el = $('profile-social-section'); if(!el) return;
+  const el = $('profile-social-section');
+  const idVal = $('profile-id-value');
+  const idCopyBtn = $('profile-id-copy-btn');
 
   if(!_fbUser || !_fbProfile) {
-    el.innerHTML = "<div style='padding:11px;text-align:center;font-size:8px;color:var(--sub);border:var(--bo);'>Login di Setelan untuk mendapatkan ID</div>";
+    if(idVal) idVal.textContent = 'Login di Setelan';
+    if(idCopyBtn) idCopyBtn.style.display = 'none';
+    if(el) el.innerHTML = "<div style='padding:11px;text-align:center;font-size:8px;color:var(--sub);border:var(--bo);'>Login di Setelan untuk mendapatkan ID</div>";
     return;
   }
 
   const numId = _fbProfile.numId || '---';
+  if(idVal) idVal.textContent = numId;
+  if(idCopyBtn) { idCopyBtn.style.display = 'inline-flex'; idCopyBtn.onclick = (e)=>{ e.stopPropagation(); copyFriendId(numId); }; }
+  if(!el) return;
 
   _fbDb.ref('visitors/' + _fbUser.uid).orderByChild('ts').limitToLast(3).once('value').then(function(snap) {
     const visitors = [];
     snap.forEach(function(child) { visitors.unshift(child.val()); });
 
     let html = "";
-    // ID Card
-    html += "<div style='background:var(--surface);border:var(--bo);padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;'>";
-    html += "<div><div style='font-size:7px;color:var(--sub);margin-bottom:4px;letter-spacing:1px;'>ID</div>";
-    html += "<div style='font-family:Archivo Black,sans-serif;font-weight:900;font-size:24px;color:var(--yellow);letter-spacing:5px;'>" + numId + "</div></div>";
-    html += "<button class='btn btn-xs' onclick=\"copyFriendId('" + numId + "')\" >📋 COPY</button></div>";
-
     // Visitors
     html += "<div style='background:var(--surface);border:var(--bo);padding:14px 16px;'>";
     html += "<div style='font-size:7px;color:var(--sub);margin-bottom:9px;text-transform:uppercase;letter-spacing:1px;'>👀 Pengunjung Terakhir</div>";

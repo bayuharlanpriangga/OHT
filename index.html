@@ -322,7 +322,7 @@
 <!-- ══ SETTINGS ══ -->
 <div class="page" id="page-settings"><div class="page-content">
   <!-- Firebase Auth Section -->
-  <div class="sec-hdr"><div class="sec-title">Akun Teman</div></div>
+  <div class="sec-hdr"><div class="sec-title">Akun</div></div>
   <div id="settings-auth-block" style="margin-bottom:14px;">
     <!-- Dirender oleh JS: login form atau info akun -->
   </div>
@@ -962,7 +962,7 @@
     </div>
     <div id="profile-canvas-wrap"></div>
 
-    <!-- ID & Visitors -->
+    <!-- Visitors (ID sudah pindah ke kartu identitas di atas) -->
     <div id="profile-social-section" style="margin-top:11px;padding-bottom:24px;"></div>
   </div>
   <!-- Edit mode (hidden by default) -->
@@ -1113,13 +1113,47 @@
 </div>
 <div class="form-group"><label class="form-label">Frequency</label><div class="freq-row"><div class="freq-btn sel" onclick="selFreq(this,'daily')" title="Every day">DAILY</div><div class="freq-btn" onclick="selFreq(this,'weekdays')" title="Mon–Fri only">WEEKDAYS</div><div class="freq-btn" onclick="selFreq(this,'weekends')" title="Sat–Sun only">WEEKENDS</div><div class="freq-btn" onclick="selFreq(this,'3x/week')" title="Mon, Wed, Fri">3X/WK</div><div class="freq-btn" onclick="selFreq(this,'weekly')" title="Once per week">WEEKLY</div><div class="freq-btn" onclick="selFreq(this,'monthly')" title="Once per month">MONTHLY</div></div><div id="freq-desc" style="font-size:9px;color:var(--sub);margin-top:3px;">Every single day — no excuses.</div><input type="hidden" id="inp-freq" value="daily"></div>
 
+      <div class="form-group"><label class="form-label">Target (times per session)</label><input type="number" class="form-input" id="inp-target" min="1" value="1"></div>
 
+      <div class="form-group"><label class="form-label">Scheduled Time (optional)</label>
+        <div class="custom-time-trigger" onclick="openTimePicker('inp-time')">
+          <span class="ctt-ico">⏰</span><span class="ctt-val" id="time-trigger-val">Tap to set time</span>
+        </div>
+        <input type="hidden" id="inp-time" value="">
+      </div>
 
+      <div class="form-group" id="prog-difficulty-group"><label class="form-label">Difficulty Curve</label>
+        <div class="custom-select-trigger" id="trigger-prog" onclick="openCustomSelect('prog')">
+          <span class="cst-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          <span class="cst-label">None</span>
+        </div>
+        <input type="hidden" id="inp-prog" value="none">
+      </div>
 
-      
-      
+      <div class="form-group"><label class="form-label">Stake (optional)</label><input type="text" class="form-input" id="inp-stake" placeholder="e.g. Donasi Rp20k jika gagal"></div>
+
+      <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-textarea" id="inp-notes" placeholder="Extra details..."></textarea></div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('modal-add')">CANCEL</button><button class="btn" onclick="saveHabitAndAddAnother()" style="font-size:9px;">+ ANOTHER</button><button class="btn btn-primary" onclick="saveHabit()">✓ SAVE</button></div>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN -->
+<div class="modal-overlay" id="modal-login" onclick="if(event.target===this)closeModal('modal-login')">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">MASUK / DAFTAR</div><div class="modal-close" onclick="closeModal('modal-login')" style="font-size:14px;font-weight:900;line-height:1;">×</div></div>
+    <div class="modal-body">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">Login untuk terhubung dengan teman.</div>
+      <button onclick="fbLoginGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--text);margin-bottom:9px;">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/></svg>
+        Masuk dengan Google
+      </button>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;"><div style="flex:1;height:1px;background:var(--bc);"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">atau</div><div style="flex:1;height:1px;background:var(--bc);"></div></div>
+      <div class="form-group"><label class="form-label">USERNAME</label><input type="text" id="fb-username" class="form-input" placeholder="huruf/angka" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"></div>
+      <div class="form-group"><label class="form-label">PASSWORD</label><input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter"></div>
+      <div style="display:flex;gap:7px;"><button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button><button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button></div>
+      <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>
+    </div>
   </div>
 </div>
 
