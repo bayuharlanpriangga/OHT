@@ -9,7 +9,39 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>OHT — Orias Habit Tracker</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiMwYTBhMGEiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjI4IiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMjgiIHk9IjAiIHdpZHRoPSI4IiBoZWlnaHQ9IjE0IiBmaWxsPSIjMGEwYTBhIi8+CiAgPHJlY3QgeD0iODQiIHk9IjAiIHdpZHRoPSI4IiBoZWlnaHQ9IjE0IiBmaWxsPSIjMGEwYTBhIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjM4IiB3aWR0aD0iMjYiIGhlaWdodD0iMjIiIGZpbGw9IiMyMjIiLz4KICA8cmVjdCB4PSI0NyIgeT0iMzgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIyMiIgZmlsbD0iIzIyMiIvPgogIDxyZWN0IHg9Ijg0IiB5PSIzOCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjIyIiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjY4IiB3aWR0aD0iMjYiIGhlaWdodD0iMjIiIGZpbGw9IiNGRkU2MDAiLz4KICA8cmVjdCB4PSI0NyIgeT0iNjgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIyMiIgZmlsbD0iI0ZGRTYwMCIvPgogIDxyZWN0IHg9Ijg0IiB5PSI2OCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjIyIiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMTAiIHk9Ijk4IiB3aWR0aD0iMjYiIGhlaWdodD0iMTgiIGZpbGw9IiNGRkU2MDAiLz4KICA8cmVjdCB4PSI0NyIgeT0iOTgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxOCIgZmlsbD0iI0ZGNkIwMCIvPgogIDxyZWN0IHg9Ijg0IiB5PSI5OCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjE4IiBmaWxsPSIjMzMzIi8+Cjwvc3ZnPg==">
+<link rel="icon" type="image/svg+xml" id="favicon-link" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiMwYTBhMGEiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjI4IiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMjgiIHk9IjAiIHdpZHRoPSI4IiBoZWlnaHQ9IjE0IiBmaWxsPSIjMGEwYTBhIi8+CiAgPHJlY3QgeD0iODQiIHk9IjAiIHdpZHRoPSI4IiBoZWlnaHQ9IjE0IiBmaWxsPSIjMGEwYTBhIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjM4IiB3aWR0aD0iMjYiIGhlaWdodD0iMjIiIGZpbGw9IiMyMjIiLz4KICA8cmVjdCB4PSI0NyIgeT0iMzgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIyMiIgZmlsbD0iIzIyMiIvPgogIDxyZWN0IHg9Ijg0IiB5PSIzOCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjIyIiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjY4IiB3aWR0aD0iMjYiIGhlaWdodD0iMjIiIGZpbGw9IiNGRkU2MDAiLz4KICA8cmVjdCB4PSI0NyIgeT0iNjgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIyMiIgZmlsbD0iI0ZGRTYwMCIvPgogIDxyZWN0IHg9Ijg0IiB5PSI2OCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjIyIiBmaWxsPSIjRkZFNjAwIi8+CiAgPHJlY3QgeD0iMTAiIHk9Ijk4IiB3aWR0aD0iMjYiIGhlaWdodD0iMTgiIGZpbGw9IiNGRkU2MDAiLz4KICA8cmVjdCB4PSI0NyIgeT0iOTgiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxOCIgZmlsbD0iI0ZGNkIwMCIvPgogIDxyZWN0IHg9Ijg0IiB5PSI5OCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjE4IiBmaWxsPSIjMzMzIi8+Cjwvc3ZnPg==">
+<script>
+// Early accent bootstrap — runs before first paint to avoid flash of wrong color
+// on both the favicon and the loading screen.
+(function(){
+  try {
+    var HEX = {pink:'#FF3CAC',green:'#AAFF00',blue:'#00B4FF',orange:'#FF6B00'};
+    var raw = localStorage.getItem('hb_v5');
+    var theme = null;
+    if (raw) { var d = JSON.parse(raw); theme = d && d.accentTheme; }
+    var hex = HEX[theme] || '#FFE600';
+    if (theme && HEX[theme]) document.documentElement.setAttribute('data-accent', theme);
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">'
+      + '<rect x="0" y="0" width="120" height="120" fill="#0a0a0a"/>'
+      + '<rect x="0" y="0" width="120" height="28" fill="' + hex + '"/>'
+      + '<rect x="28" y="0" width="8" height="14" fill="#0a0a0a"/>'
+      + '<rect x="84" y="0" width="8" height="14" fill="#0a0a0a"/>'
+      + '<rect x="10" y="38" width="26" height="22" fill="#222"/>'
+      + '<rect x="47" y="38" width="26" height="22" fill="#222"/>'
+      + '<rect x="84" y="38" width="26" height="22" fill="' + hex + '"/>'
+      + '<rect x="10" y="68" width="26" height="22" fill="' + hex + '"/>'
+      + '<rect x="47" y="68" width="26" height="22" fill="' + hex + '"/>'
+      + '<rect x="84" y="68" width="26" height="22" fill="' + hex + '"/>'
+      + '<rect x="10" y="98" width="26" height="18" fill="' + hex + '"/>'
+      + '<rect x="47" y="98" width="26" height="18" fill="#FF6B00"/>'
+      + '<rect x="84" y="98" width="26" height="18" fill="#333"/>'
+      + '</svg>';
+    var link = document.getElementById('favicon-link');
+    if (link) link.href = 'data:image/svg+xml;base64,' + btoa(svg);
+    window._OHT_ACCENT_HEX = hex;
+  } catch(e) {}
+})();
+</script>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,75 +57,77 @@
 <!-- ══ LOADING SCREEN ══ -->
 <div id="oht-loader" style="
   position:fixed;inset:0;z-index:99999;
-  background:#0a0a0a;
+  background:var(--bg,#FFF9E6);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:0;overflow:hidden;
 ">
   <!-- scanline texture overlay -->
   <div style="
     position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 1px,transparent 1px,transparent 4px);
+    background:repeating-linear-gradient(0deg,rgba(10,10,10,.025) 0px,rgba(10,10,10,.025) 1px,transparent 1px,transparent 4px);
     z-index:1;
   "></div>
 
   <!-- corner accents -->
-  <div style="position:absolute;top:0;left:0;width:40px;height:40px;border-top:4px solid #FFE600;border-left:4px solid #FFE600;z-index:2;"></div>
-  <div style="position:absolute;top:0;right:0;width:40px;height:40px;border-top:4px solid #FFE600;border-right:4px solid #FFE600;z-index:2;"></div>
-  <div style="position:absolute;bottom:0;left:0;width:40px;height:40px;border-bottom:4px solid #FFE600;border-left:4px solid #FFE600;z-index:2;"></div>
-  <div style="position:absolute;bottom:0;right:0;width:40px;height:40px;border-bottom:4px solid #FFE600;border-right:4px solid #FFE600;z-index:2;"></div>
+  <div style="position:absolute;top:0;left:0;width:40px;height:40px;border-top:4px solid var(--yellow,#FFE600);border-left:4px solid var(--yellow,#FFE600);z-index:2;"></div>
+  <div style="position:absolute;top:0;right:0;width:40px;height:40px;border-top:4px solid var(--yellow,#FFE600);border-right:4px solid var(--yellow,#FFE600);z-index:2;"></div>
+  <div style="position:absolute;bottom:0;left:0;width:40px;height:40px;border-bottom:4px solid var(--yellow,#FFE600);border-left:4px solid var(--yellow,#FFE600);z-index:2;"></div>
+  <div style="position:absolute;bottom:0;right:0;width:40px;height:40px;border-bottom:4px solid var(--yellow,#FFE600);border-right:4px solid var(--yellow,#FFE600);z-index:2;"></div>
 
   <!-- main content -->
   <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;width:100%;max-width:340px;padding:0 24px;">
 
-    <!-- logo block -->
-    <div style="
-      background:#FFE600;
-      padding:6px 22px 4px;
-      margin-bottom:0;
-      border:4px solid #FFE600;
-      position:relative;
-    ">
+    <!-- animated icon (matches favicon design) -->
+    <div class="loader-icon-wrap">
+      <svg class="loader-icon" viewBox="0 0 120 120" width="128" height="128">
+        <rect class="loader-rect" style="animation-delay:0s;" x="0" y="0" width="120" height="120" fill="#0a0a0a"/>
+        <rect class="loader-rect" style="animation-delay:.05s;" x="0" y="0" width="120" height="28" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.09s;" x="28" y="0" width="8" height="14" fill="#0a0a0a"/>
+        <rect class="loader-rect" style="animation-delay:.09s;" x="84" y="0" width="8" height="14" fill="#0a0a0a"/>
+        <rect class="loader-rect" style="animation-delay:.20s;" x="10" y="38" width="26" height="22" fill="#222"/>
+        <rect class="loader-rect" style="animation-delay:.26s;" x="47" y="38" width="26" height="22" fill="#222"/>
+        <rect class="loader-rect" style="animation-delay:.32s;" x="84" y="38" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.38s;" x="10" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.44s;" x="47" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.50s;" x="84" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.56s;" x="10" y="98" width="26" height="18" fill="var(--yellow,#FFE600)"/>
+        <rect class="loader-rect" style="animation-delay:.62s;" x="47" y="98" width="26" height="18" fill="#FF6B00"/>
+        <rect class="loader-rect" style="animation-delay:.68s;" x="84" y="98" width="26" height="18" fill="#333"/>
+      </svg>
+    </div>
+    <!-- title block (unboxed) -->
+    <div style="text-align:center;margin-top:14px;margin-bottom:40px;">
       <div style="
         font-family:'Archivo Black',Arial Black,sans-serif;
-        font-size:64px;letter-spacing:-4px;line-height:1;
-        color:#0a0a0a;
+        font-size:30px;line-height:1;letter-spacing:1px;
+        color:var(--black,#0a0a0a);
       ">OHT</div>
-    </div>
-    <!-- black strip under logo -->
-    <div style="
-      width:100%;max-width:212px;
-      background:#0a0a0a;
-      border-left:4px solid #FFE600;border-right:4px solid #FFE600;
-      padding:4px 0 6px;
-    ">
       <div style="
         font-family:'IBM Plex Mono',monospace;
-        font-size:9px;letter-spacing:3.5px;
-        color:#FFE600;text-transform:uppercase;text-align:center;
-      ">ORIAS HABIT TRACKER</div>
+        font-size:9px;letter-spacing:3.5px;margin-top:8px;
+        color:#888;text-transform:uppercase;
+      ">Orias Habit Tracker</div>
     </div>
-    <!-- bottom border of logo block -->
-    <div style="width:100%;max-width:212px;height:4px;background:#FFE600;margin-bottom:40px;"></div>
 
     <!-- progress bar container -->
     <div style="width:100%;position:relative;margin-bottom:10px;">
       <!-- label row -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#555;letter-spacing:2px;text-transform:uppercase;" id="loader-status">INITIALIZING</div>
-        <div style="font-family:'Archivo Black',Arial Black,sans-serif;font-size:13px;color:#FFE600;" id="loader-pct">0%</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#888;letter-spacing:2px;text-transform:uppercase;" id="loader-status">INITIALIZING</div>
+        <div style="font-family:'Archivo Black',Arial Black,sans-serif;font-size:13px;color:var(--black,#0a0a0a);" id="loader-pct">0%</div>
       </div>
       <!-- bar track — neobrutalist: segmented blocks -->
       <div style="
         width:100%;height:16px;
-        background:#111;
-        border:3px solid #FFE600;
-        box-shadow:4px 4px 0 #FFE600;
+        background:var(--surface,#fffff0);
+        border:3px solid var(--black,#0a0a0a);
+        box-shadow:4px 4px 0 var(--yellow,#FFE600);
         position:relative;overflow:hidden;
       ">
         <!-- fill -->
         <div id="loader-fill" style="
           height:100%;width:0%;
-          background:#FFE600;
+          background:var(--yellow,#FFE600);
           transition:width .18s linear;
           position:relative;
         ">
@@ -113,27 +147,44 @@
           background:repeating-linear-gradient(
             90deg,
             transparent 0px, transparent 11px,
-            #0a0a0a 11px, #0a0a0a 13px
+            var(--black,#0a0a0a) 11px, var(--black,#0a0a0a) 13px
           );
+          opacity:.9;
           pointer-events:none;
         "></div>
       </div>
     </div>
 
-    <!-- version tag -->
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:#333;letter-spacing:2px;margin-top:6px;text-align:center;">
-      V4 — BUILD 2026
-    </div>
+  </div>
 
+  <!-- footer — pinned to bottom of loading screen -->
+  <div style="position:absolute;left:0;right:0;bottom:28px;z-index:3;font-family:'Space Grotesk',sans-serif;font-size:10px;color:#888;text-align:center;">
+    Powered by <span style="color:var(--yellow,#FFE600);font-weight:700;">Orias</span>
   </div>
 </div>
 
+
 <div class="topbar">
-  <div><div class="logo">OHT</div><span class="logo-sub">ORIAS HABIT TRACKER</span></div>
+  <div class="topbar-left" onclick="navigate('settings')" title="Profil & pengaturan">
+    <div class="hdr-avatar-wrap" onclick="event.stopPropagation();document.getElementById('hdr-photo-input').click();" title="Ganti foto profil">
+      <img id="hdr-avatar-photo" class="hdr-avatar-photo" style="display:none;" alt="Foto profil">
+      <canvas id="xp-avatar-canvas" width="48" height="56" style="display:block;"></canvas>
+      <div class="hdr-avatar-edit"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <input type="file" id="hdr-photo-input" accept="image/*" style="display:none;" onchange="onProfilePhotoSelected(event)">
+    </div>
+    <div class="hdr-info">
+      <div class="hdr-nickname" id="xp-name">User</div>
+      <div class="xp-track hdr-level-track"><div class="xp-fill" id="xp-bar" style="width:0%"></div></div>
+      <div class="xp-nums hdr-xp-nums"><span id="xp-cur">0</span><span id="xp-max">100 XP</span></div>
+    </div>
+  </div>
   <div class="topbar-right">
+    <div class="freeze-chip freeze-chip-sm" id="freeze-chip" onclick="openModal('modal-freeze')" title="Streak Freeze">
+      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 7l-5 5-5-5"/><path d="M17 17l-5-5-5 5"/><path d="M2 12l5-2.5L2 7"/><path d="M22 12l-5 2.5L22 17"/></svg>
+      <span class="freeze-count" id="freeze-count">0</span>
+    </div>
     <button class="btn btn-icon btn-sm" aria-label="Install App" id="pwa-install-btn" onclick="installPWA()" style="display:none;padding:5px;" title="Install App"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><rect x="5" y="2" width="14" height="20"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></button>
     <button class="btn btn-icon btn-sm" onclick="toggleSound()" title="Sound" aria-label="Toggle Sound" style="padding:5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" id="sound-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a9 9 0 010 14"/></svg></button>
-    <button class="btn btn-icon btn-sm" onclick="toggleDark()" aria-label="Toggle Dark Mode" style="padding:5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" id="theme-icon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
     <button class="btn btn-sm" onclick="openAddModal()" aria-label="Add Habit" style="padding:6px 10px;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>ADD</button>
     <button class="btn btn-sm btn-primary" onclick="completeAll()" aria-label="Complete All Habits" style="padding:6px 10px;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>ALL</button>
   </div>
@@ -142,105 +193,9 @@
 
 <div class="main-scroll" id="main-scroll">
 
-<!-- ══ TODAY ══ -->
-<div class="page active" id="page-today"><div class="page-content">
-  <div class="xp-bar-section">
-    <canvas id="xp-avatar-canvas" width="48" height="56" onclick="navigateMore('profile')" style="cursor:pointer;display:block;flex-shrink:0;" title="Lihat profil"></canvas>
-    <div class="xp-info">
-      <div class="xp-name" id="xp-name">User</div>
-      <div class="xp-level" id="xp-level">LVL 1 — ROOKIE</div>
-      <div class="xp-track"><div class="xp-fill" id="xp-bar" style="width:0%"></div></div>
-      <div class="xp-nums"><span id="xp-cur">0</span><span id="xp-max">100 XP</span></div>
-    </div>
-    <div class="freeze-chip" id="freeze-chip" onclick="openModal('modal-freeze')">
-      <div><div class="freeze-count" id="freeze-count">0</div><div class="freeze-lbl"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 7l-5 5-5-5"/><path d="M17 17l-5-5-5 5"/><path d="M2 12l5-2.5L2 7"/><path d="M22 12l-5 2.5L22 17"/></svg> Freeze</div></div>
-    </div>
-  </div>
-  <div class="mood-checkin" id="mood-checkin">
-    <div class="mood-label" id="mood-label">Mood?</div>
-    <div class="mood-btns">
-      <div class="mood-btn" onclick="setMood(1,this)">😫</div>
-      <div class="mood-btn" onclick="setMood(2,this)">😕</div>
-      <div class="mood-btn" onclick="setMood(3,this)">😐</div>
-      <div class="mood-btn" onclick="setMood(4,this)">😊</div>
-      <div class="mood-btn" onclick="setMood(5,this)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7c-1.86 0-3.516-.5-4.862-1.5A7 7 0 012 17"/></svg></div>
-    </div>
-    <div class="mood-energy">
-      <div class="energy-label">Energy</div>
-      <div class="energy-dots" id="energy-dots">
-        <div class="edot" onclick="setEnergy(1)"></div><div class="edot" onclick="setEnergy(2)"></div>
-        <div class="edot" onclick="setEnergy(3)"></div><div class="edot" onclick="setEnergy(4)"></div>
-        <div class="edot" onclick="setEnergy(5)"></div>
-      </div>
-    </div>
-    <div class="mood-saved-badge" id="mood-saved-badge" style="display:none">✓ SAVED</div>
-  </div>
-  <div class="quote-banner" style="padding:7px 11px;margin-bottom:7px;"><div class="quote-ico" style="font-size:12px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><div class="quote-txt" id="quote-txt">...</div><div class="quote-src" id="quote-src"></div></div></div>
-  <div class="daily-hero">
-    <div class="today-num-wrap"><div class="today-num" id="today-num">01</div><div class="today-month" id="today-month">JAN</div><div class="today-wd" id="today-wd">MON</div></div>
-    <div class="daily-info">
-      <div class="daily-msg" id="daily-msg">Let's crush it! 💪</div>
-      <div class="dstat"><span><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><strong id="d-done">0</strong><span>/</span><strong id="d-total">0</strong></div>
-      <div class="dstat"><span><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7c-1.86 0-3.516-.5-4.862-1.5A7 7 0 012 17"/></svg></span><strong id="d-streak">0</strong><span style="font-size:7px"> best</span></div>
-      <div class="dstat"><span><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><strong id="d-xp">0</strong><span style="font-size:7px"> XP</span></div>
-    </div>
-    <div class="ring-wrap">
-      <svg class="ring-svg" width="52" height="52"><circle cx="26" cy="26" r="20" fill="none" stroke="#333" stroke-width="4.5"/><circle cx="26" cy="26" r="20" fill="none" stroke="#FFE600" stroke-width="4.5" stroke-dasharray="125.7" stroke-dashoffset="125.7" id="ring-circle" stroke-linecap="square" style="transition:stroke-dashoffset .5s;"/></svg>
-      <div class="ring-text"><span class="ring-pct" id="ring-pct">0%</span><span class="ring-lbl">done</span></div>
-    </div>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-card yellow"><div class="stat-label">Today</div><div class="stat-value" id="s-pct">0%</div><div class="stat-sub" id="s-sub">0 of 0</div></div>
-    <div class="stat-card pink"><div class="stat-label">Best Streak</div><div class="stat-value" id="s-streak">0</div><div class="stat-sub"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7c-1.86 0-3.516-.5-4.862-1.5A7 7 0 012 17"/></svg> days</div></div>
-    <div class="stat-card cyan"><div class="stat-label">Total XP</div><div class="stat-value" id="s-xp">0</div><div class="stat-sub"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> exp</div></div>
-    <div class="stat-card lime"><div class="stat-label">Habits</div><div class="stat-value" id="s-habits">0</div><div class="stat-sub">active</div></div>
-    <div class="stat-card orange"><div class="stat-label">Login Streak</div><div class="stat-value" id="s-login">1</div><div class="stat-sub"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> days</div></div>
-  </div>
-  <div id="today-antihabits-mini" style="margin-bottom:9px;display:none;"></div>
-
-  <div id="today-goals-mini" style="margin-bottom:9px;display:none;"></div>
-  <div id="today-rituals-mini" style="margin-bottom:9px;display:none;"></div>
-  <!-- Habit Weather -->
-  <div id="habit-weather"></div>
-  <!-- Rest Day Button -->
-  <div style="display:flex;gap:6px;align-items:center;margin-bottom:9px;">
-    <button class="btn btn-xs" onclick="toggleRestDay()" id="rest-day-btn" style="font-size:9px;">
-      <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      REST DAY
-    </button>
-    <button class="btn btn-xs" id="compact-mode-btn" onclick="toggleCompactMode()" style="font-size:9px;">
-      <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      COMPACT
-    </button>
-  </div>
-  <div class="sec-hdr"><div class="sec-title">This Week</div></div>
-  <div class="bar-chart-wrap"><div class="bar-chart" id="week-chart"></div><div class="chart-days" id="week-labels"></div></div>
-  <div class="coach-card">
-    <div class="coach-header">
-      <div class="coach-avatar"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M20 21c0-4-3.6-7-8-7s-8 3-8 7"/><path d="M15 11l1.5 2.5L15 15"/><path d="M9 11l-1.5 2.5L9 15"/></svg></div>
-      <div style="flex:1;"><div class="coach-name">OHT COACH</div><div class="coach-tag"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 3.87-3 5-3 9H8c0-4-3-5.13-3-9a7 7 0 017-7z"/><line x1="8" y1="22" x2="16" y2="22"/><line x1="12" y1="18" x2="12" y2="22"/></svg> OHT AI</div></div>
-      <button class="btn btn-xs btn-purple" onclick="refreshCoach()"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 11-2.8-9.6L23 10"/></svg> REFRESH</button>
-      <button class="btn btn-xs" onclick="openModal('modal-coach-history')" style="margin-left:3px;"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></button>
-    </div>
-    <div class="coach-bubble" id="coach-bubble">Tap <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 11-2.8-9.6L23 10"/></svg> REFRESH for your personalized AI insight...</div>
-    <div class="coach-input-row">
-      <input type="text" class="coach-input" id="coach-input" placeholder="Ask your coach..." onkeydown="if(event.key==='Enter')askCoach()">
-      <button class="btn btn-sm btn-purple" onclick="askCoach()">ASK</button>
-    </div>
-  </div>
-</div></div>
-
 <!-- ══ HABITS ══ -->
-<div class="page" id="page-habits"><div class="page-content">
-  <div class="sec-hdr"><div class="sec-title">Habits</div><div style="display:flex;gap:4px;"><button class="btn btn-sm" onclick="openModal('modal-templates')">📋</button><button class="btn btn-sm" onclick="openModal('modal-dna-import')">🧬</button><button class="btn btn-sm btn-primary" onclick="openAddModal()">+ NEW</button></div></div>
-  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;">
-    <div class="cat-tabs" id="habits-sort-tabs">
-      <div class="ctab active" onclick="setHabitsSort('default',this)">DEFAULT</div>
-      <div class="ctab" onclick="setHabitsSort('streak',this)">🔥 STREAK</div>
-      <div class="ctab" onclick="setHabitsSort('name',this)">A–Z</div>
-      <div class="ctab" onclick="setHabitsSort('cat',this)">CAT</div>
-    </div>
-  </div>
+<div class="page active" id="page-habits"><div class="page-content">
+  <div class="sec-hdr"><div class="sec-title">Habits</div><div style="display:flex;gap:4px;"><button class="btn btn-sm" onclick="openModal('modal-dna-import')">🧬</button><button class="btn btn-sm btn-primary" onclick="openAddModal()">+ NEW</button></div></div>
 
 
   <!-- ALL HABITS -->
@@ -315,7 +270,18 @@
 <!-- ══ STREAKS ══ -->
 <div class="page" id="page-streaks"><div class="page-content">
   <div class="sec-hdr"><div class="sec-title">Streak Board</div></div>
-  <div class="streak-grid" id="streak-board"></div>
+
+  <div class="psh"><div class="psh-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Daily</div><span class="psh-badge" id="streak-daily-badge">0</span></div>
+  <div class="streak-grid" id="streak-board-daily"></div>
+
+  <div class="psh weekly"><div class="psh-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="6"/><line x1="16" y1="3" x2="16" y2="6"/></svg>Weekly</div><span class="psh-badge" id="streak-weekly-badge">0</span></div>
+  <div class="streak-grid" id="streak-board-weekly"></div>
+
+  <div class="psh monthly"><div class="psh-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>Monthly</div><span class="psh-badge" id="streak-monthly-badge">0</span></div>
+  <div class="streak-grid" id="streak-board-monthly"></div>
+
+  <div class="psh specialist"><div class="psh-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M12 2a7 7 0 017 7c0 3.87-3 5-3 9H8c0-4-3-5.13-3-9a7 7 0 017-7z"/><line x1="8" y1="22" x2="16" y2="22"/><line x1="12" y1="18" x2="12" y2="22"/></svg>Specialist</div><span class="psh-badge" id="streak-specialist-badge">0</span></div>
+  <div class="streak-grid" id="streak-board-specialist"></div>
 
 </div></div>
 
@@ -339,7 +305,6 @@
     <div class="setting-row" id="vacation-end-row" style="display:none;"><div><div class="sr-label">Auto-resume on</div></div><input type="date" class="form-input" id="vacation-end-date" style="width:140px;box-shadow:none;font-size:11px;" onchange="setVacationEnd(this.value)"></div>
   </div></div>
   <div class="settings-block"><div class="settings-block-header"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v1M12 20v1M4.22 4.22l.7.7M19.07 19.07l.71.71M1 12h2M21 12h2M4.22 19.78l.7-.7M19.07 4.93l.71-.71"/><circle cx="12" cy="12" r="4"/></svg> SOUND & THEME</div><div class="settings-block-body">
-    <div class="toggle-row"><div><div class="toggle-lbl">Dark Mode</div></div><div class="toggle" id="dark-toggle" onclick="toggleDark()"><div class="toggle-thumb"></div></div></div>
     <div class="toggle-row"><div><div class="toggle-lbl">Sound Effects</div></div><div class="toggle on" id="sound-toggle" onclick="toggleSoundSetting()"><div class="toggle-thumb"></div></div></div>
     <div class="toggle-row"><div><div class="toggle-lbl">Confetti</div></div><div class="toggle on" id="confetti-toggle" onclick="this.classList.toggle('on');S.confettiOn=this.classList.contains('on');save();"><div class="toggle-thumb"></div></div></div>
   </div></div>
@@ -507,81 +472,6 @@
 
 </div></div>
 
-<!-- ══ GARDEN PAGE ══ -->
-<div class="page" id="page-garden"><div class="gdn-outer">
-
-  <!-- TOP HUD -->
-  <div class="gdn-hud">
-    <div class="gdn-hud-left">
-      <div class="gdn-coin-badge" title="Koin">🪙 <span id="gdn-coins">0</span></div>
-      <div class="gdn-tool-pill" id="gdn-pill-water" onclick="selectGardenTool('water')" title="Jatah Siram">
-        💧 <span id="gdn-water-count">0</span>
-      </div>
-      <div class="gdn-tool-pill" id="gdn-pill-hoe" onclick="selectGardenTool('hoe')" title="Cangkul (max 5 · regen/24j)">
-        ⛏️ <span id="gdn-hoe-count">3</span>
-      </div>
-    </div>
-    <div class="gdn-hud-center" id="gdn-time-display">🌙 19:17</div>
-    <div class="gdn-hud-right">
-      <div class="gdn-tool-pill" onclick="openGardenShop()">🛒 SHOP</div>
-    </div>
-  </div>
-
-  <!-- HINT BAR -->
-  <div class="gdn-hint-bar" id="gdn-hint">Tap tanaman atau tanah untuk berinteraksi</div>
-
-  <!-- LANDS CONTAINER -->
-  <div class="gdn-lands-outer">
-    <div class="gdn-lands-slider" id="gdn-lands-slider">
-      <!-- Tiap lahan = canvas-based scene, dirender JS -->
-    </div>
-    <!-- Dot nav -->
-    <div class="gdn-dot-nav" id="gdn-land-dots"></div>
-    <!-- Swipe arrows -->
-    <button class="gdn-arrow gdn-arrow-l" onclick="switchGardenLand(_gdnCurrentLand-1)" id="gdn-arrow-l">‹</button>
-    <button class="gdn-arrow gdn-arrow-r" onclick="switchGardenLand(_gdnCurrentLand+1)" id="gdn-arrow-r">›</button>
-  </div>
-
-</div></div>
-
-
-
-<!-- MODAL: Garden Shop -->
-<div class="modal-overlay" id="modal-garden-shop" onclick="if(event.target===this)closeModal('modal-garden-shop')">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">🛒 Garden Shop</div>
-      <button class="modal-close" onclick="closeModal('modal-garden-shop')">✕</button>
-    </div>
-    <div style="padding:11px;">
-      <!-- Tabs -->
-      <div style="display:flex;gap:0;border:var(--bo);margin-bottom:11px;">
-        <div class="ctab active" onclick="setShopTab('seeds',this)" id="shop-tab-seeds" style="flex:1;text-align:center;">BIBIT</div>
-        <div class="ctab" onclick="setShopTab('items',this)" id="shop-tab-items" style="flex:1;text-align:center;">ITEM</div>
-        <div class="ctab" onclick="setShopTab('bg',this)" id="shop-tab-bg" style="flex:1;text-align:center;">BACKGROUND</div>
-        <div class="ctab" onclick="setShopTab('land',this)" id="shop-tab-land" style="flex:1;text-align:center;">LAHAN</div>
-      </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);margin-bottom:9px;">
-        💰 Koin kamu: <strong id="shop-coins-display">0</strong>
-      </div>
-      <div id="shop-content"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Plant Info / Action -->
-<div class="modal-overlay" id="modal-garden-plot" onclick="if(event.target===this)closeModal('modal-garden-plot')">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="gplot-title">PLOT</div>
-      <button class="modal-close" onclick="closeModal('modal-garden-plot')">✕</button>
-    </div>
-    <div style="padding:14px;" id="gplot-body"></div>
-  </div>
-</div>
-
-
-
 <!-- ══ FOCUS + BONUS TOOLS PAGE ══ -->
 <div class="page" id="page-focus"><div class="page-content">
   <div id="focus-section-timer">
@@ -727,7 +617,7 @@
 <div class="modal-overlay" id="modal-nutr-target" onclick="if(event.target===this)closeModal('modal-nutr-target')">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Target Harian</div><button class="modal-close" onclick="closeModal('modal-nutr-target')">✕</button></div>
-    <div style="padding:11px;display:flex;flex-direction:column;gap:9px;">
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:9px;">
       <div class="nutr-setting-row"><label class="nutr-setting-lbl">Kalori (kkal)</label><input type="number" class="nutr-setting-inp" id="nset-kcal" value="2000"></div>
       <div class="nutr-setting-row"><label class="nutr-setting-lbl">Protein (g)</label><input type="number" class="nutr-setting-inp" id="nset-protein" value="50"></div>
       <div class="nutr-setting-row"><label class="nutr-setting-lbl">Karbo (g)</label><input type="number" class="nutr-setting-inp" id="nset-carbs" value="300"></div>
@@ -746,12 +636,12 @@
 <div class="modal-overlay" id="modal-water-target" onclick="if(event.target===this)closeModal('modal-water-target')">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Target Air Harian</div><button class="modal-close" onclick="closeModal('modal-water-target')">✕</button></div>
-    <div style="padding:14px;display:flex;flex-direction:column;gap:14px;">
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
       <div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:6px;">MODE TRACKING</div>
-        <div class="cat-tabs">
-          <div class="ctab active" id="wt-mode-cups" onclick="setWaterTargetMode('cups',this)">GELAS</div>
-          <div class="ctab" id="wt-mode-ml" onclick="setWaterTargetMode('ml',this)">ML</div>
+        <div class="freq-row">
+          <div class="freq-btn sel" id="wt-mode-cups" onclick="setWaterTargetMode('cups',this)">GELAS</div>
+          <div class="freq-btn" id="wt-mode-ml" onclick="setWaterTargetMode('ml',this)">ML</div>
         </div>
       </div>
       <div id="wt-cups-row">
@@ -766,10 +656,6 @@
           style="width:100%;font-family:'Archivo Black',sans-serif;font-size:16px;background:var(--bg);border:var(--bo-t);color:var(--text);padding:8px 11px;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:4px;">Contoh: 2000ml = 2 liter, 2500ml = 2.5 liter</div>
       </div>
-      <div style="background:var(--bg);border:var(--bo);padding:9px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--yellow);">🏆 XP &amp; STREAK</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:4px;line-height:1.5;">Jika target terpenuhi hari ini: +20 XP<br>Streak berturut-turut: bonus XP tiap 7 hari</div>
-      </div>
       <button class="btn btn-primary" onclick="saveWaterTarget()" style="width:100%;justify-content:center;">SAVE TARGET</button>
     </div>
   </div>
@@ -779,7 +665,7 @@
 <div class="modal-overlay" id="modal-sleep-target" onclick="if(event.target===this)closeModal('modal-sleep-target')">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Target Tidur Harian</div><button class="modal-close" onclick="closeModal('modal-sleep-target')">✕</button></div>
-    <div style="padding:14px;display:flex;flex-direction:column;gap:14px;">
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;">
       <div>
         <label style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text);display:block;margin-bottom:5px;">Minimal Jam Tidur per Malam</label>
         <div style="display:flex;align-items:center;gap:9px;">
@@ -789,29 +675,11 @@
         </div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:4px;">WHO rekomendasikan 7-9 jam untuk dewasa</div>
       </div>
-      <div style="background:var(--bg);border:var(--bo);padding:9px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--yellow);">🏆 XP &amp; STREAK</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-top:4px;line-height:1.5;">Tidur ≥ target: +25 XP per malam<br>Streak berturut-turut: bonus XP tiap 7 hari</div>
-      </div>
       <button class="btn btn-primary" onclick="saveSleepTarget()" style="width:100%;justify-content:center;">SAVE TARGET</button>
     </div>
   </div>
 </div>
 
-
-<!-- ══ SHOP PAGE ══ -->
-<div class="page" id="page-shop"><div class="page-content">
-  <div class="sec-hdr">
-    <div class="sec-title">🛒 Shop</div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);">🪙 <span id="shop-page-coins">0</span></div>
-  </div>
-  <div style="display:flex;gap:0;border:var(--bo);box-shadow:var(--sha-sm);margin-bottom:11px;overflow-x:auto;">
-    <div class="ctab active" id="mshop-tab-character" onclick="setMainShopTab('character',this)" style="flex:1;text-align:center;font-size:9px;">KARAKTER</div>
-    <div class="ctab" id="mshop-tab-profile_bg" onclick="setMainShopTab('profile_bg',this)" style="flex:1;text-align:center;font-size:9px;">PROFIL BG</div>
-    <div class="ctab" id="mshop-tab-garden" onclick="setMainShopTab('garden',this)" style="flex:1;text-align:center;font-size:9px;">GARDEN</div>
-  </div>
-  <div id="main-shop-content"></div>
-</div></div>
 
 <!-- ══ JADWAL PAGE ══ -->
 <div class="page" id="page-jadwal"><div class="page-content">
@@ -832,7 +700,7 @@
       <div class="modal-title" id="jadwal-modal-title">TAMBAH JADWAL</div>
       <button class="modal-close" onclick="closeModal('modal-jadwal')">✕</button>
     </div>
-    <div style="padding:14px;display:flex;flex-direction:column;gap:11px;">
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:11px;">
       <div>
         <label style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);display:block;margin-bottom:5px;">NAMA JADWAL / KATEGORI *</label>
         <input type="text" id="jadwal-inp-name" class="form-input" placeholder="mis: Minum Air, Belajar, Tidur...">
@@ -859,13 +727,13 @@
       <div>
         <label style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);display:block;margin-bottom:5px;">HARI AKTIF</label>
         <div style="display:flex;gap:4px;flex-wrap:wrap;" id="jadwal-days-picker">
-          <div class="freq-btn sel" data-day="0">Min</div>
-          <div class="freq-btn sel" data-day="1">Sen</div>
-          <div class="freq-btn sel" data-day="2">Sel</div>
-          <div class="freq-btn sel" data-day="3">Rab</div>
-          <div class="freq-btn sel" data-day="4">Kam</div>
-          <div class="freq-btn sel" data-day="5">Jum</div>
-          <div class="freq-btn sel" data-day="6">Sab</div>
+          <div class="jhb-btn sel" data-day="0" onclick="this.classList.toggle('sel')">Min</div>
+          <div class="jhb-btn sel" data-day="1" onclick="this.classList.toggle('sel')">Sen</div>
+          <div class="jhb-btn sel" data-day="2" onclick="this.classList.toggle('sel')">Sel</div>
+          <div class="jhb-btn sel" data-day="3" onclick="this.classList.toggle('sel')">Rab</div>
+          <div class="jhb-btn sel" data-day="4" onclick="this.classList.toggle('sel')">Kam</div>
+          <div class="jhb-btn sel" data-day="5" onclick="this.classList.toggle('sel')">Jum</div>
+          <div class="jhb-btn sel" data-day="6" onclick="this.classList.toggle('sel')">Sab</div>
         </div>
       </div>
       <button class="btn btn-primary" onclick="saveJadwal()" style="width:100%;justify-content:center;margin-top:4px;">SIMPAN JADWAL</button>
@@ -880,7 +748,7 @@
     <div class="sec-hdr"><div class="sec-title">👥 Teman</div></div>
     <div id="friends-login-form">
       <div style="background:var(--surface);border:var(--bo);padding:24px;text-align:center;">
-        <div style="font-size:36px;margin-bottom:11px;">🔐</div>
+        <div style="margin-bottom:11px;display:flex;justify-content:center;"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--yellow)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="1.5"/><path d="M7.5 11V7.5a4.5 4.5 0 019 0V11"/><circle cx="12" cy="15.5" r="1.6" fill="var(--yellow)" stroke="none"/><line x1="12" y1="17.1" x2="12" y2="18.6"/></svg></div>
         <div style="font-family:'Archivo Black',sans-serif;font-size:13px;margin-bottom:7px;">Belum Login</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:14px;line-height:1.6;">
           Login dulu di halaman Setelan untuk menggunakan fitur teman.
@@ -988,6 +856,29 @@
   </div>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);margin-bottom:11px;" id="journal-viewing-date"></div>
 
+  <!-- Mood & Energy check-in (always for today) -->
+  <div class="mood-checkin" id="mood-checkin">
+    <div class="mood-saved-badge" id="mood-saved-badge" style="display:none">✓ TERSIMPAN</div>
+    <div class="mood-checkin-title">Mood &amp; Energi <span id="mood-label">Hari Ini</span></div>
+    <div class="mood-label" style="margin-bottom:5px;">Bagaimana perasaanmu?</div>
+    <div class="mood-btns">
+      <div class="mood-btn" onclick="setMood(1,this)">😫</div>
+      <div class="mood-btn" onclick="setMood(2,this)">😕</div>
+      <div class="mood-btn" onclick="setMood(3,this)">😐</div>
+      <div class="mood-btn" onclick="setMood(4,this)">😊</div>
+      <div class="mood-btn" onclick="setMood(5,this)">🔥</div>
+    </div>
+    <div class="mood-energy">
+      <div class="energy-label">Energi</div>
+      <div class="energy-dots" id="energy-dots">
+        <div class="edot" onclick="setEnergy(1)"></div><div class="edot" onclick="setEnergy(2)"></div>
+        <div class="edot" onclick="setEnergy(3)"></div><div class="edot" onclick="setEnergy(4)"></div>
+        <div class="edot" onclick="setEnergy(5)"></div>
+      </div>
+    </div>
+  </div>
+  <div id="mood-history-strip" style="margin-bottom:11px;"></div>
+
   <!-- Journal container — click area to start editing -->
   <div class="journal-main-card" id="journal-main-card" onclick="startJournalEdit()">
     <div class="journal-main-text" id="journal-main-text">
@@ -1016,14 +907,9 @@
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" style="gap:0;padding:0 2px;">
-  <div class="bnav-item active" id="bnav-today" onclick="navigate('today')">
-    <svg class="bnav-svg" viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v11H15v-5H9v5H3V10z"/></svg>
-    <div class="bnav-lbl">Home</div>
-  </div>
-  <div class="bnav-item" id="bnav-habits" onclick="navigate('habits')">
+  <div class="bnav-item active" id="bnav-habits" onclick="navigate('habits')">
     <svg class="bnav-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="3"/><rect x="3" y="10" width="18" height="3"/><rect x="3" y="16" width="12" height="3"/><polyline points="17 17 20 20 23 15"/></svg>
     <div class="bnav-lbl">Habits</div>
-    <div class="bnav-badge" id="badge-habits" style="display:none">0</div>
   </div>
   <div class="bnav-item" id="bnav-wellness" onclick="navigate('wellness')">
     <svg class="bnav-svg" viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402C1 3.736 3.791 2 6.5 2c1.85 0 3.674.788 5.5 2.528C13.826 2.788 15.65 2 17.5 2 20.209 2 23 3.736 23 7.191c0 4.105-5.37 8.863-11 14.402z"/></svg>
@@ -1052,10 +938,6 @@
         <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="13" x2="8" y2="13"/><line x1="12" y1="13" x2="12" y2="13"/><line x1="16" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="8" y2="17"/><line x1="12" y1="17" x2="12" y2="17"/></svg></div>
         <div class="mm-lbl">Jadwal</div>
       </div>
-      <div class="mm-item" onclick="navigateMore('shop')">
-        <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-        <div class="mm-lbl">Shop</div>
-      </div>
       <div class="mm-item" onclick="navigateMore('streaks')">
         <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7"/></svg></div>
         <div class="mm-lbl">Streaks</div>
@@ -1071,10 +953,6 @@
       <div class="mm-item" onclick="navigateMore('nutrition')">
         <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
         <div class="mm-lbl">Nutrition</div>
-      </div>
-      <div class="mm-item" onclick="navigateMore('garden')">
-        <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="22" x2="12" y2="11"/><path d="M12 11C12 11 8 8 8 5a4 4 0 018 0c0 3-4 6-4 6z"/><path d="M12 13C12 13 15 11 18 12s1 4-6 1"/><line x1="5" y1="22" x2="19" y2="22"/></svg></div>
-        <div class="mm-lbl">Garden</div>
       </div>
       <div class="mm-item" onclick="navigateMore('settings')">
         <div class="mm-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
@@ -1111,7 +989,7 @@
   <input type="hidden" id="inp-difficulty" value="medium">
   <div id="diff-desc" style="font-size:9px;color:var(--sub);margin-top:3px;">Balanced challenge. 10 XP per completion.</div>
 </div>
-<div class="form-group"><label class="form-label">Frequency</label><div class="freq-row"><div class="freq-btn sel" onclick="selFreq(this,'daily')" title="Every day">DAILY</div><div class="freq-btn" onclick="selFreq(this,'weekdays')" title="Mon–Fri only">WEEKDAYS</div><div class="freq-btn" onclick="selFreq(this,'weekends')" title="Sat–Sun only">WEEKENDS</div><div class="freq-btn" onclick="selFreq(this,'3x/week')" title="Mon, Wed, Fri">3X/WK</div><div class="freq-btn" onclick="selFreq(this,'weekly')" title="Once per week">WEEKLY</div><div class="freq-btn" onclick="selFreq(this,'monthly')" title="Once per month">MONTHLY</div></div><div id="freq-desc" style="font-size:9px;color:var(--sub);margin-top:3px;">Every single day — no excuses.</div><input type="hidden" id="inp-freq" value="daily"></div>
+<div class="form-group"><label class="form-label">Frequency</label><div class="freq-row"><div class="freq-btn sel" onclick="selFreq(this,'daily')" title="Every day">DAILY</div><div class="freq-btn" onclick="selFreq(this,'weekly')" title="Once per week">WEEKLY</div><div class="freq-btn" onclick="selFreq(this,'monthly')" title="Once per month">MONTHLY</div></div><div id="freq-desc" style="font-size:9px;color:var(--sub);margin-top:3px;">Every single day — no excuses.</div><input type="hidden" id="inp-freq" value="daily"></div>
 
       <div class="form-group"><label class="form-label">Target (times per session)</label><input type="number" class="form-input" id="inp-target" min="1" value="1"></div>
 
@@ -1130,8 +1008,6 @@
         <input type="hidden" id="inp-prog" value="none">
       </div>
 
-      <div class="form-group"><label class="form-label">Stake (optional)</label><input type="text" class="form-input" id="inp-stake" placeholder="e.g. Donasi Rp20k jika gagal"></div>
-
       <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-textarea" id="inp-notes" placeholder="Extra details..."></textarea></div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('modal-add')">CANCEL</button><button class="btn" onclick="saveHabitAndAddAnother()" style="font-size:9px;">+ ANOTHER</button><button class="btn btn-primary" onclick="saveHabit()">✓ SAVE</button></div>
@@ -1139,21 +1015,73 @@
 </div>
 
 <!-- MODAL: LOGIN -->
-<div class="modal-overlay" id="modal-login" onclick="if(event.target===this)closeModal('modal-login')">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title">MASUK / DAFTAR</div><div class="modal-close" onclick="closeModal('modal-login')" style="font-size:14px;font-weight:900;line-height:1;">×</div></div>
-    <div class="modal-body">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);margin-bottom:11px;line-height:1.6;">Login untuk terhubung dengan teman.</div>
-      <button onclick="fbLoginGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px;border:2px solid var(--bc);background:var(--bg);cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--text);margin-bottom:9px;">
-        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/></svg>
-        Masuk dengan Google
-      </button>
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;"><div style="flex:1;height:1px;background:var(--bc);"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--sub);">atau</div><div style="flex:1;height:1px;background:var(--bc);"></div></div>
-      <div class="form-group"><label class="form-label">USERNAME</label><input type="text" id="fb-username" class="form-input" placeholder="huruf/angka" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"></div>
-      <div class="form-group"><label class="form-label">PASSWORD</label><input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter"></div>
-      <div style="display:flex;gap:7px;"><button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="fbRegister()">DAFTAR</button><button class="btn" style="flex:1;justify-content:center;" onclick="fbLogin()">MASUK</button></div>
-      <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:7px;"></div>
+<!-- ══ AUTH PAGE (halaman login/daftar terpisah, bukan modal) ══ -->
+<div id="auth-page">
+  <div class="auth-page-scan"></div>
+  <div class="auth-page-corner tl"></div>
+  <div class="auth-page-corner tr"></div>
+  <div class="auth-page-corner bl"></div>
+  <div class="auth-page-corner br"></div>
+  <div class="auth-page-bg">
+
+    <!-- Form panel (left on desktop) — hidden until first showcase cycle finishes -->
+    <div class="auth-card" id="auth-card">
+      <div class="auth-card-panel">
+        <div class="auth-tabs2">
+          <button class="auth-tab2 active" id="auth-tab2-login" onclick="setAuthMode('login')">MASUK</button>
+          <button class="auth-tab2" id="auth-tab2-register" onclick="setAuthMode('register')">DAFTAR</button>
+        </div>
+
+        <div class="form-group"><label class="form-label">USERNAME</label><input type="text" id="fb-username" class="form-input" placeholder="huruf/angka" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"></div>
+        <div class="form-group"><label class="form-label">PASSWORD</label><input type="password" id="fb-password" class="form-input" placeholder="min 6 karakter" onkeydown="if(event.key==='Enter')authSubmit2()"></div>
+
+        <button class="btn btn-primary" id="auth2-submit-btn" style="width:100%;justify-content:center;" onclick="authSubmit2()">MASUK</button>
+        <div id="fb-auth-error" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#f44;margin-top:9px;text-align:center;"></div>
+
+        <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">atau</div><div class="auth-divider-line"></div></div>
+
+        <button class="auth-google-btn" onclick="fbLoginGoogle()">
+          <svg width="16" height="16" viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.4 26.7 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
+            <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.4-2.4 4.4-4.4 5.8l6.2 5.2C40.5 36.2 44 30.6 44 24c0-1.3-.1-2.7-.4-4z"/>
+          </svg>
+          Lanjutkan dengan Google
+        </button>
+      </div>
+
+      <div class="auth-footer-note">Data tersimpan aman di cloud · Sinkron antar perangkat</div>
     </div>
+
+    <!-- Animated showcase (right on desktop, looping continuously) -->
+    <div class="auth-showcase">
+      <div class="auth-showcase-inner">
+        <div class="auth-typewriter"><span id="auth-typewriter-text"></span></div>
+
+        <div class="auth-showcase-logo" id="auth-showcase-logo">
+          <svg class="auth-showcase-icon" viewBox="0 0 120 120" width="88" height="88">
+            <rect class="auth-icon-rect" style="transition-delay:0s;" x="0" y="0" width="120" height="120" fill="#0a0a0a"/>
+            <rect class="auth-icon-rect" style="transition-delay:.05s;" x="0" y="0" width="120" height="28" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.09s;" x="28" y="0" width="8" height="14" fill="#0a0a0a"/>
+            <rect class="auth-icon-rect" style="transition-delay:.09s;" x="84" y="0" width="8" height="14" fill="#0a0a0a"/>
+            <rect class="auth-icon-rect" style="transition-delay:.16s;" x="10" y="38" width="26" height="22" fill="#222"/>
+            <rect class="auth-icon-rect" style="transition-delay:.20s;" x="47" y="38" width="26" height="22" fill="#222"/>
+            <rect class="auth-icon-rect" style="transition-delay:.24s;" x="84" y="38" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.28s;" x="10" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.32s;" x="47" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.36s;" x="84" y="68" width="26" height="22" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.40s;" x="10" y="98" width="26" height="18" fill="var(--yellow,#FFE600)"/>
+            <rect class="auth-icon-rect" style="transition-delay:.44s;" x="47" y="98" width="26" height="18" fill="#FF6B00"/>
+            <rect class="auth-icon-rect" style="transition-delay:.48s;" x="84" y="98" width="26" height="18" fill="#333"/>
+          </svg>
+        </div>
+
+        <div class="auth-showcase-title"><span id="auth-showcase-title-text"></span></div>
+        <div class="auth-showcase-sub"><span id="auth-showcase-sub-text"></span></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1171,19 +1099,6 @@
   </div>
 </div>
 
-<!-- MODAL: TEMPLATES -->
-<div class="modal-overlay" id="modal-templates" onclick="if(event.target===this)closeModal('modal-templates')">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> TEMPLATES</div><div class="modal-close" onclick="closeModal('modal-templates')">✕</div></div>
-    <div class="modal-body">
-      <p style="font-size:10px;color:var(--muted);margin-bottom:11px;">Pick a pack to add habits instantly.</p>
-      <div class="template-grid" id="template-grid"></div>
-      <div style="margin-top:11px;padding:10px;border:var(--bo);background:var(--bg);display:none;" id="template-preview"></div>
-    </div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-templates')">CANCEL</button><button class="btn btn-primary" onclick="applyTemplate()">✓ ADD</button></div>
-  </div>
-</div>
-
 <!-- MODAL: DNA IMPORT -->
 <div class="modal-overlay" id="modal-dna-import" onclick="if(event.target===this)closeModal('modal-dna-import')">
   <div class="modal">
@@ -1195,14 +1110,6 @@
       <button class="btn btn-sm" onclick="dnaFileImport()">📂 UPLOAD .JSON FILE</button>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('modal-dna-import')">CANCEL</button><button class="btn btn-cyan" onclick="applyDNAImport()">🧬 LOAD HABITS</button></div>
-  </div>
-</div>
-
-<!-- MODAL: COACH HISTORY -->
-<div class="modal-overlay" id="modal-coach-history" onclick="if(event.target===this)closeModal('modal-coach-history')">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> COACH HISTORY</div><div class="modal-close" onclick="closeModal('modal-coach-history')">✕</div></div>
-    <div class="modal-body" id="coach-history-body"><div style="font-size:10px;color:var(--sub);text-align:center;padding:20px;">No coach history yet. Tap <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 11-2.8-9.6L23 10"/></svg> REFRESH on the coach card.</div></div>
   </div>
 </div>
 
@@ -1222,18 +1129,6 @@
       <button class="btn btn-purple" onclick="getAIReviewInsight()">🦁 AI INSIGHT</button>
       <button class="btn btn-primary" onclick="saveReview()">✓ SAVE</button>
     </div>
-  </div>
-</div>
-
-<!-- ACHIEVEMENT POPUP -->
-<div class="ach-popup-overlay" id="ach-popup">
-  <div class="ach-popup">
-    <div class="ach-popup-tag">🏅 ACHIEVEMENT UNLOCKED</div>
-    <div class="ach-popup-icon" id="ach-popup-icon">🏆</div>
-    <div class="ach-popup-title" id="ach-popup-title">CHAMPION</div>
-    <div class="ach-popup-desc" id="ach-popup-desc">Achievement unlocked!</div>
-    <div class="ach-popup-xp" id="ach-popup-xp">+100 XP</div>
-    <button class="btn btn-cyan" style="width:100%;justify-content:center;" onclick="closeAchPopup()">AWESOME! ✨</button>
   </div>
 </div>
 
@@ -1417,13 +1312,13 @@
 
 <!-- ══ HABIT DETAIL OVERLAY (full screen slide-in) ══ -->
 <div class="habit-detail-overlay" id="habit-detail-overlay">
-  <div style="background:var(--black);border-bottom:var(--bo-t);border-color:var(--yellow);padding:11px;display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:10;">
-    <button class="btn btn-sm" onclick="closeHabitDetail()" style="padding:6px 10px;">← BACK</button>
+  <div class="hd-header" style="padding:11px;display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:10;">
+    <button class="btn btn-sm btn-accent" onclick="closeHabitDetail()" style="padding:6px 10px;">← BACK</button>
     <div style="flex:1;">
-      <div id="hd-title" style="font-family:'Archivo Black',sans-serif;font-size:14px;color:var(--yellow);"></div>
-      <div id="hd-cat" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);text-transform:uppercase;margin-top:2px;"></div>
+      <div id="hd-title" class="hd-header-title" style="font-family:'Archivo Black',sans-serif;font-size:14px;"></div>
+      <div id="hd-cat" class="hd-header-cat" style="font-family:'IBM Plex Mono',monospace;font-size:8px;text-transform:uppercase;margin-top:2px;"></div>
     </div>
-    <div id="hd-streak-num" style="font-family:'Archivo Black',sans-serif;font-size:24px;color:var(--orange);"></div>
+    <div id="hd-streak-num" class="hd-header-title" style="font-family:'Archivo Black',sans-serif;font-size:24px;"></div>
   </div>
   <div id="hd-body" style="padding:11px;padding-bottom:80px;"></div>
 </div>
@@ -1442,9 +1337,9 @@
 <div class="time-picker-overlay" id="time-picker-overlay">
   <div class="time-picker-panel">
     <!-- Header -->
-    <div style="background:var(--yellow);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="background:var(--yellow);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;border-bottom:var(--bo-t);">
       <div style="font-family:'Archivo Black',sans-serif;font-size:11px;color:var(--black);text-transform:uppercase;letter-spacing:2px;">SET WAKTU</div>
-      <div onclick="closeTimePicker()" style="cursor:pointer;font-size:18px;font-weight:900;color:var(--black);line-height:1;">×</div>
+      <div class="modal-close" onclick="closeTimePicker()">×</div>
     </div>
     <!-- Display jam besar -->
     <div style="display:flex;align-items:center;justify-content:center;gap:4px;padding:16px 13px 8px;background:var(--bg);">
@@ -1469,6 +1364,26 @@
       <button class="btn" style="flex:1;justify-content:center;" onclick="clearTimePicker()">HAPUS</button>
       <button class="btn btn-primary" style="flex:2;justify-content:center;" onclick="confirmTimePicker()">✓ KONFIRMASI</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE PHOTO CROP MODAL ══ -->
+<div class="modal-overlay" id="modal-photo-crop" onclick="if(event.target===this)cancelPhotoCrop()">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-header"><div class="modal-title">ATUR FOTO PROFIL</div><div class="modal-close" onclick="cancelPhotoCrop()">×</div></div>
+    <div class="modal-body" style="display:flex;flex-direction:column;align-items:center;gap:13px;">
+      <div id="photo-crop-viewport" style="width:230px;height:230px;max-width:100%;border-radius:50%;overflow:hidden;position:relative;border:var(--bo-t);touch-action:none;cursor:grab;background:#000;">
+        <img id="photo-crop-img" draggable="false" alt="" style="position:absolute;left:0;top:0;transform-origin:0 0;user-select:none;pointer-events:none;">
+        <div style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);pointer-events:none;"></div>
+      </div>
+      <div style="width:100%;display:flex;align-items:center;gap:9px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--sub);flex-shrink:0;">−</span>
+        <input type="range" id="photo-crop-zoom" min="100" max="300" value="100" style="flex:1;accent-color:var(--yellow);" oninput="onPhotoCropZoom(this.value)">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--sub);flex-shrink:0;">+</span>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--sub);text-align:center;letter-spacing:.5px;">GESER FOTO UNTUK MENGATUR POSISI · GUNAKAN SLIDER UNTUK ZOOM</div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="cancelPhotoCrop()">BATAL</button><button class="btn btn-primary" onclick="confirmPhotoCrop()">✓ SIMPAN</button></div>
   </div>
 </div>
 

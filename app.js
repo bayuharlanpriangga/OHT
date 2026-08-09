@@ -58,15 +58,6 @@ const HABIT_ICONS = [
 ];
 const EMOJIS = HABIT_ICONS.map(i => i.id);
 const COLORS=['#FFE600','#FF3CAC','#00F5D4','#AAFF00','#FF6B00','#0057FF','#7B2FBE','#FF1744','#00BCD4','#FF9800','#4CAF50','#E91E63'];
-const QUOTES=[
-  {q:'"We are what we repeatedly do. Excellence is not an act, but a habit."',a:'ARISTOTLE'},
-  {q:'"Motivation is what gets you started. Habit is what keeps you going."',a:'JIM RYUN'},
-  {q:'"The secret of your future is hidden in your daily routine."',a:'MIKE MURDOCK'},
-  {q:'"Small daily improvements lead to stunning results."',a:'UNKNOWN'},
-  {q:'"First forget inspiration. Habit is more dependable."',a:'OCTAVIA BUTLER'},
-  {q:'"Do the work. Especially when you don\'t feel like it."',a:'UNKNOWN'},
-  {q:'"You do not rise to your goals. You fall to your systems."',a:'JAMES CLEAR'},
-];
 const CATS={
   health:{label:'Health',svg:'<path d="M6 4v6"/><path d="M18 4v6"/><path d="M3 7h18"/><path d="M6 10c0 4 2 6 6 6s6-2 6-6"/>',color:'#FF3CAC'},
   mind:{label:'Mind',svg:'<path d="M9.5 2a4.5 4.5 0 014.5 4.5c0 1.5-.5 2.5-1.5 3.5h3a4.5 4.5 0 010 9H9a4.5 4.5 0 010-9h.5C8 9 7.5 8 7.5 6.5A4.5 4.5 0 019.5 2z"/>',color:'#0057FF'},
@@ -79,39 +70,6 @@ const CATS={
 };
 const DAILY_FREQS=['daily','weekdays','weekends','3x/week'];
 const MOOD_EMOJIS=['','😫','😕','😐','😊','🔥'];
-const HABIT_TEMPLATES=[
-  {id:'morning',icon:'🌅',title:'Morning Routine',count:4,habits:[
-    {name:'Wake Up Early',icon:'clock',color:'#FFE600',category:'wellness',freq:'daily',target:1,notes:'Before 6AM',progressive:'none',stack:'',stake:'',scheduledTime:'06:00'},
-    {name:'Morning Run',icon:'run',color:'#FF3CAC',category:'health',freq:'daily',target:1,notes:'20 min min',progressive:'slow',stack:'',stake:'',scheduledTime:'06:15'},
-    {name:'Cold Shower',icon:'water',color:'#00F5D4',category:'wellness',freq:'daily',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Journal',icon:'write',color:'#7B2FBE',category:'mind',freq:'daily',target:1,notes:'3 gratitude items',progressive:'none',stack:'',stake:'',scheduledTime:'07:00'},
-  ]},
-  {id:'fitness',icon:'💪',title:'Fitness Pack',count:4,habits:[
-    {name:'Workout',icon:'lift',color:'#FF3CAC',category:'health',freq:'daily',target:1,notes:'',progressive:'medium',stack:'',stake:'',scheduledTime:''},
-    {name:'Drink 8 Glasses',icon:'water',color:'#00F5D4',category:'health',freq:'daily',target:8,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Protein Intake',icon:'food',color:'#AAFF00',category:'health',freq:'daily',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Stretch',icon:'meditate',color:'#FF6B00',category:'health',freq:'daily',target:1,notes:'10 min',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ]},
-  {id:'study',icon:'book',title:'Study Pack',count:3,habits:[
-    {name:'Read 30 min',icon:'book',color:'#0057FF',category:'mind',freq:'daily',target:1,notes:'',progressive:'slow',stack:'',stake:'',scheduledTime:'21:00'},
-    {name:'Study Session',icon:'code',color:'#FFE600',category:'productivity',freq:'weekdays',target:1,notes:'Deep focus',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Review Notes',icon:'write',color:'#FF6B00',category:'mind',freq:'weekdays',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ]},
-  {id:'mindful',icon:'meditate',title:'Mindfulness',count:3,habits:[
-    {name:'Meditate',icon:'meditate',color:'#7B2FBE',category:'wellness',freq:'daily',target:1,notes:'10 min',progressive:'slow',stack:'',stake:'',scheduledTime:'07:30'},
-    {name:'Gratitude',icon:'bolt',color:'#FFE600',category:'wellness',freq:'daily',target:1,notes:'3 things',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Digital Detox',icon:'phone',color:'#FF1744',category:'wellness',freq:'weekly',target:1,notes:'No social media',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ]},
-  {id:'finance',icon:'money',title:'Finance Pack',count:3,habits:[
-    {name:'No Impulse Buy',icon:'money',color:'#AAFF00',category:'finance',freq:'daily',target:1,notes:'',progressive:'none',stack:'',stake:'Donasi Rp20k jika gagal',scheduledTime:''},
-    {name:'Log Expenses',icon:'phone',color:'#00BCD4',category:'finance',freq:'daily',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:'22:00'},
-    {name:'Budget Review',icon:'target',color:'#FF9800',category:'finance',freq:'monthly',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ]},
-  {id:'social',icon:'people',title:'Social Pack',count:2,habits:[
-    {name:'Connect with Someone',icon:'people',color:'#FF6B00',category:'social',freq:'daily',target:1,notes:'Real talk',progressive:'none',stack:'',stake:'',scheduledTime:''},
-    {name:'Family Call',icon:'bolt',color:'#E91E63',category:'social',freq:'weekly',target:1,notes:'',progressive:'none',stack:'',stake:'',scheduledTime:''},
-  ]},
-];
 const MISSIONS=[
   {id:'m1',title:'FIRST BLOOD',desc:'7-day streak on any habit',icon:'target',goal:7,type:'streak',reward:1},
   {id:'m2',title:'CONSISTENCY KING',desc:'ALL daily habits done 3 days straight',icon:'👑',goal:3,type:'perfect_days',reward:2},
@@ -120,22 +78,6 @@ const MISSIONS=[
   {id:'m5',title:'ON A ROLL',desc:'7 perfect days in a row',icon:'🔥',goal:7,type:'perfect_days',reward:3},
   {id:'m6',title:'XP BEAST',desc:'Reach 500 total XP',icon:'⚡',goal:500,type:'xp',reward:5},
   {id:'m7',title:'WEEK WARRIOR',desc:'Weekly habit 4 consecutive weeks',icon:'⚔️',goal:4,type:'weekly_streak',reward:2},
-];
-const ACHIEVEMENTS=[
-  {id:'a1',icon:'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M12 3v1M12 20v1M4.22 4.22l.7.7M19.07 19.07l.71.71M1 12h2M21 12h2M4.22 19.78l.7-.7M19.07 4.93l.71-.71"/><circle cx="12" cy="12" r="4"/></svg>',title:'FIRST STEP',desc:'Add your first habit',xp:10},
-  {id:'a2',icon:'🔥',title:'ON FIRE',desc:'3-day streak',xp:20},
-  {id:'a3',icon:'💪',title:'CONSISTENT',desc:'7-day streak',xp:50},
-  {id:'a4',icon:'⚡',title:'LIGHTNING',desc:'100% in one day',xp:30},
-  {id:'a5',icon:'🏆',title:'CHAMPION',desc:'30-day streak',xp:200},
-  {id:'a6',icon:'book',title:'SCHOLAR',desc:'Track 5+ habits',xp:25},
-  {id:'a7',icon:'bolt',title:'SUPERSTAR',desc:'500 total XP',xp:50},
-  {id:'a8',icon:'❄',title:'PREPARED',desc:'Earn your first freeze',xp:15},
-  {id:'a9',icon:'💯',title:'PERFECTIONIST',desc:'7 perfect days',xp:100},
-  {id:'a10',icon:'🧬',title:'ARCHITECT',desc:'Stack 2 habits',xp:30},
-  {id:'a11',icon:'<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',title:'LEVELLING UP',desc:'Use progressive difficulty',xp:25},
-  {id:'a12',icon:'🦁',title:'OHT COACHED',desc:'Chat with AI Coach',xp:20},
-  {id:'a13',icon:'🏖',title:'RECHARGED',desc:'Use vacation mode',xp:15},
-  {id:'a14',icon:'🧬',title:'DNA SHARER',desc:'Export your habit DNA',xp:20},
 ];
 const CHALLENGES=[
   {id:'c1',title:'30-DAY WARRIOR',desc:'All habits done 30 days straight.',goal:30,color:'#FF3CAC',icon:'⚔️'},
@@ -151,11 +93,11 @@ let S={
   habits:[],history:[],lockedDays:{},
   xp:0,name:'User',
   freezes:0,freezeLog:[],
-  missions:[],achievements:[],
+  missions:[],
   moodLog:{},coachHistory:[],weeklyReviews:[],insightFeed:[],
   todayFilter:'all',historyFilter:'all',reportPeriod:'daily',
   habitsSort:'default',habitsCatFilter:'all',
-  darkMode:false,soundOn:true,confettiOn:true,onboardDone:false,
+  soundOn:true,confettiOn:true,onboardDone:false,
   vacationMode:false,vacationEnd:'',
   lastDate:todayStr(),selTemplate:null,
 };
@@ -182,12 +124,10 @@ function loadState(){
     try{
       const d=JSON.parse(raw);
       S=Object.assign({},S,d);
-      if(!S.achievements?.length) S.achievements=ACHIEVEMENTS.map(a=>({...a,unlocked:false}));
       if(!S.missions?.length) S.missions=MISSIONS.map(m=>({...m,progress:0,completed:false}));
     }catch(e){}
   } else {
     S.missions=MISSIONS.map(m=>({...m,progress:0,completed:false}));
-    S.achievements=ACHIEVEMENTS.map(a=>({...a,unlocked:false}));
   }
   // FIX: vacation end auto-resume
   if(S.vacationMode&&S.vacationEnd&&S.vacationEnd<=todayStr()){
@@ -404,8 +344,9 @@ function updateMoodUI(){
   if(m&&(m.mood||m.energy)){
     if(mc)mc.classList.add('done-today');
     if(badge)badge.style.display='block';
-    if(lbl)lbl.textContent='Today';
+    if(lbl)lbl.textContent='Hari Ini ✓';
   }
+  if(typeof renderMoodHistoryStrip==='function') renderMoodHistoryStrip();
 }
 function restoreMoodUI(){
   const td=todayStr();const m=S.moodLog&&S.moodLog[td];
@@ -436,7 +377,7 @@ function toggleVacation(){
   S.vacationMode=!S.vacationMode;
   const vt=$('vacation-toggle');if(vt)vt.classList.toggle('on',S.vacationMode);
   const ver=$('vacation-end-row');if(ver)ver.style.display=S.vacationMode?'flex':'none';
-  if(S.vacationMode){unlockAch('a13');toast('🏖 Vacation mode ON — streaks protected!','info');}
+  if(S.vacationMode){toast('🏖 Vacation mode ON — streaks protected!','info');}
   else{toast('🏋️ Vacation mode OFF — tracking resumed.','success');}
   save();renderAll();
 }
@@ -520,62 +461,69 @@ function _updatePWASettingsUI(){
   const statusEl= document.getElementById('loader-status');
   if (!loader || !fill) return;
 
+  const MIN_MS = 3500; // durasi minimum loading screen (3.5 detik)
+  const startTime = Date.now();
+
   const stages = [
-    { pct: 15,  label: 'LOADING ASSETS'   },
-    { pct: 35,  label: 'RESTORING DATA'   },
-    { pct: 58,  label: 'BUILDING HABITS'  },
-    { pct: 74,  label: 'SYNCING STREAKS'  },
-    { pct: 88,  label: 'ALMOST READY'     },
-    { pct: 100, label: 'READY'            },
+    { at: 0.15, label: 'LOADING ASSETS'   },
+    { at: 0.35, label: 'RESTORING DATA'   },
+    { at: 0.58, label: 'BUILDING HABITS'  },
+    { at: 0.74, label: 'SYNCING STREAKS'  },
+    { at: 0.90, label: 'ALMOST READY'     },
+    { at: 1.00, label: 'READY'            },
   ];
 
-  let cur = 0;
-  let stageIdx = 0;
-
   const tick = setInterval(() => {
-    const target = stages[stageIdx].pct;
-    // Maju 1–3% per tick, melambat saat mendekati target
-    const step = Math.max(1, Math.ceil((target - cur) * 0.18));
-    cur = Math.min(target, cur + step);
+    const elapsed = Date.now() - startTime;
+    const ratio = Math.min(1, elapsed / MIN_MS);
+    const pct = Math.round(ratio * 100);
 
-    fill.style.width    = cur + '%';
-    pctEl.textContent   = cur + '%';
-    statusEl.textContent= stages[stageIdx].label;
+    fill.style.width    = pct + '%';
+    pctEl.textContent   = pct + '%';
+    const stage = stages.find(s => ratio <= s.at) || stages[stages.length - 1];
+    statusEl.textContent = stage.label;
 
-    if (cur >= target && stageIdx < stages.length - 1) {
-      stageIdx++;
-    }
-    if (cur >= 100) {
-      clearInterval(tick);
-    }
-  }, 28);
+    if (ratio >= 1) clearInterval(tick);
+  }, 40);
 
-  // Simpan referensi supaya init() bisa dismiss setelah app siap
+  // Simpan referensi supaya init() bisa dismiss setelah app siap DAN durasi minimum tercapai
   window._loaderInterval = tick;
+  window._loaderStart = startTime;
+  window._loaderMinMs = MIN_MS;
   window._dismissLoader = function() {
-    clearInterval(window._loaderInterval);
-    if (fill)   fill.style.width    = '100%';
-    if (pctEl)  pctEl.textContent   = '100%';
-    if (statusEl) statusEl.textContent = 'READY';
+    const elapsed = Date.now() - window._loaderStart;
+    const wait = Math.max(0, window._loaderMinMs - elapsed);
     setTimeout(() => {
-      loader.style.transition = 'opacity .45s ease';
-      loader.style.opacity    = '0';
-      setTimeout(() => { loader.style.display = 'none'; }, 460);
-    }, 220);
+      clearInterval(window._loaderInterval);
+      if (fill)   fill.style.width    = '100%';
+      if (pctEl)  pctEl.textContent   = '100%';
+      if (statusEl) statusEl.textContent = 'READY';
+      setTimeout(() => {
+        loader.style.transition = 'opacity .45s ease';
+        loader.style.opacity    = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 460);
+      }, 220);
+    }, wait);
   };
 })();
 
 function init(){
-  loadState();buildPickers();setTodayDate();setQuote();buildTemplateGrid();
+  loadState();buildPickers();
   updateSoundUI();
+  // Sync accent theme UI (attribute already applied earlier via bootstrap script)
+  if (S.accentTheme) {
+    document.documentElement.setAttribute('data-accent', S.accentTheme);
+    document.querySelectorAll('.accent-opt').forEach(el => {
+      el.classList.toggle('sel', el.dataset.accent === S.accentTheme);
+    });
+  }
   // FIX: dark mode icon sync on load
-  if(S.darkMode){applyDark(true);}
   const ct=$('confetti-toggle');if(ct)ct.classList.toggle('on',S.confettiOn!==false);
   const vt=$('vacation-toggle');if(vt)vt.classList.toggle('on',!!S.vacationMode);
   const ver=$('vacation-end-row');if(ver)ver.style.display=S.vacationMode?'flex':'none';
-  // Ensure only today page is active on start
+  // Ensure only habits page is active on start
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const _initPage = $('page-today');
+  const _initPage = $('page-habits');
   if(_initPage) _initPage.classList.add('active');
   
   if(!S.onboardDone)showOnboarding();
@@ -617,24 +565,10 @@ function populateStackPicker(editId){
   S.habits.filter(h=>h.id!==editId).forEach(h=>{sel.innerHTML+=`<option value="${h.id}">${h.icon} ${h.name}</option>`;});
 }
 
-function setTodayDate(){
-  const n=new Date();
-  const days=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  setTxt('today-num',String(n.getDate()).padStart(2,'0'));
-  setTxt('today-month',`${months[n.getMonth()]} ${n.getFullYear()}`);
-  setTxt('today-wd',days[n.getDay()]);
-}
-function setQuote(){
-  const q=QUOTES[new Date().getDay()%QUOTES.length];
-  setTxt('quote-txt',q.q);setTxt('quote-src',`— ${q.a}`);
-}
-
 // ── RENDER ALL ─────────────────────────────────────────────
 
 // ── Page view state (global) ──
 let _reportViewDate   = null;
-let _gardenViewDate   = null;
 let _nutrViewDate     = null;
 let _wellnessDate     = null;
 let _journalViewDate  = null;
@@ -643,12 +577,9 @@ let _wellnessWaterMode = 'cups';
 function renderAll(){
   const _r = (fn) => { try{ fn(); }catch(e){ console.error('RENDER ERROR ['+fn.name+']:', e.message); } };
   _r(renderStats);
-  _r(renderTodayHabits);
   _r(renderAllHabits);
-  _r(renderWeekChart);
   _r(renderStreaks);
   _r(renderInsightFeed);
-  if(typeof renderAchievements==='function') _r(renderAchievements);
   if(typeof renderMissions==='function') _r(renderMissions);
   if(typeof renderChallenges==='function') _r(renderChallenges);
   _r(renderCommitments);
@@ -658,7 +589,6 @@ function renderAll(){
   _r(renderShare);
   _r(renderFreezeLog);
   if(typeof renderArchive==='function') _r(renderArchive);
-  // garden rendered via navigate hook only
   if(typeof renderCalendar==='function') _r(renderCalendar);
   _r(renderGoals);
   _r(renderRituals);
@@ -668,7 +598,6 @@ function renderAll(){
   if(typeof renderBestTimeCard==='function') _r(renderBestTimeCard);
   if(typeof renderWeeklySchedule==='function') _r(renderWeeklySchedule);
   if(typeof renderHabitCorrelations==='function') _r(renderHabitCorrelations);
-  _r(checkAchievements);
 }
 
 // ── STATS ──────────────────────────────────────────────────
@@ -702,8 +631,6 @@ function renderStats(){
   const hasBigStreak=S.habits.some(h=>(h.streak||0)>=7);
   if(chip)chip.classList.toggle('danger',(S.freezes||0)===0&&hasBigStreak);
   setTxt('s-login',S.loginStreak||1);
-  const badge=$('badge-habits');
-  if(badge){if(total>0){badge.style.display='block';badge.textContent=total;}else badge.style.display='none';}
   // FIX: sync vacation toggle
   const vt=$('vacation-toggle');if(vt)vt.classList.toggle('on',!!S.vacationMode);
 
@@ -785,35 +712,6 @@ function weekDots(h){
 }
 
 function togglePauseHabit(id){const h=S.habits.find(x=>x.id===id);if(!h)return;h.paused=!h.paused;save();renderAll();toast(h.paused?`⏸ "${h.name}" paused`:`▶ "${h.name}" resumed`,'info');}
-
-// ── RENDER TODAY ────────────────────────────────────────────
-function renderTodayHabits(){
-  const list=$('today-habits-list');if(!list)return;
-  const activeHabits=S.habits.filter(h=>!h.archived);
-  if(!activeHabits.length){list.innerHTML=getEmptyState("habits");return;}
-  const due=activeHabits.filter(h=>isDueToday(h)&&!h.paused);
-  const _due_sorted = [...due].sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
-  const show=_due_sorted.filter(h=>S.todayFilter==='done'?h.completedToday:S.todayFilter==='pending'?!h.completedToday:true);
-  renderTodayAntiHabitsMini();
-  renderTodayGoalsMini();
-  renderHabitWeather();
-  let html='';
-  if(_todayGroupByTime && show.length) {
-    const groups = {morning:[],afternoon:[],evening:[],night:[],anytime:[]};
-    show.forEach(h => groups[getTimeOfDay(h.scheduledTime||'')].push(h));
-    const glabels = {morning:'Morning',afternoon:'Afternoon',evening:'Evening',night:'Night',anytime:'Anytime'};
-    const gicons = {morning:'🌅',afternoon:'☀️',evening:'🌙',night:'🌃',anytime:'⚡'};
-    Object.entries(groups).forEach(([time, habits]) => {
-      if(!habits.length) return;
-      html += `<div style="font-family:var(--font-mono, monospace);font-size:7px;text-transform:uppercase;color:var(--sub);letter-spacing:1px;padding:5px 0 3px;">${gicons[time]} ${glabels[time]}</div>`;
-      html += habits.map(h=>habitCard(h,'daily','th')).join('');
-    });
-    if(!html) html = getEmptyState('habits');
-  } else {
-    html = show.length?show.map(h=>habitCard(h,'daily','th')).join(''):getEmptyState('habits');
-  }
-  list.innerHTML=html;
-}
 
 // ── RENDER HABITS PAGE ──────────────────────────────────────
 function renderAllHabits(){
@@ -969,7 +867,7 @@ function executeDelete(){
 function earnFreeze(amount,reason){
   S.freezes=(S.freezes||0)+amount;S.freezeLog=S.freezeLog||[];
   S.freezeLog.unshift({date:todayStr(),reason,earned:amount,used:false});
-  unlockAch('a8');save();renderStats();renderFreezeLog();
+  save();renderStats();renderFreezeLog();
   toast(`❄ +${amount} Freeze${amount>1?'s':''} earned!`,'info');
 }
 function renderFreezeLog(){
@@ -1001,36 +899,6 @@ function renderMissions(){
   el.innerHTML=S.missions.map(m=>{const pct=Math.min(100,Math.round(((m.progress||0)/m.goal)*100));return `<div class="mission-card"><div class="mc-header"><div class="mc-icon">${m.icon}</div><div style="flex:1;"><div class="mc-title">${m.title}</div><div class="mc-reward">❄ +${m.reward} Freeze${m.reward>1?'s':''}</div></div>${m.completed?'<div class="mc-status-done">✓ DONE</div>':''}</div><div class="mc-desc">${m.desc}</div>${!m.completed?`<div class="mc-prog-track"><div class="mc-prog-fill" style="width:${pct}%"></div></div><div class="mc-footer"><span>${m.progress||0}/${m.goal}</span><span>${pct}%</span></div>`:`<div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--lime);">✓ ${m.reward} freeze${m.reward>1?'s':''} earned</div>`}</div>`;}).join('');
 }
 
-// ── ACHIEVEMENTS ───────────────────────────────────────────
-let achQueue=[];
-function checkAchievements(){
-  if(!S.achievements?.length)S.achievements=ACHIEVEMENTS.map(a=>({...a,unlocked:false}));
-  const done=S.habits.filter(h=>h.completedToday).length;
-  const best=S.habits.reduce((m,h)=>Math.max(m,h.bestStreak||0),0);
-  const perfectDays=S.lockedDays?Object.values(S.lockedDays).filter(snap=>snap.length>0&&snap.every(h=>h.completed)).length:0;
-  if(S.habits.length>=1)unlockAch('a1');if(best>=3)unlockAch('a2');if(best>=7)unlockAch('a3');
-  if(done===S.habits.filter(h=>!h.archived).length&&S.habits.filter(h=>!h.archived).length>0)unlockAch('a4');if(best>=30)unlockAch('a5');
-  if(S.habits.length>=5)unlockAch('a6');if((S.xp||0)>=500)unlockAch('a7');
-  if((S.freezes||0)>0)unlockAch('a8');if(perfectDays>=7)unlockAch('a9');
-  if(S.habits.some(h=>h.stack))unlockAch('a10');
-  if(S.habits.some(h=>h.progressive&&h.progressive!=='none'))unlockAch('a11');
-}
-function unlockAch(id){
-  if(!S.achievements)return;const a=S.achievements.find(x=>x.id===id);
-  if(a&&!a.unlocked){a.unlocked=true;S.xp=(S.xp||0)+a.xp;achQueue.push(a);if(achQueue.length===1)displayNextAch();save();}
-}
-function displayNextAch(){
-  if(!achQueue.length)return;const a=achQueue[0];
-  setTxt('ach-popup-icon',a.icon);setTxt('ach-popup-title',a.title);setTxt('ach-popup-desc',a.desc);setTxt('ach-popup-xp','+'+a.xp+' XP');
-  $('ach-popup').classList.add('open');playSound('ach');if(S.confettiOn!==false)confetti(20);
-}
-function closeAchPopup(){$('ach-popup').classList.remove('open');achQueue.shift();if(achQueue.length)setTimeout(displayNextAch,400);}
-function renderAchievements(){
-  const grid=$('ach-grid');if(!grid)return;
-  if(!S.achievements)S.achievements=ACHIEVEMENTS.map(a=>({...a,unlocked:false}));
-  grid.innerHTML=S.achievements.map(a=>`<div class="ach-card${a.unlocked?'':' locked'}">${a.unlocked?'<div class="ach-unlocked-badge">✓</div>':''}<div class="ach-icon">${a.icon}</div><div class="ach-title">${a.title}</div><div class="ach-desc">${a.desc}</div><div class="ach-xp">+${a.xp} XP</div></div>`).join('');
-}
-
 // ── STREAKS ────────────────────────────────────────────────
 function getStreakTier(s) {
   // Api TikTok style — perubahan di kelipatan 50
@@ -1044,36 +912,58 @@ function getStreakTier(s) {
   return {fire:'○',label:'STARTING',c:'#666',bg:'transparent',border:'#333'};
 }
 
-function makeStreakCard(name, streak, best, label='') {
+// Render sebuah SVG icon habit (dari HABIT_ICONS) siap pakai di teks kecil,
+// warnanya ikut currentColor supaya menyatu dengan warna label di sekitarnya.
+function habitIconSvg(iconId, size) {
+  const ic = HABIT_ICONS.find(x => x.id === iconId) || HABIT_ICONS[0];
+  const sz = size || 13;
+  return `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;">${ic.svg}</svg>`;
+}
+
+function makeStreakCard(iconHtml, name, streak, best) {
   const s = streak||0;
   const t = getStreakTier(s);
   return `<div class="streak-card" style="border-color:${t.border};background:color-mix(in srgb,${t.border} 5%,var(--surface));">
     <div class="streak-fire" style="font-size:22px;">${t.fire}</div>
     <div class="streak-num" style="color:${t.c};font-size:32px;">${s}</div>
-    <div class="streak-name" style="font-size:10px;">${label||name}</div>
+    <div class="streak-name" style="font-size:10px;display:flex;align-items:center;justify-content:center;gap:4px;">${iconHtml}<span>${name}</span></div>
     <div class="streak-badge" style="background:${t.bg};border:1px solid ${t.border};color:${t.c};font-size:7px;padding:2px 7px;margin-top:4px;font-family:var(--font-mono, monospace);">${t.label}</div>
     <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-top:3px;">BEST: ${best||0}</div>
   </div>`;
 }
 
 function renderStreaks(){
-  const board=$('streak-board');if(!board)return;
-  const sorted=[...S.habits].filter(h=>!h.archived).sort((a,b)=>(b.streak||0)-(a.streak||0));
+  const dailyBoard=$('streak-board-daily');if(!dailyBoard)return;
+  const weeklyBoard=$('streak-board-weekly');
+  const monthlyBoard=$('streak-board-monthly');
+  const specBoard=$('streak-board-specialist');
 
-  // Habit streak cards
-  let cards = sorted.map(h => makeStreakCard(
-    `${h.icon} ${h.name}`, h.streak||0, h.bestStreak||0
-  ));
+  const active=[...S.habits].filter(h=>!h.archived).sort((a,b)=>(b.streak||0)-(a.streak||0));
+  const daily=active.filter(h=>DAILY_FREQS.includes(h.freq||'daily'));
+  const weekly=active.filter(h=>h.freq==='weekly');
+  const monthly=active.filter(h=>h.freq==='monthly');
 
-  // Water + Sleep streak masuk di sini juga
-  try {
-    const ws = JSON.parse(localStorage.getItem('oht_wellness_streaks')||'{}');
-    cards.push(makeStreakCard('💧 Water', ws.waterStreak||0, ws.waterBest||0));
-    cards.push(makeStreakCard('😴 Sleep', ws.sleepStreak||0, ws.sleepBest||0));
-  } catch(e){}
+  const cardsFor=arr=>arr.map(h=>makeStreakCard(
+    habitIconSvg(h.icon), h.name, h.streak||0, h.bestStreak||0
+  )).join('');
 
-  if(!cards.length){board.innerHTML=getEmptyState("streaks");return;}
-  board.innerHTML=cards.join('');
+  setTxt('streak-daily-badge', daily.length);
+  setTxt('streak-weekly-badge', weekly.length);
+  setTxt('streak-monthly-badge', monthly.length);
+  dailyBoard.innerHTML = daily.length?cardsFor(daily):getEmptyState('streaks');
+  if(weeklyBoard) weeklyBoard.innerHTML = weekly.length?cardsFor(weekly):getEmptyState('streaks');
+  if(monthlyBoard) monthlyBoard.innerHTML = monthly.length?cardsFor(monthly):getEmptyState('streaks');
+
+  // Streak "Specialist" — khusus target minum air & target jam tidur dari halaman Wellness
+  if(specBoard){
+    const waterIcon='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/></svg>';
+    const sleepIcon='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
+    const ws = (typeof getWellnessStreaks==='function') ? getWellnessStreaks() : {waterStreak:0,waterBest:0,sleepStreak:0,sleepBest:0};
+    setTxt('streak-specialist-badge', 2);
+    specBoard.innerHTML =
+      makeStreakCard(waterIcon, 'Target Air', ws.waterStreak||0, ws.waterBest||0) +
+      makeStreakCard(sleepIcon, 'Target Tidur', ws.sleepStreak||0, ws.sleepBest||0);
+  }
 }
 
 // ── CHALLENGES ─────────────────────────────────────────────
@@ -1247,7 +1137,7 @@ function exportDNA(){
   const dna={version:'oht-dna-v1',name:S.name,exportDate:todayStr(),totalXp:S.xp,bestStreak:S.habits.reduce((m,h)=>Math.max(m,h.bestStreak||0),0),totalHabits:S.habits.length,dominantCategory:topCat?topCat[0]:'none',habits:S.habits.map(h=>({name:h.name,icon:h.icon,color:h.color,category:h.category,freq:h.freq,target:h.target,progressive:h.progressive||'none',stack:'',stake:h.stake||'',scheduledTime:h.scheduledTime||'',notes:h.notes||''}))};
   const blob=new Blob([JSON.stringify(dna,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`oht_dna_${S.name||'user'}_${todayStr()}.json`;a.click();
-  unlockAch('a14');toast('🧬 Habit DNA exported!','success');
+  toast('🧬 Habit DNA exported!','success');
 }
 
 // ── DNA IMPORT ─────────────────────────────────────────────
@@ -1298,46 +1188,6 @@ function typeWriter(el,text,speed=15){
   type();
 }
 
-async function refreshCoach(){
-  const bubble=$('coach-bubble');if(!bubble)return;
-  bubble.textContent='';bubble.classList.add('loading');
-  unlockAch('a12');
-  const done=S.habits.filter(h=>h.completedToday).length;const total=S.habits.length;
-  const best=S.habits.reduce((m,h)=>Math.max(m,h.bestStreak||0),0);
-  const weakH=S.habits.filter(h=>!h.completedToday&&isDueToday(h))[0];
-  const topH=[...S.habits].sort((a,b)=>(b.streak||0)-(a.streak||0))[0];
-  const mToday=S.moodLog&&S.moodLog[todayStr()];
-  const moodStr=mToday?`Mood: ${MOOD_EMOJIS[mToday.mood]||'?'}, Energy: ${mToday.energy||'?'}/5.`:'No mood check-in yet.';
-  const prompt=`You are OHT COACH inside the OHT app. Be direct, specific, tough-love coaching. Max 3 sentences. No fluff.
-
-User: ${S.name||'User'} | Today: ${done}/${total} (${total?Math.round(done/total*100):0}%) | Best streak: ${best}d
-Top habit: ${topH?`${topH.icon} ${topH.name} (${topH.streak}d)`:'none'} | At risk: ${weakH?`${weakH.icon} ${weakH.name}`:'none'}
-${moodStr} | XP: ${S.xp||0} | Habits: ${S.habits.map(h=>`${h.name}(🔥${h.streak||0})`).slice(0,5).join(', ')||'none'}
-
-Give ONE sharp personalized insight. Reference specific habit names. Tough coach tone.`;
-  const text=await callAI(prompt,150);
-  bubble.classList.remove('loading');
-  typeWriter(bubble,text,16);
-  S.coachHistory=S.coachHistory||[];S.coachHistory.unshift({date:todayStr(),text,q:null});
-  if(S.coachHistory.length>30)S.coachHistory=S.coachHistory.slice(0,30);
-  addInsight(text,'AI COACH');save();
-}
-
-async function askCoach(){
-  const input=$('coach-input');const bubble=$('coach-bubble');
-  if(!input||!bubble||!input.value.trim())return;
-  const question=input.value.trim();input.value='';
-  bubble.textContent='';bubble.classList.add('loading');unlockAch('a12');
-  const ctx=`User ${S.name||'User'}: ${S.habits.length} habits, ${S.xp||0} XP, best streak ${S.habits.reduce((m,h)=>Math.max(m,h.bestStreak||0),0)}d, today ${S.habits.filter(h=>h.completedToday).length}/${S.habits.length} done.`;
-  const prompt=`OHT COACH. Direct. Max 3 sentences. ${ctx}\n\nUser asks: "${question}"\n\nAnswer concisely and actionably.`;
-  const text=await callAI(prompt,180);
-  bubble.classList.remove('loading');
-  typeWriter(bubble,text,15);
-  S.coachHistory=S.coachHistory||[];S.coachHistory.unshift({date:todayStr(),text,q:question});
-  if(S.coachHistory.length>30)S.coachHistory=S.coachHistory.slice(0,30);
-  addInsight(`Q: ${question} → ${text}`,'AI COACH');save();
-}
-
 // ── WEEKLY REVIEW ──────────────────────────────────────────
 function openWeeklyReview(){
   const week=getWeekMon();setTxt('review-week-label',`Week of ${week}`);
@@ -1373,28 +1223,11 @@ async function getAIReviewInsight(){
   addInsight(`Weekly Review insight: ${text}`,'WEEKLY REVIEW');save();
 }
 
-// ── COACH HISTORY MODAL ────────────────────────────────────
 function openModal(id){
   const ov=$(id);if(!ov)return;
   ov.classList.add('open');
-  if(id==='modal-coach-history')renderCoachHistoryModal();
-}
-function renderCoachHistoryModal(){
-  const el=$('coach-history-body');if(!el)return;
-  const hist=S.coachHistory||[];
-  if(!hist.length){el.innerHTML=`<div style="font-size:10px;color:var(--sub);text-align:center;padding:18px;">No coach history yet.</div>`;return;}
-  el.innerHTML=hist.slice(0,20).map(h=>`<div class="coach-history-item"><div class="chi-date">${h.date}</div>${h.q?`<div class="chi-q">Q: ${h.q}</div>`:''}<div class="chi-text">${h.text}</div></div>`).join('');
 }
 function closeModal(id){$(id).classList.remove('open');}
-
-// ── WEEK CHART ─────────────────────────────────────────────
-function renderWeekChart(){
-  const el=$('week-chart');const lel=$('week-labels');if(!el)return;
-  const today=new Date();const CC=['#0057FF','#7B2FBE','#FF3CAC','#FF6B00','#FFE600','#AAFF00','#00F5D4'];
-  const data=Array.from({length:7},(_,i)=>{const d=new Date(today);d.setDate(d.getDate()-(6-i));const ds=d.toISOString().split('T')[0];const cnt=(S.history||[]).filter(h=>h.date===ds&&h.status==='done').length;const mx=Math.max(1,S.habits.filter(h=>!h.archived).length);return{pct:Math.min(100,Math.round(cnt/mx*100)),color:CC[i],cnt};});
-  el.innerHTML=data.map(d=>`<div class="bar-col"><div class="bar-fill" style="height:${Math.max(d.cnt?3:2,d.pct*70/100)}px;max-height:70px;background:${d.color};"></div></div>`).join('');
-  if(lel)lel.innerHTML=['MON','TUE','WED','THU','FRI','SAT','SUN'].map(d=>`<div class="chart-day-lbl">${d}</div>`).join('');
-}
 
 // ── DRAG & DROP ────────────────────────────────────────────
 let dragId=null;
@@ -1461,10 +1294,6 @@ function selEmoji(el,e){document.querySelectorAll('.emoji-opt').forEach(x=>x.cla
 function selColor(el,c){document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');$('sel-color').value=c;}
 function selFreq(el,f){document.querySelectorAll('.freq-btn').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');$('inp-freq').value=f;updateProgDifficultyVisibility();}
 
-// ── TEMPLATES ──────────────────────────────────────────────
-function buildTemplateGrid(){const grid=$('template-grid');if(!grid)return;grid.innerHTML=HABIT_TEMPLATES.map(t=>`<div class="template-card" id="tc-${t.id}" onclick="selectTemplate('${t.id}')"><div class="tc-icon">${t.icon}</div><div class="tc-title">${t.title}</div><div class="tc-count">${t.count} habits</div></div>`).join('');}
-function selectTemplate(id){S.selTemplate=id;document.querySelectorAll('.template-card').forEach(c=>c.classList.toggle('selected',c.id===`tc-${id}`));const t=HABIT_TEMPLATES.find(x=>x.id===id);const prev=$('template-preview');if(prev&&t){prev.style.display='block';prev.innerHTML=`<div style="font-family:var(--font-mono, monospace);font-size:8px;font-weight:700;text-transform:uppercase;margin-bottom:5px;">INCLUDES:</div>`+t.habits.map(h=>`<div style="display:flex;align-items:center;gap:5px;font-size:10px;padding:2px 0;border-bottom:1px solid var(--bg);">${h.icon} ${h.name}<span style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);margin-left:auto;">${h.freq}</span></div>`).join('');}}
-function applyTemplate(){if(!S.selTemplate){toast('Select a template!','error');return;}const t=HABIT_TEMPLATES.find(x=>x.id===S.selTemplate);if(!t)return;t.habits.forEach(d=>{S.habits.push({id:'h'+Date.now()+Math.floor(Math.random()*9999),...d,completedToday:false,currentProgress:0,streak:0,bestStreak:0,totalDone:0,weekLog:Array(7).fill(false),monthLog:{},todayXp:0,baseTarget:d.target,createdAt:new Date().toISOString()});});toast(`✅ ${t.count} habits from "${t.title}" added!`,'success');S.selTemplate=null;document.querySelectorAll('.template-card').forEach(c=>c.classList.remove('selected'));const prev=$('template-preview');if(prev)prev.style.display='none';updateMissions();save();renderAll();closeModal('modal-templates');}
 
 // ── NAVIGATION ─────────────────────────────────────────────
 function navigate(page){
@@ -1480,7 +1309,7 @@ function navigate(page){
   pg.classList.add('active');
 
   // 3. Nav highlight
-  const mainPages=['today','habits','wellness','friends'];
+  const mainPages=['habits','wellness','friends'];
   if(mainPages.includes(page)){
     const nb=$('bnav-'+page);if(nb)nb.classList.add('active');
     const bm=$('bnav-more');if(bm)bm.classList.remove('active');
@@ -1500,9 +1329,7 @@ function navigate(page){
   if(page==='journal'){initJournalPage();}
   if(page==='report'){_reportViewDate=null;initReportPage();}
   if(page==='wellness'){initWellnessPage();}
-  if(page==='garden'){initGardenPage();}
   if(page==='profile'){initProfilePage();}
-  if(page==='shop'){initShopPage();}
   if(page==='friends'){initFriendsPage();}
   if(page==='settings'){if(typeof renderSettingsAuth==='function') setTimeout(renderSettingsAuth,100);}
   if(page==='jadwal'){initJadwalPage();}
@@ -1515,21 +1342,9 @@ function navigate(page){
 }
 
 // ── SORT & FILTER ───────────────────────────────────────────
-function setHabitsSort(val,el){S.habitsSort=val;document.querySelectorAll('#habits-sort-tabs .ctab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllHabits();}
 function setHabitsCatFilter(val,el){S.habitsCatFilter=val;document.querySelectorAll('#habits-cat-tabs .ctab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllHabits();}
-function setTodayFilter(f,el){S.todayFilter=f;document.querySelectorAll('#today-filter-tabs .ctab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderTodayHabits();}
 
 // ── DARK MODE (FIX: proper icon sync) ──────────────────────
-function applyDark(on){
-  document.documentElement.setAttribute('data-theme',on?'dark':'light');
-  const dt=$('dark-toggle');if(dt)dt.classList.toggle('on',on);
-  const ti=$('theme-icon');
-  if(ti){ti.innerHTML=on
-    ?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
-    :'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';}
-}
-function toggleDark(){S.darkMode=!S.darkMode;applyDark(S.darkMode);save();}
-
 // ── ONBOARDING ─────────────────────────────────────────────
 function showOnboarding(){$('onboarding').classList.add('open');}
 function obNext(step){if(step<0)return;if(step===2){const n=$('ob-name-input').value.trim();if(n)S.name=n;}document.querySelectorAll('.onboard-step').forEach((s,i)=>s.classList.toggle('active',i===step));document.querySelectorAll('.onboard-dot').forEach((d,i)=>d.classList.toggle('active',i===step));}
@@ -1551,21 +1366,7 @@ init();
 
 
 // ════════════════════════════════════════════════════════════
-// GARDEN PAGE
 // ════════════════════════════════════════════════════════════
-
-// [plantSVG replaced by PvZ]
-
-function getPlantStage(doneCount, totalHabits) {
-  if (totalHabits === 0) return 0;
-  const pct = doneCount / totalHabits;
-  if (pct === 0) return 0;
-  if (pct < 0.2) return 1;
-  if (pct < 0.4) return 2;
-  if (pct < 0.6) return 3;
-  if (pct < 0.85) return 4;
-  return 5; // BLOOM = 100% (or ≥85%)
-}
 
 function getCompletedForDate(dateStr) {
   const today = todayStr();
@@ -1582,63 +1383,6 @@ function getCompletedForDate(dateStr) {
   const hist = (S.history || []).filter(h => h.date === dateStr && h.status === 'done');
   const unique = [...new Set(hist.map(h => h.habitId))].length;
   return { done: unique, total: Math.max(unique, S.habits.length) };
-}
-
-function renderGarden() {
-  const grid = $('garden-grid');
-  if (!grid) return;
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const todayDate = now.getDate();
-  const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-  setTxt('garden-month-title', `${months[month]} ${year}`);
-
-  let perfectCount = 0, grownCount = 0;
-
-  // Build all cells
-  const cells = Array.from({ length: daysInMonth }, (_, i) => {
-    const day = i + 1;
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    const isFuture = day > todayDate;
-    const isToday = day === todayDate;
-    const { done, total } = getCompletedForDate(dateStr);
-    const stage = isFuture ? 0 : getPlantStage(done, total);
-    const pct = total > 0 ? Math.round(done / total * 100) : 0;
-    const isPerfect = !isFuture && total > 0 && done >= total;
-
-    if (!isFuture && stage > 0) grownCount++;
-    if (isPerfect) perfectCount++;
-
-    const fillColor = ['#ccc','#AAFF00','#7ec850','#4aab00','#00C853','#FFE600'][stage];
-
-    const _gc = isFuture ? '' : "openDayDetail('" + dateStr + "')";
-    return `<div class="plant-cell plant-s${stage}${isToday?' today-cell':''}${isFuture?' future-cell':''}${isPerfect?' perfect-cell':''}"
-      onclick="${_gc}" title="${dateStr}: ${done}/${total} habits">
-      <div class="plant-date">${day}</div>
-      <div class="plant-svg-wrap">${plantSVG(stage, fillColor, pct)}</div>
-      <div class="plant-pct-bar"><div class="plant-pct-fill" style="width:${isFuture?0:pct}%;"></div></div>
-    </div>`;
-  });
-
-  // Layout: 7 per row
-  grid.innerHTML = cells.join('');
-
-  setTxt('gstat-perfect', perfectCount);
-  setTxt('gstat-grown', grownCount);
-  const best = S.habits.reduce((m, h) => Math.max(m, h.bestStreak || 0), 0);
-  setTxt('gstat-streak', best);
-  // Trigger grow animation on newly grown plants
-  setTimeout(() => {
-    document.querySelectorAll('.plant-cell:not(.future-cell)').forEach(cell => {
-      const prevStage = parseInt(cell.dataset.prevStage || '0');
-      const curStage = parseInt(cell.className.match(/plant-s(\d)/)?.[1] || '0');
-      if (curStage > prevStage) cell.classList.add('plant-just-grew');
-      else cell.classList.remove('plant-just-grew');
-      cell.dataset.prevStage = curStage;
-    });
-  }, 50);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -2158,7 +1902,13 @@ var _tpHour = 12, _tpMin = 0, _tpAmPm = 'AM';
 
 function openTimePicker(targetId) {
   _tpTarget = targetId || 'inp-time';
-  const cur = $(_tpTarget)?.value || '';
+  let cur = '';
+  if (_tpTarget.startsWith('jadwal-time-')) {
+    const idx = parseInt(_tpTarget.split('jadwal-time-')[1]);
+    cur = _jadwalTimes[idx] || '';
+  } else {
+    cur = $(_tpTarget)?.value || '';
+  }
   if (cur) {
     const [hStr, mStr] = cur.split(':');
     _tpHour = parseInt(hStr) || 0;
@@ -2229,6 +1979,13 @@ function updateTPDisplay() {
 }
 function confirmTimePicker() {
   const val = `${String(_tpHour).padStart(2,'0')}:${String(_tpMin).padStart(2,'0')}`;
+  if (_tpTarget.startsWith('jadwal-time-')) {
+    const idx = parseInt(_tpTarget.split('jadwal-time-')[1]);
+    updateJadwalTime(idx, val);
+    const lbl = $('jadwal-time-val-'+idx); if (lbl) lbl.textContent = val;
+    closeTimePicker();
+    return;
+  }
   const inp = $(_tpTarget);
   if (inp) inp.value = val;
   // Update display labels
@@ -2242,6 +1999,12 @@ function confirmTimePicker() {
   closeTimePicker();
 }
 function clearTimePicker() {
+  if (_tpTarget.startsWith('jadwal-time-')) {
+    const idx = parseInt(_tpTarget.split('jadwal-time-')[1]);
+    if (_jadwalTimes.length > 1) { removeJadwalTime(idx); }
+    closeTimePicker();
+    return;
+  }
   const inp = $(_tpTarget); if (inp) inp.value = '';
   if (_tpTarget === 'inp-time') { const tv=$('time-trigger-val'); if(tv) tv.textContent='--:--'; }
   else if (_tpTarget === 'sleep-bed') { const sv=$('sleep-bed-val'); if(sv) sv.textContent='--:--'; }
@@ -2253,9 +2016,7 @@ function closeTimePicker() {
 }
 
 // ════════════════════════════════════════════════════════════
-// PLANT ANIMATIONS (PvZ style)
 // ════════════════════════════════════════════════════════════
-// [plant anims replaced by PvZ system]
 
 
 // ════════════════════════════════════════════════════════════
@@ -2269,7 +2030,6 @@ function setHabitSearch(val) {
   if (clearBtn) clearBtn.style.display = _searchQuery ? 'block' : 'none';
   clearTimeout(_searchDebounce);
   _searchDebounce = setTimeout(() => {
-    renderTodayHabits();
     if (_searchQuery) renderAllHabitsFiltered();
     else renderAllHabits();
   }, 180);
@@ -2303,7 +2063,7 @@ function clearSearch() {
 // IN-APP NOTIFICATION SYSTEM
 // ════════════════════════════════════════════════════════════
 var _notifQueue = [], _notifShowing = false;
-function notify(msg, icon='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>', duration=3500) {
+function notify(msg, icon='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>', duration=3500) {
   _notifQueue.push({msg, icon, duration});
   if (!_notifShowing) showNextNotif();
 }
@@ -2311,22 +2071,31 @@ function showNextNotif() {
   if (!_notifQueue.length) { _notifShowing = false; return; }
   _notifShowing = true;
   const {msg, icon, duration} = _notifQueue.shift();
-  let el = $('ian-el');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'ian-el';
-    el.className = 'in-app-notif';
-    el.innerHTML = `<div class="ian-icon" id="ian-icon"></div><div class="ian-text" id="ian-text"></div><div class="ian-close" onclick="dismissNotif()">✕</div>`;
-    document.body.appendChild(el);
+  const tc = $('toast-container'); if (!tc) { _notifShowing = false; return; }
+  const el = document.createElement('div');
+  el.className = 'toast notif-toast';
+  el.innerHTML = `<div style="font-size:18px;flex-shrink:0;">${icon}</div><div style="flex:1;">${msg}</div>`;
+  tc.appendChild(el);
+  el._timer = setTimeout(() => dismissNotif(el), duration);
+}
+function dismissNotif(el) {
+  if (!el) el = document.querySelector('.notif-toast');
+  if (el) {
+    clearTimeout(el._timer);
+    el.classList.add('removing');
+    setTimeout(() => { el.remove(); _notifShowing = false; showNextNotif(); }, 320);
   }
-  setTxt('ian-icon', icon); setTxt('ian-text', msg);
-  setTimeout(() => el.classList.add('show'), 10);
-  setTimeout(() => dismissNotif(), duration);
 }
-function dismissNotif() {
-  const el = $('ian-el');
-  if (el) { el.classList.remove('show'); setTimeout(() => { _notifShowing = false; showNextNotif(); }, 350); }
-}
+// Click outside toast-container dismisses any active toast/notif immediately
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.toast-container')) return;
+  document.querySelectorAll('.toast-container .toast:not(.removing)').forEach(t => {
+    if (t._timer) clearTimeout(t._timer);
+    t.classList.add('removing');
+    setTimeout(() => t.remove(), 320);
+  });
+  if (_notifShowing) { _notifShowing = false; showNextNotif(); }
+});
 
 // Browser push notification request
 function requestNotifPermission() {
@@ -2515,9 +2284,31 @@ function renderSWLaps() {
 // ════════════════════════════════════════════════════════════
 // CUSTOM ACCENT COLOR THEMES
 // ════════════════════════════════════════════════════════════
+const ACCENT_HEX_MAP = {pink:'#FF3CAC',green:'#AAFF00',blue:'#00B4FF',orange:'#FF6B00'};
+function updateFaviconAccent(theme) {
+  const hex = ACCENT_HEX_MAP[theme] || '#FFE600';
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">'
+    + '<rect x="0" y="0" width="120" height="120" fill="#0a0a0a"/>'
+    + '<rect x="0" y="0" width="120" height="28" fill="' + hex + '"/>'
+    + '<rect x="28" y="0" width="8" height="14" fill="#0a0a0a"/>'
+    + '<rect x="84" y="0" width="8" height="14" fill="#0a0a0a"/>'
+    + '<rect x="10" y="38" width="26" height="22" fill="#222"/>'
+    + '<rect x="47" y="38" width="26" height="22" fill="#222"/>'
+    + '<rect x="84" y="38" width="26" height="22" fill="' + hex + '"/>'
+    + '<rect x="10" y="68" width="26" height="22" fill="' + hex + '"/>'
+    + '<rect x="47" y="68" width="26" height="22" fill="' + hex + '"/>'
+    + '<rect x="84" y="68" width="26" height="22" fill="' + hex + '"/>'
+    + '<rect x="10" y="98" width="26" height="18" fill="' + hex + '"/>'
+    + '<rect x="47" y="98" width="26" height="18" fill="#FF6B00"/>'
+    + '<rect x="84" y="98" width="26" height="18" fill="#333"/>'
+    + '</svg>';
+  const link = document.getElementById('favicon-link');
+  if (link) link.href = 'data:image/svg+xml;base64,' + btoa(svg);
+}
 function setAccentTheme(theme) {
   S.accentTheme = theme;
   document.documentElement.setAttribute('data-accent', theme);
+  updateFaviconAccent(theme);
   save();
   document.querySelectorAll('.accent-opt').forEach(el => {
     el.classList.toggle('sel', el.dataset.accent === theme);
@@ -2629,309 +2420,6 @@ function svgIcon(name, size=16, color='currentColor') {
   return s.replace('<svg ', `<svg width="${size}" height="${size}" style="flex-shrink:0;color:${color};" `);
 }
 
-
-// ════════════════════════════════════════════════════════════
-// PvZ PLANT SYSTEM — proper animated plants
-// ════════════════════════════════════════════════════════════
-
-// Inject PvZ-style keyframe animations
-(function injectPvZAnims() {
-  const style = document.createElement('style');
-  style.textContent = `
-    /* ── PvZ Snake/Sway motion ── */
-    @keyframes pvzSway {
-      0%   { transform: rotate(0deg) translateY(0px); }
-      15%  { transform: rotate(-4deg) translateY(-1px); }
-      30%  { transform: rotate(3deg) translateY(0px); }
-      45%  { transform: rotate(-3deg) translateY(-2px); }
-      60%  { transform: rotate(4deg) translateY(0px); }
-      75%  { transform: rotate(-2deg) translateY(-1px); }
-      90%  { transform: rotate(2deg) translateY(0px); }
-      100% { transform: rotate(0deg) translateY(0px); }
-    }
-    @keyframes pvzSnake {
-      0%   { d: path("M14 62 Q10 50 14 40 Q18 30 13 20 Q10 12 14 6"); }
-      25%  { d: path("M14 62 Q18 50 13 40 Q10 30 15 20 Q18 12 14 6"); }
-      50%  { d: path("M14 62 Q10 50 15 40 Q19 30 12 20 Q9 12 14 6"); }
-      75%  { d: path("M14 62 Q17 50 12 40 Q9 30 16 20 Q19 12 14 6"); }
-      100% { d: path("M14 62 Q10 50 14 40 Q18 30 13 20 Q10 12 14 6"); }
-    }
-    @keyframes pvzLeafL {
-      0%,100% { transform: rotate(-35deg) scaleX(1); }
-      40%  { transform: rotate(-25deg) scaleX(1.07); }
-      70%  { transform: rotate(-42deg) scaleX(0.95); }
-    }
-    @keyframes pvzLeafR {
-      0%,100% { transform: rotate(35deg) scaleX(1); }
-      40%  { transform: rotate(25deg) scaleX(1.07); }
-      70%  { transform: rotate(42deg) scaleX(0.95); }
-    }
-    @keyframes pvzHeadBob {
-      0%,100% { transform: translateY(0) rotate(0deg); }
-      25%  { transform: translateY(-3px) rotate(-5deg); }
-      50%  { transform: translateY(-1px) rotate(3deg); }
-      75%  { transform: translateY(-4px) rotate(-3deg); }
-    }
-    @keyframes pvzBloom {
-      0%,100% { transform: scale(1) rotate(0deg); }
-      25%  { transform: scale(1.06) rotate(8deg); }
-      50%  { transform: scale(1.03) rotate(-5deg); }
-      75%  { transform: scale(1.07) rotate(6deg); }
-    }
-    @keyframes pvzSeed {
-      0%,100% { transform: translateY(0) rotate(0deg); }
-      30%  { transform: translateY(-5px) rotate(-8deg); }
-      60%  { transform: translateY(-2px) rotate(6deg); }
-    }
-    @keyframes pvzSunPetal {
-      0%,100% { transform: rotate(0deg) scaleY(1); }
-      50%  { transform: rotate(15deg) scaleY(1.1); }
-    }
-    @keyframes pvzGlow {
-      0%,100% { filter: drop-shadow(0 0 2px rgba(255,230,0,0.3)); }
-      50%  { filter: drop-shadow(0 0 8px rgba(255,230,0,0.7)); }
-    }
-    @keyframes pvzGrow {
-      0%   { transform: scaleY(0) translateY(20px); opacity:0; }
-      60%  { transform: scaleY(1.08) translateY(-2px); opacity:1; }
-      100% { transform: scaleY(1) translateY(0); opacity:1; }
-    }
-    @keyframes pvzPop {
-      0%   { transform: scale(0); opacity:0; }
-      60%  { transform: scale(1.15); opacity:1; }
-      100% { transform: scale(1); opacity:1; }
-    }
-
-    /* Apply to plant cells */
-    .plant-cell:not(.future-cell) .pvz-stem {
-      animation: pvzSway 2.5s ease-in-out infinite;
-      transform-origin: bottom center;
-    }
-    .plant-cell:not(.future-cell) .pvz-leaf-l {
-      animation: pvzLeafL 2.1s ease-in-out infinite;
-      transform-origin: right bottom;
-    }
-    .plant-cell:not(.future-cell) .pvz-leaf-r {
-      animation: pvzLeafR 2.3s ease-in-out infinite;
-      transform-origin: left bottom;
-    }
-    .plant-cell:not(.future-cell) .pvz-head {
-      animation: pvzHeadBob 2s ease-in-out infinite;
-      transform-origin: bottom center;
-    }
-    .plant-cell:not(.future-cell) .pvz-bloom {
-      animation: pvzBloom 1.8s ease-in-out infinite;
-      transform-origin: center;
-    }
-    .plant-s0:not(.future-cell) .pvz-seed {
-      animation: pvzSeed 2s ease-in-out infinite;
-    }
-    .plant-cell:not(.future-cell) .pvz-sun {
-      animation: pvzBloom 2.2s ease-in-out infinite, pvzGlow 2.2s ease-in-out infinite;
-      transform-origin: center;
-    }
-    .plant-cell:not(.future-cell) .pvz-petal {
-      animation: pvzSunPetal 1.8s ease-in-out infinite;
-      transform-origin: center bottom;
-    }
-    .plant-s5:not(.future-cell) .pvz-stem {
-      animation: pvzSway 1.6s ease-in-out infinite;
-    }
-    .plant-cell.future-cell * { animation: none !important; }
-    .plant-just-grew .pvz-stem { animation: pvzGrow 0.5s ease-out forwards, pvzSway 2.5s ease-in-out 0.5s infinite !important; }
-    .plant-just-grew .pvz-head { animation: pvzPop 0.4s 0.3s ease-out forwards, pvzHeadBob 2s 0.7s ease-in-out infinite !important; }
-
-    /* Stagger animations between cells */
-    .plant-cell:nth-child(odd) .pvz-stem { animation-delay: -0.4s; }
-    .plant-cell:nth-child(3n) .pvz-stem { animation-delay: -0.9s; }
-    .plant-cell:nth-child(4n) .pvz-head { animation-delay: -0.6s; }
-    .plant-cell:nth-child(2n) .pvz-leaf-l { animation-delay: -0.3s; }
-    .plant-cell:nth-child(5n) .pvz-leaf-r { animation-delay: -0.7s; }
-  `;
-  document.head.appendChild(style);
-})();
-
-// ── NEW plantSVG — proper PvZ style with CSS classes ──
-function plantSVG(stage) {
-  if (stage === 0) {
-    // Seed in soil — bouncing
-    return `<svg class="plant-svg" width="28" height="44" viewBox="0 0 32 64" overflow="visible">
-      <ellipse cx="16" cy="61" rx="8" ry="2.5" fill="#7a5c2e" opacity=".5"/>
-      <g class="pvz-seed">
-        <ellipse cx="16" cy="55" rx="5.5" ry="5" fill="#c8a03c" stroke="#6b4c1a" stroke-width="1.5"/>
-        <path d="M16 51 Q18 48 16 46 Q14 48 16 51" fill="#5a9e30" stroke="#2d5a14" stroke-width="1"/>
-        <ellipse cx="14.5" cy="54.5" rx="1.5" ry="1" fill="#a07030" opacity=".6"/>
-        <ellipse cx="17.5" cy="56" rx="1.5" ry="1" fill="#a07030" opacity=".4"/>
-      </g>
-    </svg>`;
-  }
-
-  if (stage === 1) {
-    // Tiny sprout — single wobbly stem + 2 small leaves
-    return `<svg class="plant-svg" width="28" height="44" viewBox="0 0 32 64" overflow="visible">
-      <ellipse cx="16" cy="62" rx="7" ry="2" fill="#7a5c2e" opacity=".4"/>
-      <g class="pvz-stem" style="transform-origin:16px 62px">
-        <path d="M16 62 Q12 54 15 46 Q17 40 15 34" fill="none" stroke="#3d7a20" stroke-width="2.5" stroke-linecap="round"/>
-        <g class="pvz-leaf-l" style="transform-origin:15px 46px; transform:rotate(-35deg)">
-          <ellipse cx="9" cy="43" rx="8" ry="4" fill="#6aba38" stroke="#2d6010" stroke-width="1"/>
-          <path d="M15 46 Q9 43 7 40" fill="none" stroke="#2d6010" stroke-width=".8" opacity=".5"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:15px 40px; transform:rotate(35deg)">
-          <ellipse cx="21" cy="37" rx="7" ry="3.5" fill="#5eb030" stroke="#2d6010" stroke-width="1"/>
-        </g>
-        <g class="pvz-head" style="transform-origin:15px 34px">
-          <ellipse cx="15" cy="31" rx="6" ry="5" fill="#7aca40" stroke="#2d6010" stroke-width="1.2"/>
-          <path d="M12 29 Q15 27 18 29" fill="none" stroke="#2d6010" stroke-width=".9"/>
-        </g>
-      </g>
-    </svg>`;
-  }
-
-  if (stage === 2) {
-    // Small plant — taller, more leaves
-    return `<svg class="plant-svg" width="28" height="44" viewBox="0 0 32 64" overflow="visible">
-      <ellipse cx="16" cy="63" rx="8" ry="2.2" fill="#7a5c2e" opacity=".45"/>
-      <g class="pvz-stem" style="transform-origin:16px 63px">
-        <path d="M16 63 Q11 55 15 46 Q18 38 14 30 Q12 24 16 18" fill="none" stroke="#2d6010" stroke-width="3" stroke-linecap="round"/>
-        <g class="pvz-leaf-l" style="transform-origin:15px 50px; transform:rotate(-40deg)">
-          <ellipse cx="8" cy="47" rx="9" ry="4.5" fill="#6aba38" stroke="#1e5010" stroke-width="1.2"/>
-          <path d="M15 50 Q8 47 5 43" fill="none" stroke="#1e5010" stroke-width=".9" opacity=".5"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:14px 43px; transform:rotate(40deg)">
-          <ellipse cx="22" cy="40" rx="8.5" ry="4" fill="#5ab030" stroke="#1e5010" stroke-width="1.2"/>
-        </g>
-        <g class="pvz-leaf-l" style="transform-origin:14px 34px; transform:rotate(-30deg); animation-delay:-0.5s">
-          <ellipse cx="8" cy="32" rx="7" ry="3.5" fill="#72c838" stroke="#1e5010" stroke-width="1"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:16px 28px; transform:rotate(30deg); animation-delay:-0.8s">
-          <ellipse cx="22" cy="26" rx="7" ry="3.5" fill="#5ab030" stroke="#1e5010" stroke-width="1"/>
-        </g>
-        <g class="pvz-head" style="transform-origin:16px 18px">
-          <ellipse cx="16" cy="15" rx="7" ry="6" fill="#80d040" stroke="#1e5010" stroke-width="1.5"/>
-          <path d="M12 13 Q16 10 20 13" fill="none" stroke="#1e5010" stroke-width="1"/>
-          <circle cx="14" cy="15" r="1.2" fill="#1e5010" opacity=".4"/>
-          <circle cx="18" cy="15" r="1.2" fill="#1e5010" opacity=".4"/>
-        </g>
-      </g>
-    </svg>`;
-  }
-
-  if (stage === 3) {
-    // Medium — prominent head, full leaves
-    return `<svg class="plant-svg" width="28" height="44" viewBox="0 0 32 64" overflow="visible">
-      <ellipse cx="16" cy="63" rx="9" ry="2.5" fill="#6b4c1a" opacity=".5"/>
-      <g class="pvz-stem" style="transform-origin:16px 63px">
-        <path d="M16 63 Q10 54 15 44 Q19 36 13 26 Q11 19 16 13" fill="none" stroke="#1a5008" stroke-width="3.5" stroke-linecap="round"/>
-        <g class="pvz-leaf-l" style="transform-origin:15px 50px; transform:rotate(-45deg)">
-          <ellipse cx="6" cy="46" rx="11" ry="5" fill="#5ab028" stroke="#1a5008" stroke-width="1.3"/>
-          <path d="M15 50 Q6 46 3 41" fill="none" stroke="#1a5008" stroke-width="1" opacity=".5"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:14px 42px; transform:rotate(42deg)">
-          <ellipse cx="24" cy="38" rx="10" ry="4.5" fill="#4da020" stroke="#1a5008" stroke-width="1.3"/>
-        </g>
-        <g class="pvz-leaf-l" style="transform-origin:13px 32px; transform:rotate(-30deg); animation-delay:-0.6s">
-          <ellipse cx="6" cy="29" rx="9" ry="4" fill="#5ab028" stroke="#1a5008" stroke-width="1"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:15px 25px; transform:rotate(28deg); animation-delay:-1s">
-          <ellipse cx="23" cy="22" rx="8.5" ry="4" fill="#4da020" stroke="#1a5008" stroke-width="1"/>
-        </g>
-        <g class="pvz-head" style="transform-origin:16px 13px">
-          <ellipse cx="16" cy="10" rx="9" ry="8" fill="#88d840" stroke="#1a5008" stroke-width="1.8"/>
-          <path d="M11 8 Q16 5 21 8" fill="none" stroke="#1a5008" stroke-width="1.2"/>
-          <circle cx="13.5" cy="10.5" r="1.5" fill="#1a5008" opacity=".5"/>
-          <circle cx="18.5" cy="10.5" r="1.5" fill="#1a5008" opacity=".5"/>
-          <path d="M13 13 Q16 15 19 13" fill="none" stroke="#1a5008" stroke-width="1" opacity=".7"/>
-        </g>
-      </g>
-    </svg>`;
-  }
-
-  if (stage === 4) {
-    // Full grown — PvZ Peashooter style
-    return `<svg class="plant-svg" width="34" height="64" viewBox="0 0 34 64" overflow="visible">
-      <ellipse cx="17" cy="63" rx="10" ry="2.5" fill="#5a3e10" opacity=".6"/>
-      <g class="pvz-stem" style="transform-origin:17px 63px">
-        <path d="M17 63 Q10 52 16 42 Q21 33 14 23 Q11 16 17 9" fill="none" stroke="#145008" stroke-width="4" stroke-linecap="round"/>
-        <g class="pvz-leaf-l" style="transform-origin:16px 50px; transform:rotate(-45deg)">
-          <path d="M16 50 Q4 44 2 36 Q6 38 16 50z" fill="#4a9818" stroke="#145008" stroke-width="1.2"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:15px 42px; transform:rotate(44deg)">
-          <path d="M15 42 Q27 36 29 28 Q24 31 15 42z" fill="#429018" stroke="#145008" stroke-width="1.2"/>
-        </g>
-        <g class="pvz-leaf-l" style="transform-origin:14px 31px; transform:rotate(-32deg); animation-delay:-0.7s">
-          <path d="M14 31 Q3 26 2 19 Q6 22 14 31z" fill="#4a9818" stroke="#145008" stroke-width="1"/>
-        </g>
-        <g class="pvz-leaf-r" style="transform-origin:16px 24px; transform:rotate(30deg); animation-delay:-1.1s">
-          <path d="M16 24 Q28 19 29 13 Q24 16 16 24z" fill="#429018" stroke="#145008" stroke-width="1"/>
-        </g>
-        <g class="pvz-head" style="transform-origin:17px 9px">
-          <!-- Peashooter head -->
-          <ellipse cx="17" cy="7" rx="11" ry="9.5" fill="#90e040" stroke="#145008" stroke-width="2"/>
-          <ellipse cx="17" cy="4" rx="7" ry="5" fill="#aaee60" stroke="#145008" stroke-width="1.5"/>
-          <!-- eyes -->
-          <circle cx="13.5" cy="6.5" r="2" fill="white" stroke="#145008" stroke-width="1"/>
-          <circle cx="20.5" cy="6.5" r="2" fill="white" stroke="#145008" stroke-width="1"/>
-          <circle cx="14" cy="7" r="1.1" fill="#1a1a1a"/>
-          <circle cx="21" cy="7" r="1.1" fill="#1a1a1a"/>
-          <circle cx="14.4" cy="6.6" r="0.4" fill="white"/>
-          <circle cx="21.4" cy="6.6" r="0.4" fill="white"/>
-          <!-- mouth -->
-          <path d="M14 10 Q17 12.5 20 10" fill="none" stroke="#145008" stroke-width="1.2"/>
-          <!-- shooter opening -->
-          <ellipse cx="17" cy="1.5" rx="4.5" ry="3" fill="#60b820" stroke="#145008" stroke-width="1.2"/>
-          <ellipse cx="17" cy="1" rx="3" ry="1.8" fill="#1a1a1a" opacity=".5"/>
-        </g>
-      </g>
-    </svg>`;
-  }
-
-  // stage 5 = SUNFLOWER — full PvZ sunflower
-  return `<svg class="plant-svg" width="34" height="64" viewBox="0 0 34 64" overflow="visible">
-    <ellipse cx="17" cy="63" rx="10" ry="2.5" fill="#5a3e10" opacity=".6"/>
-    <g class="pvz-stem" style="transform-origin:17px 63px">
-      <path d="M17 63 Q11 53 16 43 Q21 34 15 23 Q12 16 17 9" fill="none" stroke="#145008" stroke-width="3.8" stroke-linecap="round"/>
-      <g class="pvz-leaf-l" style="transform-origin:16px 49px; transform:rotate(-45deg)">
-        <path d="M16 49 Q4 43 2 35 Q6 38 16 49z" fill="#4a9818" stroke="#145008" stroke-width="1.2"/>
-      </g>
-      <g class="pvz-leaf-r" style="transform-origin:15px 41px; transform:rotate(44deg)">
-        <path d="M15 41 Q27 35 29 27 Q24 30 15 41z" fill="#429018" stroke="#145008" stroke-width="1.2"/>
-      </g>
-      <g class="pvz-leaf-l" style="transform-origin:14px 30px; transform:rotate(-30deg); animation-delay:-0.6s">
-        <path d="M14 30 Q3 25 2 18 Q6 21 14 30z" fill="#4a9818" stroke="#145008" stroke-width="1"/>
-      </g>
-    </g>
-    <!-- Sunflower head — separate animation -->
-    <g class="pvz-sun" style="transform-origin:17px 9px">
-      <!-- Petals -->
-      ${Array.from({length:12},(_,i)=>{
-        const a = i * 30 * Math.PI / 180;
-        const px = 17 + 11 * Math.cos(a);
-        const py = 9 + 11 * Math.sin(a);
-        return `<ellipse class="pvz-petal" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="4" ry="2.5" fill="#FFE600" stroke="#c8a000" stroke-width=".8" transform="rotate(${i*30} ${px.toFixed(1)} ${py.toFixed(1)})" style="animation-delay:${(i*0.15).toFixed(2)}s"/>`;
-      }).join('')}
-      <!-- Outer petals -->
-      ${Array.from({length:8},(_,i)=>{
-        const a = (i * 45 + 22.5) * Math.PI / 180;
-        const px = 17 + 13.5 * Math.cos(a);
-        const py = 9 + 13.5 * Math.sin(a);
-        return `<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="3.5" ry="2" fill="#FFC800" stroke="#a08000" stroke-width=".7" transform="rotate(${i*45+22.5} ${px.toFixed(1)} ${py.toFixed(1)})" opacity=".8"/>`;
-      }).join('')}
-      <!-- Center disc -->
-      <circle cx="17" cy="9" r="7.5" fill="#5c3d00" stroke="#2d1a00" stroke-width="1.5"/>
-      <circle cx="17" cy="9" r="5.5" fill="#3d2800"/>
-      <!-- Face -->
-      <circle cx="14.5" cy="7.5" r="1.8" fill="white" stroke="#2d1a00" stroke-width=".8"/>
-      <circle cx="19.5" cy="7.5" r="1.8" fill="white" stroke="#2d1a00" stroke-width=".8"/>
-      <circle cx="14.9" cy="7.9" r="1" fill="#1a0800"/>
-      <circle cx="19.9" cy="7.9" r="1" fill="#1a0800"/>
-      <circle cx="15.2" cy="7.5" r="0.35" fill="white"/>
-      <circle cx="20.2" cy="7.5" r="0.35" fill="white"/>
-      <path d="M14.5 10.5 Q17 12.5 19.5 10.5" fill="none" stroke="#8B6914" stroke-width=".9"/>
-      <!-- Sun rays glow effect -->
-      <circle cx="17" cy="9" r="14" fill="none" stroke="#FFE600" stroke-width=".5" opacity=".3"/>
-    </g>
-  </svg>`;
-}
 
 // ════════════════════════════════════════════════════════════
 // HABIT STRENGTH SCORE (0–100%)
@@ -3775,6 +3263,9 @@ function openMoreMenu() {
   // Reset inline styles yang di-set oleh closeMoreMenu
   if(overlay) { overlay.style.opacity = ''; overlay.style.pointerEvents = ''; overlay.classList.add('open'); }
   if(menu) { menu.style.opacity = ''; menu.style.pointerEvents = ''; menu.classList.add('open'); }
+  // Matikan dulu highlight nav manapun yang sedang aktif (mis. Habits),
+  // supaya hanya "More" saja yang menyala selama menu ini terbuka.
+  document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('active'));
   const bn = $('bnav-more'); if(bn) bn.classList.add('active');
   // Highlight active page in menu
   const activePg = document.querySelector('.page.active');
@@ -3793,10 +3284,17 @@ function closeMoreMenu() {
   // Immediately hide - no transition delay
   if(overlay) { overlay.style.opacity = '0'; overlay.style.pointerEvents = 'none'; overlay.classList.remove('open'); }
   if(menu) { menu.style.opacity = '0'; menu.style.pointerEvents = 'none'; menu.classList.remove('open'); }
+  // Nyalakan lagi highlight sesuai halaman yang benar-benar aktif saat ini:
+  // kalau halaman itu salah satu tab utama, nyalakan tab itu; kalau bukan
+  // (halaman dibuka lewat menu More), biarkan "More" yang tetap menyala.
   const activePg = document.querySelector('.page.active')?.id?.replace('page-','');
-  const mainPages = ['today','habits','garden','focus'];
+  const mainPages = ['habits','wellness','friends'];
+  $('bnav-more')?.classList.remove('active');
+  document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('active'));
   if (mainPages.includes(activePg)) {
-    $('bnav-more')?.classList.remove('active');
+    $('bnav-'+activePg)?.classList.add('active');
+  } else {
+    $('bnav-more')?.classList.add('active');
   }
 }
 
@@ -3891,10 +3389,10 @@ function showUndoToast(label, fn) {
   document.querySelectorAll('.undo-toast').forEach(t => t.remove());
   const tc = $('toast-container'); if (!tc) return;
   const t = document.createElement('div');
-  t.className = 'toast info undo-toast';
-  t.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:9px;max-width:300px;';
+  t.className = 'toast undo-toast';
+  t.style.cssText = 'justify-content:space-between;max-width:300px;';
   t.innerHTML = `<span style="flex:1;font-size:10px;">${label}</span>
-    <button onclick="doUndo(this)" style="background:var(--black);color:var(--yellow);border:1.5px solid var(--yellow);padding:3px 8px;font-family:var(--font-mono, monospace);font-size:9px;font-weight:700;cursor:pointer;">UNDO</button>`;
+    <button onclick="doUndo(this)" style="background:var(--yellow);color:var(--black);border:none;padding:3px 8px;font-family:var(--font-mono, monospace);font-size:9px;font-weight:700;cursor:pointer;">UNDO</button>`;
   t._undoFn = fn;
   tc.appendChild(t);
   const timer = setTimeout(() => { if (t.parentNode) t.remove(); }, 4500);
@@ -4090,10 +3588,9 @@ function shareAsImage() {
   const canvas = document.createElement('canvas');
   canvas.width = 540; canvas.height = 960;
   const ctx = canvas.getContext('2d');
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const bg = isDark ? '#0a0a0a' : '#FFF9E6';
-  const surface = isDark ? '#141414' : '#FFFFF0';
-  const text = isDark ? '#F0F0F0' : '#0a0a0a';
+  const bg = '#FFF9E6';
+  const surface = '#FFFFF0';
+  const text = '#0a0a0a';
   const accent = '#FFE600';
   const cyan = '#00F5D4';
 
@@ -4272,86 +3769,9 @@ function togglePinHabit(id) {
 }
 
 
-function renderTodayAntiHabitsMini() {
-  const el = $('today-antihabits-mini'); if (!el) return;
-  const anti = S.antiHabits || [];
-  if (!anti.length) { el.style.display = 'none'; return; }
-  const today = todayStr();
-  el.style.display = 'block';
-  el.innerHTML = `<div style="background:var(--black);border:var(--bo-t);border-color:var(--red);padding:8px 11px;margin-bottom:0;">
-    <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RESIST TODAY</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap;">
-      ${anti.map(a => {
-        const logged = a.lastResisted === today;
-        return `<div style="display:flex;align-items:center;gap:5px;padding:4px 8px;border:1.5px solid ${logged?'var(--lime)':'var(--red)'};background:${logged?'rgba(170,255,0,.1)':'rgba(255,23,68,.08)'};">
-          <span style="font-family:sans-serif;font-weight:900;font-size:11px;color:${logged?'var(--lime)':'var(--red)'};">${a.streak||0}</span>
-          <span style="font-size:10px;font-weight:700;">${a.name.length>12?a.name.slice(0,11)+'…':a.name}</span>
-          ${!logged?`<button onclick="resistAntiHabit('${a.id}');renderTodayAntiHabitsMini();" style="background:var(--lime);border:var(--bo);padding:2px 5px;font-size:8px;font-weight:700;cursor:pointer;color:var(--black);">CLEAN</button>`:'<span style="font-size:9px;color:var(--lime);">✓</span>'}
-        </div>`;
-      }).join('')}
-    </div>
-  </div>`;
-}
-
-
-function renderTodayGoalsMini() {
-  const gel = $('today-goals-mini');
-  const rel = $('today-rituals-mini');
-  // Goals mini
-  const goals = S.goals || [];
-  if (gel) {
-    if (!goals.length) { gel.style.display = 'none'; }
-    else {
-      gel.style.display = 'block';
-      gel.innerHTML = `<div style="background:var(--surface);border:var(--bo-t);border-color:var(--cyan);padding:8px 11px;">
-        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">GOALS</div>
-        ${goals.slice(0,3).map(g => {
-          const habits = (g.habitIds||[]).map(id=>S.habits.find(h=>h.id===id)).filter(Boolean);
-          const done = habits.filter(h=>h?.completedToday).length;
-          const pct = habits.length ? Math.round(done/habits.length*100) : 0;
-          return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
-            <span style="flex:1;font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.name}</span>
-            <span style="font-family:var(--font-mono, monospace);font-size:9px;color:${pct===100?'var(--lime)':'var(--cyan)'};">${done}/${habits.length}</span>
-            <div style="width:50px;height:5px;background:#eee;border:1px solid #ccc;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${pct===100?'var(--lime)':'var(--cyan)'};"></div></div>
-          </div>`;
-        }).join('')}
-      </div>`;
-    }
-  }
-  // Rituals mini
-  const rituals = S.rituals || [];
-  if (rel) {
-    if (!rituals.length) { rel.style.display = 'none'; }
-    else {
-      rel.style.display = 'block';
-      const RITUAL_TIME_ICONS2 = {morning:'🌅',afternoon:'☀️',evening:'🌙',anytime:'⚡'};
-      rel.innerHTML = `<div style="background:var(--surface);border:var(--bo-t);border-color:var(--orange);padding:8px 11px;">
-        <div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">RITUALS</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          ${rituals.slice(0,4).map(r => {
-            const habits = r.habitIds.map(id=>S.habits.find(h=>h.id===id)).filter(Boolean);
-            const done = habits.filter(h=>h?.completedToday).length;
-            const pct = habits.length ? Math.round(done/habits.length*100) : 0;
-            const color = {morning:'#FF6B00',afternoon:'#FFE600',evening:'#7B2FBE',anytime:'#00F5D4'}[r.time]||'var(--cyan)';
-            return `<div onclick="navigate('goals')" style="padding:4px 9px;border:1.5px solid ${color};cursor:pointer;display:flex;align-items:center;gap:5px;">
-              <span style="font-size:10px;font-weight:700;">${r.name.length>10?r.name.slice(0,9)+'…':r.name}</span>
-              <span style="font-family:var(--font-mono, monospace);font-size:9px;color:${pct===100?'var(--lime)':color};">${pct}%</span>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>`;
-    }
-  }
-}
 
 
 // [let _todayGroupByTime moved to top]
-function toggleTodayTimeGroup() {
-  _todayGroupByTime = !_todayGroupByTime;
-  const btn = $('today-time-group-btn');
-  if (btn) btn.classList.toggle('btn-cyan', _todayGroupByTime);
-  renderTodayHabits();
-}
 function getTimeOfDay(scheduledTime) {
   if (!scheduledTime) return 'anytime';
   const h = parseInt(scheduledTime.split(':')[0]);
@@ -4435,7 +3855,7 @@ function saveHabitAndAddAnother() {
 
 
 function setStreaksTab(tab, el) {
-  ['achievements','missions','challenges'].forEach(t => {
+  ['missions','challenges'].forEach(t => {
     const s = $('streaks-section-'+t);
     if (s) s.style.display = t===tab ? 'block' : 'none';
     const btn = $('stab-'+t);
@@ -4443,7 +3863,6 @@ function setStreaksTab(tab, el) {
   });
   if (tab==='missions') renderMissions();
   if (tab==='challenges') renderChallenges();
-  if (tab==='achievements') renderAchievements();
 }
 
 
@@ -4482,8 +3901,8 @@ function getEmptyState(type) {
     insights: {
       icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
       title: "NO INSIGHTS YET",
-      sub: "Chat with the AI Coach or complete a Weekly Review to generate insights.",
-      cta: { label: "ASK COACH", fn: "navigate('today')" }
+      sub: "Complete a Weekly Review to generate insights.",
+      cta: { label: "WEEKLY REVIEW", fn: "openWeeklyReview()" }
     },
     gratitude: {
       icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--pink)" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
@@ -4713,62 +4132,7 @@ function renderHabitCorrelations() {
   `).join('');
 }
 
-// ── 9. HABIT WEATHER ─────────────────────────────────────────
-function getHabitWeather() {
-  const active = S.habits.filter(h=>!h.archived&&isDueToday(h));
-  if (!active.length) return { icon:'☀️', label:'Clear', desc:'No habits due today.', color:'var(--yellow)' };
-  
-  const avgStrength = active.reduce((s,h)=>s+getHabitStrength(h),0) / active.length;
-  const todayDow = new Date().getDay();
-  
-  // Check historical performance on this day of week
-  const sameDay = (S.history||[]).filter(e => {
-    if (!e.date) return false;
-    return new Date(e.date+'T12:00:00').getDay() === todayDow;
-  });
-  const uniqueDayDates = [...new Set(sameDay.map(e=>e.date))];
-  const avgCompletionOnDay = uniqueDayDates.length > 0 
-    ? sameDay.length / (uniqueDayDates.length * Math.max(1, active.length)) 
-    : 0.5;
-  
-  const score = (avgStrength / 100 * 0.6) + (avgCompletionOnDay * 0.4);
-  
-  if (score >= 0.8) return { icon:'⚡', label:'BEAST MODE', desc:`${Math.round(score*100)}% predicted success. Your strongest day.`, color:'var(--lime)' };
-  if (score >= 0.65) return { icon:'☀️', label:'STRONG DAY', desc:`${Math.round(score*100)}% predicted. Good momentum.`, color:'var(--yellow)' };
-  if (score >= 0.45) return { icon:'⛅', label:'MODERATE', desc:`${Math.round(score*100)}% predicted. Stay consistent.`, color:'var(--cyan)' };
-  if (score >= 0.3) return { icon:'🌥️', label:'CHALLENGING', desc:`${Math.round(score*100)}% predicted. Push through.`, color:'var(--orange)' };
-  return { icon:'⛈️', label:'ROUGH DAY', desc:`${Math.round(score*100)}% predicted. Every rep counts.`, color:'var(--red)' };
-}
-
-function renderHabitWeather() {
-  const el = $('habit-weather');
-  if (!el) return;
-  const w = getHabitWeather();
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;gap:13px;padding:9px 13px;background:var(--black);border:2px solid ${w.color};">
-      <div style="font-size:32px;">${w.icon}</div>
-      <div>
-        <div style="font-family:sans-serif;font-weight:900;font-size:14px;color:${w.color};">${w.label}</div>
-        <div style="font-size:10px;color:#aaa;margin-top:2px;">${w.desc}</div>
-      </div>
-    </div>`;
-}
-
-// ── 10. REST DAY ─────────────────────────────────────────────
-function toggleRestDay() {
-  const today = todayStr();
-  S.restDays = S.restDays || {};
-  if (S.restDays[today]) {
-    delete S.restDays[today];
-    toast('Rest day cancelled. Back to it!', 'info');
-  } else {
-    S.restDays[today] = true;
-    toast('Rest day set. Streaks protected. Recharge!', 'success');
-    haptic('medium');
-  }
-  save(); renderAll();
-}
-
+// ── REST DAY (data check, used by due-date logic) ─────────────
 function isRestDay(dateStr) {
   return !!(S.restDays && S.restDays[dateStr||todayStr()]);
 }
@@ -4783,16 +4147,6 @@ function toggleSettingsBlock(el) {
   body.style.display = isOpen ? 'none' : 'block';
   const chevron = el.querySelector('.sb-chevron');
   if (chevron) chevron.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
-}
-
-// ── 12. COMPACT CARD MODE ────────────────────────────────────
-function toggleCompactMode() {
-  _compactMode = !_compactMode;
-  document.body.classList.toggle('compact-mode', _compactMode);
-  const btn = $('compact-mode-btn');
-  if (btn) btn.classList.toggle('btn-cyan', _compactMode);
-  renderAll();
-  toast(_compactMode ? 'Compact mode ON' : 'Full mode ON', 'info');
 }
 
 // Patch init to check perfect day and proactive coach
@@ -5292,6 +4646,27 @@ function loadJournalDate(dateStr) {
   cancelJournalEdit();
   // Render prev entries (all other dates)
   renderJournalPrev(targetDate);
+  renderMoodHistoryStrip();
+}
+
+function renderMoodHistoryStrip() {
+  const el = $('mood-history-strip'); if(!el) return;
+  const today = new Date();
+  const days = Array.from({length:7},(_,i)=>{
+    const d = new Date(today); d.setDate(d.getDate()-(6-i));
+    return d.toISOString().split('T')[0];
+  });
+  const dayNames=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const cells = days.map(ds=>{
+    const m = S.moodLog && S.moodLog[ds];
+    const dt = new Date(ds+'T12:00:00');
+    const isToday = ds === todayStr();
+    return `<div style="flex:1;text-align:center;">
+      <div style="font-size:16px;margin-bottom:2px;opacity:${m&&m.mood?1:.25};">${m&&m.mood?MOOD_EMOJIS[m.mood]:'·'}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:${isToday?'var(--yellow)':'var(--sub)'};">${dayNames[dt.getDay()]}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `<div style="background:var(--surface);border:var(--bo-t);box-shadow:var(--sha-sm);padding:9px 7px;display:flex;gap:2px;">${cells}</div>`;
 }
 
 function getJournalLog() {
@@ -5360,7 +4735,7 @@ function renderJournalPrev(currentDate) {
 }
 
 // ════════════════════════════════════════════════════════════
-// REPORT DATE FILTER + GARDEN/NUTRITION/OTHER in Report
+// REPORT DATE FILTER + NUTRITION/OTHER in Report
 // ════════════════════════════════════════════════════════════
 
 function initReportPage() {
@@ -5368,7 +4743,6 @@ function initReportPage() {
   const inp = $('report-date-filter');
   if(inp) inp.value = '';
   renderReportDateLabel();
-  renderReportGardenSnap();
   renderReportNutritionLog();
   if(typeof renderReportWaterDisplay==='function') renderReportWaterDisplay();
   if(typeof renderReportSleepDisplay==='function') renderReportSleepDisplay();
@@ -5440,7 +4814,6 @@ function setReportDate(dateStr) {
   const lbl = $('report-date-filter-label');
   if(lbl) lbl.textContent = dateStr ? odpFormatLabel(dateStr) : odpTodayLabel();
   renderReportDateLabel();
-  renderReportGardenSnap();
   renderReportNutritionLog();
   if(typeof renderReportWaterDisplay==='function') renderReportWaterDisplay();
   if(typeof renderReportSleepDisplay==='function') renderReportSleepDisplay();
@@ -5453,30 +4826,6 @@ function renderReportDateLabel() {
   const d = _reportViewDate || todayStr();
   const dt = new Date(d+'T12:00:00');
   el.textContent = '▸ ' + dt.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-}
-
-function renderReportGardenSnap() {
-  const el = $('report-garden-snap'); if(!el) return;
-  const d = _reportViewDate || todayStr();
-  // Check lockedDays for that date
-  const snap = S.lockedDays && S.lockedDays[d];
-  if(!snap) {
-    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:12px;">Belum ada data garden untuk tanggal ini.</div>`;
-    return;
-  }
-  const done = snap.filter(s=>s.completed).length;
-  const total = snap.length;
-  const pct = total>0?Math.round(done/total*100):0;
-  el.innerHTML = `<div style="display:flex;align-items:center;gap:11px;">
-    <div style="font-size:28px;">${pct===100?'🌳':pct>=60?'🌿':pct>=30?'🌱':'🌰'}</div>
-    <div>
-      <div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${pct}%</div>
-      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">${done}/${total} habits selesai</div>
-    </div>
-    <div style="flex:1;height:6px;background:#222;border:1px solid var(--bc);overflow:hidden;">
-      <div style="height:100%;width:${pct}%;background:var(--lime);transition:width .5s;"></div>
-    </div>
-  </div>`;
 }
 
 function renderReportNutritionLog() {
@@ -5948,14 +5297,14 @@ function openWaterTargetModal() {
   openModal('modal-water-target');
 }
 function setWaterTargetMode(mode, el) {
-  document.querySelectorAll('[id^="wt-mode-"]').forEach(b => b.classList.remove('active'));
-  if(el) el.classList.add('active');
+  document.querySelectorAll('[id^="wt-mode-"]').forEach(b => b.classList.remove('sel'));
+  if(el) el.classList.add('sel');
   const cupsRow = $('wt-cups-row'); if(cupsRow) cupsRow.style.display = mode === 'cups' ? 'block' : 'none';
   const mlRow = $('wt-ml-row'); if(mlRow) mlRow.style.display = mode === 'ml' ? 'block' : 'none';
 }
 function saveWaterTarget() {
   const cfg = getWellnessConfig();
-  const modeCups = $('wt-mode-cups')?.classList.contains('active');
+  const modeCups = $('wt-mode-cups')?.classList.contains('sel');
   cfg.waterMode = modeCups ? 'cups' : 'ml';
   cfg.waterCups = parseInt($('wt-cups-val')?.value || 8);
   cfg.waterMl   = parseInt($('wt-ml-val')?.value   || 2000);
@@ -6206,20 +5555,6 @@ function renderWellnessWater() {
   if(isToday) setTimeout(checkWaterTargetMet, 100);
 }
 
-// ── Garden date filter ──
-function loadGardenDate(dateStr) {
-  _gardenViewDate = dateStr || null;
-  const lblG = $('garden-date-filter-label');
-  if(lblG) lblG.textContent = dateStr ? odpFormatLabel(dateStr) : odpTodayLabel();
-  const d = _gardenViewDate || todayStr();
-  const lbl = $('garden-viewing-date');
-  if(lbl) {
-    const dt = new Date(d+'T12:00:00');
-    lbl.textContent = dt.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  }
-  if(typeof renderGarden==='function') renderGarden(_gardenViewDate);
-}
-
 // ════════════════════════════════════════════════════════════
 // CUSTOM DATE PICKER
 // ════════════════════════════════════════════════════════════
@@ -6250,7 +5585,7 @@ function odpTodayLabel() {
 
 // Inisialisasi semua label tombol ke "Hari ini" saat load
 function initAllDateFilterLabels() {
-  const ids = ['report-date-filter','wellness-date-filter','nutr-date-filter','journal-date-filter','garden-date-filter'];
+  const ids = ['report-date-filter','wellness-date-filter','nutr-date-filter','journal-date-filter'];
   ids.forEach(id => {
     const lbl = $(id + '-label');
     if(lbl) lbl.textContent = odpTodayLabel();
@@ -6378,771 +5713,6 @@ function odpClear() {
 }
 
 
-// ════════════════════════════════════════════════════════════
-// GARDEN FARMING — Organic Canvas Scene v3
-// ════════════════════════════════════════════════════════════
-
-const GDN_PLANTS = [
-  { id:'daisy',     name:'Bunga Daisy',    price:1, waterNeeded:3, maxStage:3,
-    harvestXp:15,  harvestHours:2,  harvestEmoji:'🌸',
-    stages:['🌱','🌿','🌼'], colors:['#4a7','#3a6','#ffe135'] },
-  { id:'sunflower', name:'Bunga Matahari', price:2, waterNeeded:4, maxStage:4,
-    harvestXp:25,  harvestHours:4,  harvestEmoji:'🌻',
-    stages:['🌱','🌿','🌾','🌻'], colors:['#4a7','#3a6','#c8a','#ffd700'] },
-  { id:'rose',      name:'Mawar Merah',    price:2, waterNeeded:5, maxStage:4,
-    harvestXp:30,  harvestHours:6,  harvestEmoji:'🌹',
-    stages:['🌱','🌿','🥀','🌹'], colors:['#4a7','#3a6','#844','#e83'] },
-  { id:'bamboo',    name:'Bambu',          price:3, waterNeeded:6, maxStage:5,
-    harvestXp:50,  harvestHours:10, harvestEmoji:'🎋',
-    stages:['🌱','🌿','🪴','🎍','🎋'], colors:['#4a7','#3a6','#3a6','#2a5','#1a4'] },
-  { id:'cactus',    name:'Kaktus Emas',    price:3, waterNeeded:2, maxStage:3,
-    harvestXp:45,  harvestHours:8,  harvestEmoji:'🌵',
-    stages:['🌱','🌵','🌵'], colors:['#4a7','#2a5','#3d7'] },
-];
-
-const GDN_BACKGROUNDS = [
-  { id:'default', name:'Lahan Biasa',   price:0, skyTop:'#1a2d4a', skyBot:'#2d4a6a', groundTop:'#3d2b1f', groundBot:'#2a1d12', grassColor:'#2d5a1a' },
-  { id:'sunset',  name:'Senja Emas',    price:2, skyTop:'#c44a00', skyBot:'#8b1a00', groundTop:'#3d2000', groundBot:'#1a0d00', grassColor:'#4a3000' },
-  { id:'night',   name:'Malam Bintang', price:2, skyTop:'#050b1a', skyBot:'#0a1428', groundTop:'#1a1a2e', groundBot:'#0d0d1e', grassColor:'#1a2a0a' },
-  { id:'spring',  name:'Musim Semi',    price:3, skyTop:'#87d4ef', skyBot:'#b8eecc', groundTop:'#3d5a1a', groundBot:'#2a3d12', grassColor:'#4a8a2a' },
-  { id:'aurora',  name:'Aurora',        price:4, skyTop:'#0a1a0f', skyBot:'#1a0a2f', groundTop:'#0d1a0d', groundBot:'#060d06', grassColor:'#1a4a1a' },
-];
-
-// Storage
-function getGardenData() {
-  try { const r = localStorage.getItem('oht_gdn3'); if(r) return JSON.parse(r); } catch(e){}
-  return {
-    coins:0, waterCount:0, hoeCount:3, hoeLastRegen:Date.now(),
-    currentLand:0,
-    lands:[
-      { id:0, bgId:'default', unlocked:true,  plots:Array(16).fill(null).map((_,i)=>makePlot(i)) },
-      { id:1, bgId:'default', unlocked:false, plots:Array(16).fill(null).map((_,i)=>makePlot(i)) },
-      { id:2, bgId:'default', unlocked:false, plots:Array(16).fill(null).map((_,i)=>makePlot(i)) },
-    ],
-    ownedBgs:['default'], inventory:[],
-  };
-}
-function makePlot(i) { return {idx:i, plant:null, stage:0, water:0, wilted:false, plantedAt:null, lastWatered:null}; }
-function saveGardenData(g) { try { localStorage.setItem('oht_gdn3', JSON.stringify(g)); } catch(e){} }
-
-let _gdnCurrentLand = 0;
-let _gdnTool = null;       // 'water' | 'hoe' | null
-let _gdnSeedMode = null;   // plantId to plant
-let _gdnTooltip = null;    // current tooltip element
-let _gdnShopTab = 'seeds';
-let _gdnRafId = null;
-
-// ── Hoe regen + wilt ──────────────────────────────────────
-function gdnMaintenance(g) {
-  const now = Date.now();
-  const elapsed = now - (g.hoeLastRegen||now);
-  const regens = Math.floor(elapsed / 86400000);
-  if(regens>0){ g.hoeCount=Math.min(5,(g.hoeCount||0)+regens); g.hoeLastRegen+=regens*86400000; }
-  g.lands.forEach(land=>{ if(!land.unlocked) return;
-    land.plots.forEach(p=>{ if(!p.plant||p.wilted) return;
-      if(p.lastWatered && (now-p.lastWatered)>=86400000) p.wilted=true;
-      // Set harvest timer saat full grown
-      if(typeof setHarvestTimer==='function') setHarvestTimer(p);
-    }); });
-  return g;
-}
-
-// ── Canvas renderer ───────────────────────────────────────
-function getPlotLayout(canvasW, canvasH) {
-  // 4 cols × 4 rows, arranged naturally on ground half
-  const cols=4, rows=4, total=16;
-  const groundY = canvasH * 0.52; // where ground starts
-  const padX = canvasW * 0.06;
-  const usableW = canvasW - padX*2;
-  const usableH = canvasH - groundY - 20;
-  const cellW = usableW / cols;
-  const cellH = usableH / rows;
-  return Array.from({length:total},(_,i)=>{
-    const col=i%cols, row=Math.floor(i/cols);
-    return {
-      x: padX + col*cellW + cellW*0.5,
-      y: groundY + 20 + row*cellH + cellH*0.75,
-      w: cellW * 0.82,
-      h: cellH * 0.7,
-      hitX: padX + col*cellW, hitY: groundY + row*cellH,
-      hitW: cellW, hitH: cellH
-    };
-  });
-}
-
-function drawGardenScene(canvas, land, bgDef) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-
-  // Sky gradient
-  const sky = ctx.createLinearGradient(0,0,0,H*0.55);
-  sky.addColorStop(0, bgDef.skyTop);
-  sky.addColorStop(1, bgDef.skyBot);
-  ctx.fillStyle = sky;
-  ctx.fillRect(0,0,W,H);
-
-  // Stars (night only)
-  if(bgDef.id==='night'||bgDef.id==='aurora') {
-    ctx.fillStyle='rgba(255,255,255,.7)';
-    for(let s=0;s<60;s++){
-      const sx=(s*137.508)%W, sy=(s*73.1)%(H*0.45);
-      ctx.fillRect(sx,sy,1,1);
-    }
-  }
-
-  // Aurora effect
-  if(bgDef.id==='aurora') {
-    const t = Date.now()/4000;
-    for(let a=0;a<3;a++){
-      const ag=ctx.createLinearGradient(0,H*0.1,0,H*0.5);
-      const hue=[120,160,200][a];
-      ag.addColorStop(0,'transparent');
-      ag.addColorStop(0.5,`hsla(${hue+Math.sin(t+a)*20},100%,50%,.12)`);
-      ag.addColorStop(1,'transparent');
-      ctx.fillStyle=ag;
-      ctx.beginPath();
-      ctx.moveTo(0,H*0.15);
-      for(let x=0;x<=W;x+=30){
-        ctx.lineTo(x, H*0.2+Math.sin(x/80+t+a)*H*0.08);
-      }
-      ctx.lineTo(W,0); ctx.lineTo(0,0); ctx.closePath();
-      ctx.fill();
-    }
-  }
-
-  // Celestial body (sun/moon)
-  const now2=new Date(); const h=now2.getHours()+now2.getMinutes()/60;
-  const isDaytime = h>=6&&h<18;
-  if(isDaytime) {
-    const t=(h-6)/12;
-    const cx=W*0.1+W*0.8*t, cy=H*0.45-Math.sin(Math.PI*t)*H*0.35;
-    // Sun glow
-    const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,55);
-    grd.addColorStop(0,'rgba(255,220,60,.35)');
-    grd.addColorStop(1,'transparent');
-    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(cx,cy,55,0,Math.PI*2); ctx.fill();
-    // Sun body
-    ctx.fillStyle='#ffd700'; ctx.beginPath(); ctx.arc(cx,cy,16,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='rgba(255,255,200,.6)'; ctx.beginPath(); ctx.arc(cx,cy,10,0,Math.PI*2); ctx.fill();
-  } else {
-    const tM=h>=18?(h-18)/12:(h+6)/12;
-    const mx=W*0.1+W*0.8*tM, my=H*0.42-Math.sin(Math.PI*tM)*H*0.32;
-    const mgrd=ctx.createRadialGradient(mx,my,0,mx,my,35);
-    mgrd.addColorStop(0,'rgba(200,210,255,.25)');
-    mgrd.addColorStop(1,'transparent');
-    ctx.fillStyle=mgrd; ctx.beginPath(); ctx.arc(mx,my,35,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#ccd5ff'; ctx.beginPath(); ctx.arc(mx,my,12,0,Math.PI*2); ctx.fill();
-    // Crater
-    ctx.fillStyle='rgba(0,0,0,.15)'; ctx.beginPath(); ctx.arc(mx+4,my-2,4,0,Math.PI*2); ctx.fill();
-  }
-
-  // Ground
-  const groundY = H*0.52;
-  const gnd=ctx.createLinearGradient(0,groundY,0,H);
-  gnd.addColorStop(0,bgDef.groundTop);
-  gnd.addColorStop(1,bgDef.groundBot);
-  ctx.fillStyle=gnd; ctx.fillRect(0,groundY,W,H-groundY);
-
-  // Ground texture — subtle dirt lines
-  ctx.strokeStyle='rgba(0,0,0,.15)'; ctx.lineWidth=1;
-  for(let y=groundY+8;y<H;y+=16){
-    ctx.beginPath(); ctx.moveTo(0,y);
-    for(let x=0;x<=W;x+=20) ctx.lineTo(x,y+(Math.sin(x*0.3+y*0.1))*2);
-    ctx.stroke();
-  }
-
-  // Grass strip at ground edge
-  const grassC = bgDef.grassColor;
-  ctx.fillStyle=grassC;
-  for(let x=0;x<W;x+=8){
-    const gh=6+Math.sin(x*0.7)*3;
-    ctx.fillRect(x,groundY-gh,3,gh+4);
-  }
-  // Solid grass base
-  ctx.fillStyle=grassC;
-  ctx.fillRect(0,groundY,W,6);
-
-  // Plot dig marks (darker soil patches)
-  const layout = getPlotLayout(W,H);
-  layout.forEach((p,i)=>{
-    const plot=land.plots[i];
-    // Soil patch
-    ctx.fillStyle=plot.wilted?'rgba(80,20,0,.5)':'rgba(0,0,0,.35)';
-    ctx.beginPath();
-    ctx.ellipse(p.x, p.y, p.w*0.48, p.h*0.22, 0, 0, Math.PI*2);
-    ctx.fill();
-    // Tilled soil detail
-    ctx.strokeStyle='rgba(0,0,0,.2)'; ctx.lineWidth=1;
-    for(let l=-1;l<=1;l++){
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y+l*4, p.w*0.4, p.h*0.12, 0, 0, Math.PI*2);
-      ctx.stroke();
-    }
-  });
-
-  // Plants
-  layout.forEach((pos,i)=>{
-    const plot = land.plots[i];
-    if(!plot.plant) return;
-    const pdef = GDN_PLANTS.find(p=>p.id===plot.plant);
-    if(!pdef) return;
-    const stageIdx = Math.min(plot.stage, pdef.stages.length-1);
-    const emoji = pdef.stages[stageIdx];
-    const size = [18,26,34,44,56][stageIdx] || 34;
-    // Wilt effect
-    if(plot.wilted) ctx.globalAlpha=0.4;
-    // Draw emoji as plant
-    ctx.font=`${size}px serif`;
-    ctx.textAlign='center';
-    ctx.textBaseline='bottom';
-    // Gentle sway animation
-    const sway = Math.sin(Date.now()/1200+i)*1.5;
-    ctx.save();
-    ctx.translate(pos.x, pos.y-pos.h*0.25);
-    ctx.rotate(sway*Math.PI/180);
-    ctx.fillText(emoji,0,0);
-    ctx.restore();
-    ctx.globalAlpha=1;
-    // Water droplet indicator
-    if(plot.water>0&&!plot.wilted){
-      ctx.font='10px serif'; ctx.textAlign='left';
-      ctx.fillText('💧',pos.x+size*0.4,pos.y-pos.h*0.55);
-    }
-    if(plot.wilted){
-      ctx.font='10px serif'; ctx.textAlign='center';
-      ctx.fillText('⚠️',pos.x,pos.y-size*0.5-5);
-    }
-  });
-
-  // Harvest-ready indicator (inline)
-  if(land.unlocked) {
-    layout.forEach((pos, i) => {
-      const plot = land.plots[i]; if(!plot || !plot.plant) return;
-      const pd2 = GDN_PLANTS.find(p => p.id === plot.plant);
-      if(typeof checkHarvestReady === 'function' && checkHarvestReady(plot)) {
-        const pulse2 = 0.7 + Math.sin(Date.now() / 300) * 0.3;
-        ctx.globalAlpha = pulse2;
-        ctx.font='15px serif'; ctx.textAlign='center';
-        ctx.fillText('🧺', pos.x, pos.y - pos.h * 0.8);
-        ctx.font='bold 7px "IBM Plex Mono",monospace';
-        ctx.fillStyle='#FFE600';
-        ctx.fillText('PANEN!', pos.x, pos.y - pos.h * 0.6);
-        ctx.globalAlpha = 1;
-      } else if(plot.readyAt && plot.stage >= (pd2?.maxStage||3)-1) {
-        const rem2 = Math.ceil((plot.readyAt - Date.now()) / 3600000);
-        if(rem2 > 0) {
-          ctx.font='7px "IBM Plex Mono",monospace'; ctx.textAlign='center';
-          ctx.fillStyle='rgba(255,255,200,0.75)'; ctx.globalAlpha=0.9;
-          ctx.fillText(`⏱${rem2}j`, pos.x, pos.y - pos.h*0.6);
-          ctx.globalAlpha=1;
-        }
-      }
-    });
-  }
-
-  // Locked overlay
-  if(!land.unlocked){
-    ctx.fillStyle='rgba(0,0,0,.65)';
-    ctx.fillRect(0,groundY,W,H-groundY);
-    ctx.fillStyle='#fff'; ctx.font='bold 36px serif'; ctx.textAlign='center';
-    ctx.fillText('🔒',W/2,groundY+(H-groundY)*0.4);
-    ctx.fillStyle='rgba(255,204,0,.9)';
-    ctx.font='bold 13px "Archivo Black",sans-serif';
-    ctx.fillText('BELI 5🪙 DI SHOP',W/2,groundY+(H-groundY)*0.58);
-  }
-}
-
-// ── Main render ────────────────────────────────────────────
-function renderGardenFull() {
-  let g = getGardenData();
-  g = gdnMaintenance(g);
-  saveGardenData(g);
-
-  // HUD
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins||0;
-  if($('gdn-water-count')) $('gdn-water-count').textContent=g.waterCount||0;
-  if($('gdn-hoe-count')) $('gdn-hoe-count').textContent=g.hoeCount||0;
-
-  const slider = $('gdn-lands-slider');
-  const dots   = $('gdn-land-dots');
-  if(!slider) return;
-
-  // Build land scenes
-  slider.innerHTML = g.lands.map((land,li)=>{
-    return `<div class="gdn-land-scene" id="gdn-scene-${li}">
-      <canvas class="gdn-land-canvas" id="gdn-canvas-${li}"></canvas>
-    </div>`;
-  }).join('');
-
-  // Draw each canvas
-  g.lands.forEach((land,li)=>{
-    const canvas = $(`gdn-canvas-${li}`);
-    if(!canvas) return;
-    const scene = $(`gdn-scene-${li}`);
-    canvas.width  = scene.offsetWidth  || window.innerWidth;
-    canvas.height = scene.offsetHeight || 420;
-    const bgDef = GDN_BACKGROUNDS.find(b=>b.id===land.bgId)||GDN_BACKGROUNDS[0];
-    drawGardenScene(canvas, land, bgDef);
-    // Hit detection
-    canvas.onclick = (e)=>onCanvasClick(e,canvas,land,li,g);
-  });
-
-  // Dots
-  if(dots) {
-    dots.innerHTML = g.lands.map((_,i)=>
-      `<div class="gdn-land-dot${i===_gdnCurrentLand?' active':''}" onclick="switchGardenLand(${i})"></div>`
-    ).join('');
-  }
-
-  // Arrow visibility
-  const al=$('gdn-arrow-l'), ar=$('gdn-arrow-r');
-  if(al) al.style.opacity=_gdnCurrentLand>0?'1':'0.2';
-  if(ar) ar.style.opacity=_gdnCurrentLand<g.lands.length-1?'1':'0.2';
-
-  // Restore position
-  slider.style.transition='none';
-  slider.style.transform=`translateX(-${_gdnCurrentLand*100}%)`;
-  setTimeout(()=>{slider.style.transition='transform .4s cubic-bezier(.4,0,.2,1)';},30);
-
-  gdnAddSwipe(slider, g);
-  gdnUpdateTime();
-  // Animation loop
-  startGardenAnimation(g);
-}
-
-function onCanvasClick(e, canvas, land, landIdx, g) {
-  const rect = canvas.getBoundingClientRect();
-  const cx = (e.clientX-rect.left)*(canvas.width/rect.width);
-  const cy = (e.clientY-rect.top)*(canvas.height/rect.height);
-  const layout = getPlotLayout(canvas.width, canvas.height);
-
-  // Find which plot was clicked
-  let hit = -1;
-  layout.forEach((p,i)=>{
-    if(cx>=p.hitX && cx<=p.hitX+p.hitW && cy>=p.hitY && cy<=p.hitY+p.hitH) hit=i;
-  });
-  if(hit<0) return;
-  const plot = land.plots[hit];
-  const screenX = e.clientX, screenY = e.clientY;
-
-  if(!land.unlocked){ openGardenShop(); return; }
-
-  // Move char to plot first, then act
-  if(hit >= 0 && (CHAR_STATE || typeof CHAR_STATE !== 'undefined')) {
-    const pos2 = layout[hit];
-    const destY2 = pos2.y - pos2.h * 0.2;
-    if(_gdnTool === 'water' || _gdnTool === 'hoe') {
-      CHAR_STATE.tool = _gdnTool;
-      if(typeof moveCharTo === 'function') moveCharTo(pos2.x, destY2, _gdnTool, _gdnTool);
-    } else if(typeof checkHarvestReady === 'function' && checkHarvestReady(land.plots[hit])) {
-      CHAR_STATE.tool = 'harvest';
-      if(typeof moveCharTo === 'function') moveCharTo(pos2.x, destY2, 'harvest', 'harvest');
-      const _li2 = landIdx, _pi2 = hit;
-      setTimeout(()=>harvestPlot(_li2,_pi2), 800);
-      return;
-    }
-  }
-
-  if(_gdnSeedMode) {
-    // Plant seed
-    if(plot.plant){ toast('Plot sudah ada tanaman!','error'); return; }
-    const inv = g.inventory||[];
-    const si = inv.indexOf(_gdnSeedMode);
-    if(si<0){ toast('Bibit tidak ditemukan!','error'); _gdnSeedMode=null; updateGardenHint(); return; }
-    inv.splice(si,1);
-    plot.plant=_gdnSeedMode; plot.stage=0; plot.water=0; plot.wilted=false;
-    plot.plantedAt=Date.now(); plot.lastWatered=Date.now();
-    g.inventory=inv;
-    const pn=GDN_PLANTS.find(p=>p.id===_gdnSeedMode)?.name||'Tanaman';
-    _gdnSeedMode=null; updateGardenHint();
-    saveGardenData(g); renderGardenFull();
-    toast(`🌱 ${pn} ditanam!`,'success');
-    return;
-  }
-
-  if(_gdnTool==='water'){
-    if(!plot.plant){ toast('Tidak ada tanaman!','error'); return; }
-    if(plot.wilted){ toast('Tanaman layu! Cangkul dulu.','error'); return; }
-    if((g.waterCount||0)<=0){ toast('Tidak ada jatah siram! Selesaikan habit.','error'); return; }
-    const pd=GDN_PLANTS.find(p=>p.id===plot.plant);
-    g.waterCount--;
-    plot.water=(plot.water||0)+1;
-    plot.lastWatered=Date.now();
-    if(plot.water>=(pd?.waterNeeded||3)&&plot.stage<(pd?.maxStage||3)-1){
-      plot.stage++; plot.water=0;
-      toast(`🌱 ${pd?.name} tumbuh ke tahap ${plot.stage+1}!`,'success');
-    } else { toast(`💧 Disiram (${plot.water}/${pd?.waterNeeded})!`,'success'); }
-    saveGardenData(g); renderGardenFull(); return;
-  }
-
-  if(_gdnTool==='hoe'){
-    if(!plot.wilted){ toast('Tanaman ini tidak layu!','error'); return; }
-    if((g.hoeCount||0)<=0){ toast('Cangkul habis! Tunggu 24 jam.','error'); return; }
-    g.hoeCount--; plot.wilted=false; plot.lastWatered=Date.now();
-    saveGardenData(g); renderGardenFull();
-    toast('⛏️ Tanaman dipulihkan!','success'); return;
-  }
-
-  // Show tooltip
-  showPlotTooltip(screenX, screenY, plot, landIdx, hit, g);
-}
-
-function showPlotTooltip(x, y, plot, landIdx, plotIdx, g) {
-  hideTooltip();
-  const tt = document.createElement('div');
-  tt.className='gdn-plant-tooltip'; tt.id='gdn-tooltip';
-  let content='';
-  if(!plot.plant){
-    const inv=(g.inventory||[]);
-    const seeds=[...new Set(inv.filter(x=>!x.startsWith('item_')))];
-    content=`<div class="gdn-tooltip-name">🪨 Tanah Kosong</div>
-      <div class="gdn-tooltip-info">Beli bibit di Shop lalu tap tanah untuk menanam.</div>
-      ${seeds.length?`<div class="gdn-tooltip-btns">${seeds.map(sid=>{
-        const p=GDN_PLANTS.find(x=>x.id===sid);
-        const cnt=inv.filter(x=>x===sid).length;
-        return `<button class="btn-plant" onclick="plantFromTooltip('${sid}',${landIdx},${plotIdx})">🌱${p?.name} (×${cnt})</button>`;
-      }).join('')}</div>`:
-      `<div class="gdn-tooltip-btns"><button class="btn-plant" onclick="hideTooltip();openGardenShop()">🛒 Buka Shop</button></div>`}`;
-  } else {
-    const pd=GDN_PLANTS.find(p=>p.id===plot.plant);
-    const stages=pd?.stages||['🌱'];
-    const em=stages[Math.min(plot.stage,stages.length-1)];
-    const done=plot.stage>=(pd?.maxStage||3)-1;
-    content=`<div class="gdn-tooltip-name">${em} ${pd?.name}</div>
-      <div class="gdn-tooltip-info">
-        Tahap ${plot.stage+1}/${pd?.maxStage} · Air ${plot.water}/${pd?.waterNeeded}
-        ${plot.wilted?'<br>⚠️ LAYU — butuh cangkul':''}
-        ${done?'<br>✨ Sudah mekar penuh!':''}
-      </div>
-      <div class="gdn-tooltip-btns">
-        ${!plot.wilted&&!done?`<button class="btn-water" onclick="quickAction('water',${landIdx},${plotIdx})">💧 Siram</button>`:''}
-        ${plot.wilted?`<button class="btn-hoe" onclick="quickAction('hoe',${landIdx},${plotIdx})">⛏️ Cangkul</button>`:''}
-        <button class="btn-remove" onclick="quickAction('remove',${landIdx},${plotIdx})">🗑️</button>
-        <button class="btn-plant" style="font-size:9px;padding:3px;" onclick="hideTooltip()">✕</button>
-      </div>`;
-  }
-  tt.innerHTML=content;
-  // Position
-  const vw=window.innerWidth, vh=window.innerHeight;
-  tt.style.left=Math.min(x+10,vw-280)+'px';
-  tt.style.top=Math.min(y-20,vh-180)+'px';
-  document.body.appendChild(tt);
-  _gdnTooltip=tt;
-  // Close on outside click
-  setTimeout(()=>document.addEventListener('click',hideTooltipOutside,{once:true,capture:true}),50);
-}
-
-function hideTooltipOutside(e){ if(!e.target.closest('#gdn-tooltip')) hideTooltip(); }
-function hideTooltip(){ if(_gdnTooltip){ _gdnTooltip.remove(); _gdnTooltip=null; } }
-
-function plantFromTooltip(seedId, landIdx, plotIdx){
-  hideTooltip();
-  const g=getGardenData();
-  const inv=g.inventory||[]; const si=inv.indexOf(seedId);
-  if(si<0){ toast('Bibit tidak ada!','error'); return; }
-  inv.splice(si,1);
-  const plot=g.lands[landIdx].plots[plotIdx];
-  plot.plant=seedId; plot.stage=0; plot.water=0; plot.wilted=false;
-  plot.plantedAt=Date.now(); plot.lastWatered=Date.now();
-  g.inventory=inv; saveGardenData(g); renderGardenFull();
-  toast(`🌱 ${GDN_PLANTS.find(p=>p.id===seedId)?.name} ditanam!`,'success');
-}
-
-function quickAction(action, landIdx, plotIdx){
-  hideTooltip();
-  const g=getGardenData();
-  const plot=g.lands[landIdx].plots[plotIdx];
-  if(action==='water'){
-    if((g.waterCount||0)<=0){toast('Tidak ada jatah siram!','error');return;}
-    const pd=GDN_PLANTS.find(p=>p.id===plot.plant);
-    g.waterCount--; plot.water=(plot.water||0)+1; plot.lastWatered=Date.now();
-    if(plot.water>=(pd?.waterNeeded||3)&&plot.stage<(pd?.maxStage||3)-1){plot.stage++;plot.water=0;toast(`🌻 ${pd?.name} tumbuh!`,'success');}
-    else toast(`💧 Disiram!`,'success');
-  } else if(action==='hoe'){
-    if((g.hoeCount||0)<=0){toast('Cangkul habis!','error');return;}
-    g.hoeCount--; plot.wilted=false; plot.lastWatered=Date.now();
-    toast('⛏️ Dipulihkan!','success');
-  } else if(action==='remove'){
-    if(!confirm('Cabut tanaman?')) return;
-    plot.plant=null;plot.stage=0;plot.water=0;plot.wilted=false;plot.plantedAt=null;plot.lastWatered=null;
-    toast('🗑️ Dicabut','info');
-  }
-  saveGardenData(g); renderGardenFull();
-}
-
-// ── Animation loop (aurora + sway) ────────────────────────
-function startGardenAnimation(g) {
-  if(_gdnRafId) cancelAnimationFrame(_gdnRafId);
-  // Hanya animate kalau ada aurora atau malam
-  const land = g.lands[_gdnCurrentLand];
-  const bgId = land?.bgId||'default';
-  const needsAnim = bgId==='aurora'||bgId==='night';
-  if(!needsAnim) return;
-  function frame() {
-    const g2=getGardenData();
-    const canvas=$(`gdn-canvas-${_gdnCurrentLand}`);
-    const scene=$(`gdn-scene-${_gdnCurrentLand}`);
-    if(!canvas||!scene) return;
-    canvas.width=scene.offsetWidth||window.innerWidth;
-    canvas.height=scene.offsetHeight||420;
-    const bgDef=GDN_BACKGROUNDS.find(b=>b.id===g2.lands[_gdnCurrentLand]?.bgId)||GDN_BACKGROUNDS[0];
-    drawGardenScene(canvas, g2.lands[_gdnCurrentLand], bgDef);
-    _gdnRafId=requestAnimationFrame(frame);
-  }
-  _gdnRafId=requestAnimationFrame(frame);
-}
-
-// ── Land switch ────────────────────────────────────────────
-function switchGardenLand(idx) {
-  const g=getGardenData();
-  if(idx<0||idx>=g.lands.length) return;
-  if(_gdnRafId){cancelAnimationFrame(_gdnRafId);_gdnRafId=null;}
-  if(_charAnimFrame){cancelAnimationFrame(_charAnimFrame);_charAnimFrame=null;}
-  _gdnCurrentLand=idx;
-  const s=$('gdn-lands-slider');
-  if(s) s.style.transform=`translateX(-${idx*100}%)`;
-  document.querySelectorAll('.gdn-land-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
-  const al=$('gdn-arrow-l'),ar=$('gdn-arrow-r');
-  if(al) al.style.opacity=idx>0?'1':'0.2';
-  if(ar) ar.style.opacity=idx<g.lands.length-1?'1':'0.2';
-  startGardenAnimation(g);
-}
-
-// ── Swipe ──────────────────────────────────────────────────
-let _gdnSx=0;
-function gdnAddSwipe(slider, g){
-  if(slider._swipe) return; slider._swipe=true;
-  slider.addEventListener('touchstart',e=>{_gdnSx=e.touches[0].clientX;},{passive:true});
-  slider.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-_gdnSx;
-    if(Math.abs(dx)>45){
-      if(dx<0&&_gdnCurrentLand<g.lands.length-1) switchGardenLand(_gdnCurrentLand+1);
-      if(dx>0&&_gdnCurrentLand>0) switchGardenLand(_gdnCurrentLand-1);
-    }
-  },{passive:true});
-}
-
-// ── Tool select ────────────────────────────────────────────
-function selectGardenTool(tool){
-  _gdnTool=_gdnTool===tool?null:tool;
-  _gdnSeedMode=null;
-  ['water','hoe'].forEach(t=>{
-    const el=$('gdn-pill-'+t);
-    if(el) el.classList.toggle('active',_gdnTool===t);
-  });
-  updateGardenHint();
-}
-function updateGardenHint(){
-  const h=$('gdn-hint'); if(!h) return;
-  if(_gdnTool==='water') h.textContent='💧 Tap tanaman untuk menyiram';
-  else if(_gdnTool==='hoe') h.textContent='⛏️ Tap tanaman layu untuk mencangkul';
-  else if(_gdnSeedMode) h.textContent=`🌱 Tap tanah kosong untuk menanam ${GDN_PLANTS.find(p=>p.id===_gdnSeedMode)?.name}`;
-  else h.textContent='Tap tanaman/tanah untuk interaksi · pilih alat 💧⛏️';
-}
-
-// ── Time display ───────────────────────────────────────────
-function gdnUpdateTime(){
-  const el=$('gdn-time-display'); if(!el) return;
-  const n=new Date(); const h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0');
-  el.textContent=`${h>=6&&h<18?'☀️':'🌙'} ${String(h).padStart(2,'0')}:${m}`;
-}
-
-// ── Shop ──────────────────────────────────────────────────
-function openGardenShop(){
-  const g=getGardenData();
-  if($('shop-coins-display')) $('shop-coins-display').textContent=g.coins||0;
-  setShopTab('seeds',$('shop-tab-seeds'));
-  openModal('modal-garden-shop');
-}
-function setShopTab(tab,el){
-  _gdnShopTab=tab;
-  document.querySelectorAll('[id^="shop-tab-"]').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderShopContent();
-}
-function renderShopContent(){
-  const g=getGardenData(); const coins=g.coins||0; const el=$('shop-content'); if(!el) return;
-  if(_gdnShopTab==='seeds'){
-    el.innerHTML=GDN_PLANTS.map(p=>{
-      const has=(g.inventory||[]).filter(x=>x===p.id).length;
-      return `<div class="shop-item${coins<p.price?' cant-afford':''}" onclick="buySeed('${p.id}')">
-        <div class="shop-item-icon">${p.stages[p.stages.length-1]}</div>
-        <div class="shop-item-info"><div class="shop-item-name">${p.name}</div>
-        <div class="shop-item-desc">Butuh ${p.waterNeeded}x siram · ${p.maxStage} tahap${has?' · inventory: '+has:''}</div></div>
-        <div class="shop-item-price">🪙${p.price}</div></div>`;
-    }).join('');
-  } else if(_gdnShopTab==='items'){
-    const items=[{id:'medicine',name:'Obat Tanaman',emoji:'💊',price:1,desc:'Pulihkan layu tanpa cangkul'},{id:'fertilizer',name:'Pupuk Kilat',emoji:'⚡',price:2,desc:'Kurangi kebutuhan air -1 sesi ini'}];
-    el.innerHTML=items.map(it=>`<div class="shop-item${coins<it.price?' cant-afford':''}" onclick="buyItem('${it.id}')">
-      <div class="shop-item-icon">${it.emoji}</div>
-      <div class="shop-item-info"><div class="shop-item-name">${it.name}</div><div class="shop-item-desc">${it.desc}</div></div>
-      <div class="shop-item-price">🪙${it.price}</div></div>`).join('');
-  } else if(_gdnShopTab==='bg'){
-    el.innerHTML=GDN_BACKGROUNDS.map(bg=>{
-      const owned=(g.ownedBgs||[]).includes(bg.id);
-      const active=g.lands[_gdnCurrentLand]?.bgId===bg.id;
-      return `<div class="shop-item${owned?' owned':(coins<bg.price?' cant-afford':'')}" onclick="${owned?`applyBg('${bg.id}')`:`buyBg('${bg.id}')`}">
-        <div class="shop-item-icon" style="width:38px;height:38px;background:linear-gradient(${bg.skyTop},${bg.groundTop});"></div>
-        <div class="shop-item-info"><div class="shop-item-name">${bg.name}</div><div class="shop-item-desc">${owned?'Sudah dimiliki':'Latar eksklusif'}</div></div>
-        <div class="shop-item-price">${owned?(active?'✅':'TERAPKAN'):`🪙${bg.price}`}</div></div>`;
-    }).join('');
-  } else if(_gdnShopTab==='land'){
-    el.innerHTML=g.lands.map((land,i)=>`<div class="shop-item${land.unlocked?' owned':(coins<5?' cant-afford':'')}}" onclick="${land.unlocked?'':(`buyLand(${i})`)}">
-      <div class="shop-item-icon">${land.unlocked?'🌾':'🔒'}</div>
-      <div class="shop-item-info"><div class="shop-item-name">Lahan ${i+1}</div><div class="shop-item-desc">${land.unlocked?'Sudah dibuka · 16 plot':'16 plot baru · geser untuk lihat'}</div></div>
-      <div class="shop-item-price">${land.unlocked?'✅':'🪙5'}</div></div>`).join('');
-  }
-}
-function buySeed(id){
-  const g=getGardenData(); const p=GDN_PLANTS.find(x=>x.id===id);
-  if(!p||(g.coins||0)<p.price){toast('Koin tidak cukup!','error');return;}
-  g.coins-=p.price; g.inventory=g.inventory||[]; g.inventory.push(id);
-  saveGardenData(g);
-  if($('shop-coins-display')) $('shop-coins-display').textContent=g.coins;
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins;
-  renderShopContent();
-  _gdnSeedMode=id; updateGardenHint();
-  toast(`🌱 ${p.name} dibeli! Tutup shop → tap tanah untuk menanam.`,'success');
-  closeModal('modal-garden-shop');
-}
-function buyItem(id){
-  const g=getGardenData(); const prices={medicine:1,fertilizer:2};
-  const price=prices[id]||1;
-  if((g.coins||0)<price){toast('Koin tidak cukup!','error');return;}
-  g.coins-=price; g.inventory.push('item_'+id); saveGardenData(g);
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins;
-  if($('shop-coins-display')) $('shop-coins-display').textContent=g.coins;
-  renderShopContent(); toast('✅ Item dibeli!','success');
-}
-function buyBg(id){
-  const g=getGardenData(); const bg=GDN_BACKGROUNDS.find(x=>x.id===id);
-  if(!bg||(g.coins||0)<bg.price){toast('Koin tidak cukup!','error');return;}
-  g.coins-=bg.price; g.ownedBgs=g.ownedBgs||['default'];
-  if(!g.ownedBgs.includes(id)) g.ownedBgs.push(id);
-  g.lands[_gdnCurrentLand].bgId=id; saveGardenData(g);
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins;
-  renderShopContent(); renderGardenFull(); toast(`🎨 ${bg.name} diterapkan!`,'success');
-}
-function applyBg(id){
-  const g=getGardenData(); g.lands[_gdnCurrentLand].bgId=id; saveGardenData(g);
-  renderShopContent(); renderGardenFull(); toast('✅ Background diterapkan!','success');
-}
-function buyLand(idx){
-  const g=getGardenData();
-  if((g.coins||0)<5){toast('Butuh 5 koin!','error');return;}
-  g.coins-=5; g.lands[idx].unlocked=true; saveGardenData(g);
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins;
-  renderShopContent(); renderGardenFull();
-  setTimeout(()=>switchGardenLand(idx),300);
-  toast(`🎉 Lahan ${idx+1} dibuka!`,'success');
-}
-
-// ── Coin awards ────────────────────────────────────────────
-function awardGardenCoin(n=1, reason=''){
-  const g=getGardenData(); g.coins=(g.coins||0)+n; saveGardenData(g);
-  if($('gdn-coins')) $('gdn-coins').textContent=g.coins;
-  toast(`🪙 +${n} coin${reason?' ('+reason+')':''}!`,'success');
-}
-function awardGardenWater(n=1){
-  const g=getGardenData(); g.waterCount=(g.waterCount||0)+n; saveGardenData(g);
-  if($('gdn-water-count')) $('gdn-water-count').textContent=g.waterCount;
-}
-function awardWellnessXP(type='water'){
-  const xp=20;
-  S.xp=(S.xp||0)+xp; save();
-  if(typeof renderStats==='function') renderStats();
-  const prevLvl=Math.max(1,Math.floor((S.xp-xp)/100)+1);
-  const newLvl=Math.max(1,Math.floor(S.xp/100)+1);
-  if(newLvl>prevLvl){
-    if(typeof playSound==='function') playSound('levelup');
-    if(typeof toast==='function') toast(`🎉 LVL ${newLvl}!`,'success');
-    if(typeof checkGardenCoinFromLevel==='function') checkGardenCoinFromLevel(prevLvl,newLvl);
-  }
-  toast(`${type==='water'?'💧':'😴'} Target tercapai! +${xp} XP`,'success');
-}
-function checkGardenCoinFromStreak(habit){
-  if((habit.streak||0)>0&&habit.streak%7===0) awardGardenCoin(1,`streak ${habit.streak}hr`);
-}
-function checkGardenCoinFromLevel(oldLv,newLv){ if(newLv>oldLv) awardGardenCoin(1,`level ${newLv}`); }
-
-// ── Init ───────────────────────────────────────────────────
-function initGardenPage(){
-  hideTooltip();
-  if(_gdnRafId){cancelAnimationFrame(_gdnRafId);_gdnRafId=null;}
-  if(_charAnimFrame){cancelAnimationFrame(_charAnimFrame);_charAnimFrame=null;}
-  _gdnTool=null; _gdnSeedMode=null;
-  renderGardenFull();
-  // Init char position
-  setTimeout(()=>{
-    const scene=$('gdn-scene-0');
-    const w=scene?.offsetWidth||window.innerWidth;
-    const h=scene?.offsetHeight||420;
-    if(typeof CHAR_STATE!=='undefined'){
-      CHAR_STATE.x=w*0.5; CHAR_STATE.y=h*0.72;
-      CHAR_STATE.facing=1; CHAR_STATE.action='idle'; CHAR_STATE.tool=null;
-    }
-    if(typeof startCharAnimation==='function') startCharAnimation(_gdnCurrentLand);
-  },100);
-  // Time updater
-  if(window._gdnTimeInt) clearInterval(window._gdnTimeInt);
-  window._gdnTimeInt=setInterval(gdnUpdateTime,30000);
-}
-
-// ════════════════════════════════════════════════════════════
-// HARVEST SYSTEM
-// ════════════════════════════════════════════════════════════
-// Saat tanaman mencapai maxStage, timer panen mulai.
-// Setelah harvestHours, muncul tombol 🧺 panen → +XP
-
-function checkHarvestReady(plot) {
-  const pd = GDN_PLANTS.find(p => p.id === plot.plant);
-  if(!pd || !plot.plant) return false;
-  if(plot.stage < pd.maxStage - 1) return false; // belum full grown
-  if(plot.wilted) return false;
-  if(!plot.readyAt) return false; // belum ada timer
-  return Date.now() >= plot.readyAt;
-}
-
-function setHarvestTimer(plot) {
-  const pd = GDN_PLANTS.find(p => p.id === plot.plant);
-  if(!pd) return;
-  if(plot.stage >= pd.maxStage - 1 && !plot.readyAt && !plot.wilted) {
-    plot.readyAt = Date.now() + (pd.harvestHours || 4) * 3600000;
-  }
-}
-
-function harvestPlot(landIdx, plotIdx) {
-  const g = getGardenData();
-  const plot = g.lands[landIdx]?.plots[plotIdx];
-  if(!plot) return;
-  const pd = GDN_PLANTS.find(p => p.id === plot.plant);
-  if(!pd || !checkHarvestReady(plot)) { toast('Belum siap panen!', 'error'); return; }
-
-  // Award XP
-  const xp = pd.harvestXp || 15;
-  S.xp = (S.xp || 0) + xp; save();
-  if(typeof renderStats === 'function') renderStats();
-
-  // Level up check
-  const prevLvl = Math.max(1, Math.floor((S.xp - xp) / 100) + 1);
-  const newLvl  = Math.max(1, Math.floor(S.xp / 100) + 1);
-  if(newLvl > prevLvl) {
-    if(typeof playSound === 'function') playSound('levelup');
-    toast(`🎉 Level Up! LVL ${newLvl}`, 'success');
-    if(typeof checkGardenCoinFromLevel === 'function') checkGardenCoinFromLevel(prevLvl, newLvl);
-  }
-
-  // Reset plot setelah panen
-  plot.plant = null; plot.stage = 0; plot.water = 0;
-  plot.wilted = false; plot.plantedAt = null; plot.lastWatered = null; plot.readyAt = null;
-  saveGardenData(g);
-  hideTooltip();
-  renderGardenFull();
-  toast(`🧺 ${pd.harvestEmoji} ${pd.name} dipanen! +${xp} XP`, 'success');
-  if(S.confettiOn !== false && typeof confetti === 'function') confetti(12);
-}
-
-// harvest timer check merged into gdnMaintenance directly
 
 // ════════════════════════════════════════════════════════════
 // CHIBI CHARACTER SYSTEM
@@ -7348,87 +5918,6 @@ function drawChibiChar(ctx, x, y, facing, action, frame, cfg) {
   ctx.restore();
 }
 
-// Character movement & animation
-let _charAnimFrame = null;
-
-function updateCharacter(canvas, land, bgDef) {
-  const cs = CHAR_STATE;
-  cs.frame++;
-
-  if(cs.moving) {
-    const dx = cs.targetX - cs.x;
-    const dy = cs.targetY - cs.y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const speed = 2.5;
-    if(dist < speed + 1) {
-      cs.x = cs.targetX; cs.y = cs.targetY;
-      cs.moving = false;
-      cs.action = cs.pendingAction || 'idle';
-      cs.actionTimer = 60; // frames to do action animation
-      cs.walkFrame = 0;
-    } else {
-      cs.x += (dx/dist)*speed;
-      cs.y += (dy/dist)*speed;
-      cs.facing = dx > 0 ? 1 : -1;
-      cs.action = 'walk';
-      cs.walkFrame++;
-    }
-  } else if(cs.actionTimer > 0) {
-    cs.actionTimer--;
-    if(cs.actionTimer === 0) {
-      cs.action = 'idle';
-      cs.tool = null;
-    }
-  }
-
-  // Redraw canvas
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.width; // clear
-  const g = getGardenData();
-  drawGardenScene(canvas, land, bgDef);
-
-  // Draw character
-  const cfg = getCharConfig();
-  drawChibiChar(ctx, cs.x, cs.y, cs.facing, cs.action, cs.frame, cfg);
-}
-
-function moveCharTo(targetX, targetY, action, tool) {
-  CHAR_STATE.targetX = targetX;
-  CHAR_STATE.targetY = targetY;
-  CHAR_STATE.moving  = true;
-  CHAR_STATE.pendingAction = action;
-  CHAR_STATE.tool = tool;
-}
-
-// Start char animation loop for a specific land
-function startCharAnimation(landIdx) {
-  if(_charAnimFrame) cancelAnimationFrame(_charAnimFrame);
-  const g = getGardenData();
-  const land = g.lands[landIdx];
-  const bgDef = GDN_BACKGROUNDS.find(b => b.id === (land?.bgId||'default')) || GDN_BACKGROUNDS[0];
-
-  function loop() {
-    const canvas = $(`gdn-canvas-${landIdx}`);
-    const scene  = $(`gdn-scene-${landIdx}`);
-    if(!canvas || !scene) { _charAnimFrame = null; return; }
-    canvas.width  = scene.offsetWidth  || window.innerWidth;
-    canvas.height = scene.offsetHeight || 420;
-    const g2 = getGardenData();
-    updateCharacter(canvas, g2.lands[landIdx], bgDef);
-    _charAnimFrame = requestAnimationFrame(loop);
-  }
-  _charAnimFrame = requestAnimationFrame(loop);
-}
-
-
-// onCanvasClick enhanced inline
-
-// initGardenPage char init merged directly
-
-// switchGardenLand char anim merged
-
-// drawGardenScene — tambah harvest-ready indicator
-
 // ════════════════════════════════════════════════════════════
 // PROFILE PAGE
 // ════════════════════════════════════════════════════════════
@@ -7458,7 +5947,6 @@ function renderProfilePage() {
   const xp = S.xp || 0;
   const lvl = Math.max(1, Math.floor(xp / 100) + 1);
   const xpInLevel = xp % 100;
-  const coins = getGardenData().coins || 0;
 
   // Habit breakdown by frequency
   const activeHabits = (S.habits||[]).filter(h=>!h.archived);
@@ -7466,7 +5954,6 @@ function renderProfilePage() {
   const weeklyCount = activeHabits.filter(h=>h.freq==='weekly').length;
   const monthlyCount = activeHabits.filter(h=>h.freq==='monthly').length;
   const bestStreak = (S.habits||[]).reduce((m,h)=>Math.max(m,h.bestStreak||0),0);
-  const ownedSkins = (()=>{try{return JSON.parse(localStorage.getItem('oht_shop_owned')||'[]').length;}catch{return 0;}})();
 
   // Canvas full viewport width (bleed ke edge), tinggi cukup untuk kartu identitas + karakter
   const pageEl = $('profile-page-content') || document.querySelector('#page-profile .page-content');
@@ -7517,12 +6004,10 @@ function renderProfilePage() {
 
           <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(255,255,255,.15);">
             <div><div style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--yellow);">🔥 ${bestStreak}</div><div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">BEST STREAK</div></div>
-            <div style="text-align:right;"><div style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--yellow);">🎨 ${ownedSkins}</div><div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">SKIN DIMILIKI</div></div>
+            <div style="text-align:right;"><div style="font-family:sans-serif;font-weight:900;font-size:13px;color:var(--yellow);">✅ ${activeHabits.length}</div><div style="font-family:var(--font-mono, monospace);font-size:6px;color:rgba(255,255,255,.6);">TOTAL HABIT</div></div>
           </div>
         </div>
       </div>
-
-      <div style="position:absolute;top:9px;right:9px;z-index:1;background:rgba(10,10,15,.58);border:1px solid rgba(255,255,255,.16);padding:5px 9px;border-radius:3px;font-family:sans-serif;font-weight:900;font-size:12px;color:var(--yellow);pointer-events:none;">🪙 ${coins}</div>
 
       <div style="position:absolute;bottom:7px;right:9px;z-index:1;font-family:var(--font-mono, monospace);font-size:8px;color:rgba(255,255,255,.65);pointer-events:none;">↺ Tap karakter untuk rotasi</div>
     </div>`;
@@ -7727,231 +6212,142 @@ function getProfileBgConfig() {
 }
 
 // ════════════════════════════════════════════════════════════
-// SHOP SYSTEM (MORE MENU)
+// PROFILE PHOTO (header avatar upload)
 // ════════════════════════════════════════════════════════════
-
-function getShopItems() {
-  return [
-    // ── AKSESORIS KARAKTER (bentuk, bukan warna) ──
-    { id:'acc_hat_classic', name:'Topi Klasik', category:'character', price:3,
-      preview:'hat', previewColor:'#8B4513',
-      desc:'Topi cokelat klasik untuk petualang',
-      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#8B4513'; saveCharConfig(c); } },
-    { id:'acc_hat_cool',    name:'Topi Keren',  category:'character', price:3,
-      preview:'hat', previewColor:'#1a1a2e',
-      desc:'Topi hitam misterius',
-      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#1a1a2e'; saveCharConfig(c); } },
-    { id:'acc_hat_chef',    name:'Topi Chef',   category:'character', price:4,
-      preview:'hat', previewColor:'#ffffff',
-      desc:'Topi koki profesional, putih bersih',
-      apply:()=>{ const c=getCharConfig(); c.accessory='hat'; c.accColor='#f5f5f5'; saveCharConfig(c); } },
-    { id:'acc_glasses_round', name:'Kacamata Bulat', category:'character', price:3,
-      preview:'glasses', previewColor:'#1a1a1a',
-      desc:'Kacamata bulat klasik bergaya retro',
-      apply:()=>{ const c=getCharConfig(); c.accessory='glasses'; c.accColor='#1a1a1a'; saveCharConfig(c); } },
-    { id:'acc_glasses_gold',  name:'Kacamata Emas',  category:'character', price:4,
-      preview:'glasses', previewColor:'#ffd700',
-      desc:'Kacamata mewah frame emas',
-      apply:()=>{ const c=getCharConfig(); c.accessory='glasses'; c.accColor='#ffd700'; saveCharConfig(c); } },
-    { id:'acc_scarf_wool',  name:'Syal Wol', category:'character', price:3,
-      preview:'scarf', previewColor:'#c0392b',
-      desc:'Syal wol hangat berwarna merah',
-      apply:()=>{ const c=getCharConfig(); c.accessory='scarf'; c.accColor='#c0392b'; saveCharConfig(c); } },
-    { id:'acc_scarf_stripe',name:'Syal Strip', category:'character', price:3,
-      preview:'scarf', previewColor:'#2980b9',
-      desc:'Syal bergaris biru dan putih',
-      apply:()=>{ const c=getCharConfig(); c.accessory='scarf'; c.accColor='#2980b9'; saveCharConfig(c); } },
-    { id:'hair_long',  name:'Rambut Panjang', category:'character', price:2,
-      preview:'hair_long', previewColor:'#3a2000',
-      desc:'Rambut panjang terurai elegan',
-      apply:()=>{ const c=getCharConfig(); c.hairStyle='long'; saveCharConfig(c); } },
-    { id:'hair_bun',   name:'Gaya Sanggul',   category:'character', price:2,
-      preview:'hair_bun', previewColor:'#3a2000',
-      desc:'Sanggul rapi dan anggun',
-      apply:()=>{ const c=getCharConfig(); c.hairStyle='bun'; saveCharConfig(c); } },
-
-    // ── BACKGROUND PROFIL ──
-    { id:'pbg_default', name:'Lahan Biasa', category:'profile_bg', price:0,
-      bgDef:{top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'},
-      desc:'Background default, selalu tersedia',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_default',top:'#1a2d4a',bot:'#2d4a6a',grass:'#2d5a1a'})); } },
-    { id:'pbg_sunset',  name:'Senja Emas',  category:'profile_bg', price:3,
-      bgDef:{top:'#ff6b35',bot:'#c0392b',grass:'#4a3000'},
-      desc:'Langit jingga hangat kala senja',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_sunset',top:'#ff6b35',bot:'#c0392b',grass:'#4a3000'})); } },
-    { id:'pbg_night',   name:'Malam Bintang', category:'profile_bg', price:3,
-      bgDef:{top:'#050b1a',bot:'#0a1428',grass:'#1a2a0a'},
-      desc:'Malam gelap bertabur bintang',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_night',top:'#050b1a',bot:'#0a1428',grass:'#1a2a0a'})); } },
-    { id:'pbg_spring',  name:'Musim Semi',    category:'profile_bg', price:4,
-      bgDef:{top:'#87d4ef',bot:'#b8eecc',grass:'#4a8a2a'},
-      desc:'Langit cerah segar musim bunga',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_spring',top:'#87d4ef',bot:'#b8eecc',grass:'#4a8a2a'})); } },
-    { id:'pbg_cherry',  name:'Sakura Pink',   category:'profile_bg', price:5,
-      bgDef:{top:'#ffb7c5',bot:'#ff69b4',grass:'#8a4a6a'},
-      desc:'Langit merah muda penuh bunga sakura',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_cherry',top:'#ffb7c5',bot:'#ff69b4',grass:'#8a4a6a'})); } },
-    { id:'pbg_storm',   name:'Badai Abu',     category:'profile_bg', price:4,
-      bgDef:{top:'#2c3e50',bot:'#4a4a4a',grass:'#2d3a1a'},
-      desc:'Langit mendung dramatis',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_storm',top:'#2c3e50',bot:'#4a4a4a',grass:'#2d3a1a'})); } },
-    { id:'pbg_aurora',  name:'Aurora Borealis', category:'profile_bg', price:6,
-      bgDef:{top:'#0a1a0f',bot:'#1a0a2f',grass:'#1a4a1a'},
-      desc:'Cahaya utara yang memukau',
-      apply:()=>{ localStorage.setItem('oht_profile_bg', JSON.stringify({id:'pbg_aurora',top:'#0a1a0f',bot:'#1a0a2f',grass:'#1a4a1a'})); } },
-
-    // ── GARDEN ──
-    { id:'boost_water', name:'Jatah Siram +3', category:'garden', price:2,
-      preview:'💧', desc:'Tambah 3 jatah siram sekarang',
-      apply:()=>{ const g=getGardenData(); g.waterCount=(g.waterCount||0)+3; saveGardenData(g); if($("gdn-water-count"))$("gdn-water-count").textContent=g.waterCount; } },
-    { id:'boost_hoe',   name:'Cangkul +2',     category:'garden', price:2,
-      preview:'⛏️', desc:'Tambah 2 cangkul (max 5)',
-      apply:()=>{ const g=getGardenData(); g.hoeCount=Math.min(5,(g.hoeCount||0)+2); saveGardenData(g); if($("gdn-hoe-count"))$("gdn-hoe-count").textContent=g.hoeCount; } },
-    { id:'fertilizer',  name:'Pupuk Kilat',    category:'garden', price:4,
-      preview:'⚡', desc:'Percepat panen semua tanaman 4 jam',
-      apply:()=>{ const g=getGardenData(); g.lands.forEach(l=>l.plots.forEach(p=>{ if(p.readyAt) p.readyAt=Math.max(Date.now(),p.readyAt-14400000); })); saveGardenData(g); } },
-    { id:'medicine',    name:'Obat Tanaman',   category:'garden', price:3,
-      preview:'💊', desc:'Pulihkan semua tanaman layu sekarang',
-      apply:()=>{ const g=getGardenData(); g.lands.forEach(l=>l.plots.forEach(p=>{ if(p.wilted){p.wilted=false;p.lastWatered=Date.now();} })); saveGardenData(g); } },
-    { id:'land_slot',   name:'Lahan Baru',     category:'garden', price:5,
-      preview:'🌾', desc:'Buka lahan baru dengan 16 plot tambahan',
-      apply:()=>{ const g=getGardenData(); const locked=g.lands.find(l=>!l.unlocked); if(locked){locked.unlocked=true;saveGardenData(g);toast("🎉 Lahan baru terbuka!",'success');} else toast("Semua lahan sudah terbuka!",'info'); } },
-  ];
+function getProfilePhoto() {
+  try { return localStorage.getItem('oht_profile_photo') || null; } catch(e) { return null; }
+}
+function onProfilePhotoSelected(evt) {
+  const file = evt.target.files && evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => openPhotoCrop(img);
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+  evt.target.value = '';
+}
+function removeProfilePhoto() {
+  try { localStorage.removeItem('oht_profile_photo'); } catch(e){}
+  applyProfilePhoto();
 }
 
-function openMainShop() {
-  renderMainShopContent('character');
-  openModal('modal-main-shop');
+// ════════════════════════════════════════════════════════════
+// PROFILE PHOTO CROP/POSITION MODAL
+// ════════════════════════════════════════════════════════════
+let _cropImg = null;       // Image object being cropped
+let _cropVP = 230;         // viewport size (px), matches CSS
+let _cropMinScale = 1;
+let _cropScale = 1;
+let _cropOffX = 0;
+let _cropOffY = 0;
+let _cropDragging = false;
+let _cropDragStart = null;
+
+function openPhotoCrop(img) {
+  _cropImg = img;
+  _cropVP = 230;
+  _cropMinScale = _cropVP / Math.min(img.width, img.height);
+  _cropScale = _cropMinScale;
+  const dispW = img.width * _cropScale, dispH = img.height * _cropScale;
+  _cropOffX = (_cropVP - dispW) / 2;
+  _cropOffY = (_cropVP - dispH) / 2;
+
+  const imgEl = $('photo-crop-img');
+  imgEl.src = img.src;
+  const zoom = $('photo-crop-zoom'); if (zoom) zoom.value = 100;
+  applyCropTransform();
+  setupCropDrag();
+  openModal('modal-photo-crop');
 }
 
-function setMainShopTab(tab, el) {
-  document.querySelectorAll('[id^="mshop-tab-"]').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderMainShopContent(tab);
+function applyCropTransform() {
+  const imgEl = $('photo-crop-img'); if (!imgEl) return;
+  imgEl.style.width = (_cropImg.width * _cropScale) + 'px';
+  imgEl.style.height = (_cropImg.height * _cropScale) + 'px';
+  imgEl.style.transform = `translate(${_cropOffX}px, ${_cropOffY}px)`;
 }
 
-function renderMainShopContent(tab) {
-  const el = $('main-shop-content'); if(!el) return;
-  const g = getGardenData();
-  const coins = g.coins || 0;
-  const owned = JSON.parse(localStorage.getItem('oht_shop_owned') || '[]');
+function clampCropOffsets() {
+  const dispW = _cropImg.width * _cropScale, dispH = _cropImg.height * _cropScale;
+  const minX = Math.min(0, _cropVP - dispW), maxX = 0;
+  const minY = Math.min(0, _cropVP - dispH), maxY = 0;
+  _cropOffX = Math.max(minX, Math.min(maxX, _cropOffX));
+  _cropOffY = Math.max(minY, Math.min(maxY, _cropOffY));
+}
 
-  // Update coin displays
-  ['mshop-coins','shop-page-coins'].forEach(id=>{ const e=$(id); if(e) e.textContent=coins; });
+function onPhotoCropZoom(val) {
+  if (!_cropImg) return;
+  const oldScale = _cropScale;
+  _cropScale = _cropMinScale * (parseFloat(val) / 100);
+  // Keep the viewport center focused on the same image point while zooming
+  const cx = _cropVP / 2, cy = _cropVP / 2;
+  const relX = (cx - _cropOffX) / oldScale, relY = (cy - _cropOffY) / oldScale;
+  _cropOffX = cx - relX * _cropScale;
+  _cropOffY = cy - relY * _cropScale;
+  clampCropOffsets();
+  applyCropTransform();
+}
 
-  const items = getShopItems().filter(it => it.category === tab);
-  if(!items.length) {
-    el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);padding:24px;text-align:center;">Belum ada item.</div>`;
-    return;
+function setupCropDrag() {
+  const vp = $('photo-crop-viewport'); if (!vp || vp._cropBound) return;
+  vp._cropBound = true;
+  const start = (x, y) => { _cropDragging = true; _cropDragStart = {x, y, offX:_cropOffX, offY:_cropOffY}; vp.style.cursor = 'grabbing'; };
+  const move = (x, y) => {
+    if (!_cropDragging || !_cropDragStart) return;
+    _cropOffX = _cropDragStart.offX + (x - _cropDragStart.x);
+    _cropOffY = _cropDragStart.offY + (y - _cropDragStart.y);
+    clampCropOffsets();
+    applyCropTransform();
+  };
+  const end = () => { _cropDragging = false; _cropDragStart = null; vp.style.cursor = 'grab'; };
+  vp.addEventListener('pointerdown', e => { vp.setPointerCapture(e.pointerId); start(e.clientX, e.clientY); });
+  vp.addEventListener('pointermove', e => move(e.clientX, e.clientY));
+  vp.addEventListener('pointerup', end);
+  vp.addEventListener('pointercancel', end);
+}
+
+function cancelPhotoCrop() {
+  closeModal('modal-photo-crop');
+  _cropImg = null;
+}
+
+function confirmPhotoCrop() {
+  if (!_cropImg) { closeModal('modal-photo-crop'); return; }
+  const SIZE = 256;
+  const c = document.createElement('canvas'); c.width = SIZE; c.height = SIZE;
+  const ctx = c.getContext('2d');
+  const srcX = -_cropOffX / _cropScale;
+  const srcY = -_cropOffY / _cropScale;
+  const srcSize = _cropVP / _cropScale;
+  ctx.drawImage(_cropImg, srcX, srcY, srcSize, srcSize, 0, 0, SIZE, SIZE);
+  const dataUrl = c.toDataURL('image/jpeg', 0.88);
+  try { localStorage.setItem('oht_profile_photo', dataUrl); } catch(e) { toast('Gagal menyimpan foto (terlalu besar)','error'); return; }
+  applyProfilePhoto();
+  closeModal('modal-photo-crop');
+  _cropImg = null;
+  toast('📸 Foto profil diperbarui!','success');
+}
+function applyProfilePhoto() {
+  const photo = getProfilePhoto();
+  const img = $('hdr-avatar-photo');
+  const canvas = $('xp-avatar-canvas');
+  if (photo) {
+    if (img) { img.src = photo; img.style.display = 'block'; }
+    if (canvas) canvas.style.display = 'none';
+  } else {
+    if (img) { img.style.display = 'none'; img.src = ''; }
+    if (canvas) canvas.style.display = 'block';
   }
-
-  el.innerHTML = items.map(it => {
-    const isOwned = owned.includes(it.id) || it.price === 0;
-    const canAfford = coins >= it.price;
-
-    // Preview visual
-    let prevHtml = '';
-    if(it.bgDef) {
-      // BG preview box
-      const hasStars = it.bgDef.top < '#3';
-      prevHtml = `<div style="width:80px;height:60px;flex-shrink:0;position:relative;overflow:hidden;border:1.5px solid var(--bc);">
-        <div style="position:absolute;inset:0;background:linear-gradient(${it.bgDef.top},${it.bgDef.bot});"></div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:${it.bgDef.grass};"></div>
-        ${hasStars?`<div style="position:absolute;top:5px;left:8px;width:2px;height:2px;background:#fff;border-radius:50%;"></div>
-          <div style="position:absolute;top:10px;left:35px;width:1.5px;height:1.5px;background:#fff;border-radius:50%;"></div>
-          <div style="position:absolute;top:7px;right:12px;width:2px;height:2px;background:#fff;border-radius:50%;"></div>`:''}
-        ${it.id==='pbg_sunset'?`<div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:#ffd700;border-radius:50%;box-shadow:0 0 8px #ff9900;"></div>`:''}
-        ${it.id==='pbg_spring'?`<div style="position:absolute;top:6px;left:50%;transform:translateX(-50%);width:12px;height:12px;background:#ffe66d;border-radius:50%;box-shadow:0 0 6px #fff;"></div>`:''}
-        ${it.id==='pbg_cherry'?`<div style="position:absolute;top:4px;left:12px;font-size:9px;">🌸</div><div style="position:absolute;top:12px;right:10px;font-size:8px;">🌸</div>`:''}
-        ${it.id==='pbg_aurora'?`<div style="position:absolute;inset:0;background:linear-gradient(transparent 20%,rgba(0,255,120,.18),rgba(120,0,255,.12),transparent);"></div>`:''}
-        ${it.id==='pbg_night'?`<div style="position:absolute;top:5px;right:10px;font-size:8px;">🌙</div>`:''}
-        ${it.id==='pbg_storm'?`<div style="position:absolute;top:4px;left:20px;font-size:8px;">⛈️</div>`:''}
-      </div>`;
-    } else if(it.preview && /hat|glasses|scarf|hair/.test(it.preview)) {
-      prevHtml = `<canvas id="prev_${it.id.replace(/[^a-z0-9]/gi,'_')}" width="60" height="60"
-        style="flex-shrink:0;border:1.5px solid var(--bc);background:var(--surface);"></canvas>`;
-    } else if(it.preview) {
-      prevHtml = `<div style="width:60px;height:60px;flex-shrink:0;border:1.5px solid var(--bc);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:26px;">${it.preview}</div>`;
-    }
-
-    const btnLabel = isOwned ? '✅ TERAPKAN' : canAfford ? `🪙 ${it.price}` : `🪙 ${it.price} ✗`;
-    const cardClass = isOwned ? 'owned' : !canAfford ? 'cant-afford' : '';
-
-    return `<div class="shop-item-card ${cardClass}"
-      onclick="${isOwned||canAfford?`shopAction('${it.id}',${isOwned})`:''}">
-      ${prevHtml}
-      <div class="shop-item-info" style="flex:1;min-width:0;">
-        <div class="shop-item-name">${it.name}</div>
-        <div class="shop-item-desc">${it.desc||''}</div>
-      </div>
-      <div style="flex-shrink:0;font-family:sans-serif;font-weight:900;font-size:12px;
-        color:${isOwned?'var(--lime)':canAfford?'var(--yellow)':'#666'};text-align:right;min-width:60px;">
-        ${btnLabel}
-      </div>
-    </div>`;
-  }).join('');
-
-  // Draw char previews on mini canvas
-  setTimeout(() => {
-    items.forEach(it => {
-      if(!it.preview || !/hat|glasses|scarf|hair/.test(it.preview)) return;
-      const cvs = $('prev_' + it.id.replace(/[^a-z0-9]/gi,'_')); if(!cvs) return;
-      const ctx = cvs.getContext('2d');
-      ctx.clearRect(0,0,60,60);
-      const previewCfg = {...getCharConfig()};
-      if(it.preview==='hat'||it.preview==='glasses'||it.preview==='scarf') {
-        previewCfg.accessory=it.preview; previewCfg.accColor=it.previewColor||'#888';
-      } else if(it.preview==='hair_long') { previewCfg.hairStyle='long'; }
-      else if(it.preview==='hair_bun')  { previewCfg.hairStyle='bun'; }
-      ctx.save();
-      ctx.translate(30, 52);
-      ctx.scale(0.62, 0.62);
-      drawChibiChar(ctx, 0, 0, 1, 'idle', 0, previewCfg);
-      ctx.restore();
-    });
-  }, 80);
-}
-
-function buyShopItem(id) {
-  const g = getGardenData();
-  const it = getShopItems().find(x => x.id === id);
-  if(!it) return;
-  if((g.coins||0) < it.price) { toast('Koin tidak cukup!', 'error'); return; }
-  g.coins -= it.price;
-  saveGardenData(g);
-  const owned = JSON.parse(localStorage.getItem('oht_shop_owned') || '[]');
-  if(!owned.includes(id)) { owned.push(id); localStorage.setItem('oht_shop_owned', JSON.stringify(owned)); }
-  it.apply();
-  const _sc2=$('mshop-coins')||$('shop-page-coins'); if(_sc2) _sc2.textContent=g.coins;
-  if($('gdn-coins')) $('gdn-coins').textContent = g.coins;
-  const activTab = document.querySelector('[id^="mshop-tab-"].active');
-  if(activTab) renderMainShopContent(activTab.id.replace('mshop-tab-',''));
-  else renderMainShopContent(it.category);
-  toast(`✅ ${it.name} dibeli!`, 'success');
-  if(typeof renderProfilePage === 'function') renderProfilePage();
-}
-
-function applyShopItem(id) {
-  const it = getShopItems().find(x => x.id === id);
-  if(it) { it.apply(); toast(`✅ ${it.name} diterapkan!`, 'success'); renderProfilePage(); }
-}
-
-// ── Shop page init ──────────────────────────────────────
-function initShopPage() {
-  const g = getGardenData();
-  const el = $('shop-page-coins'); if(el) el.textContent = g.coins||0;
-  setMainShopTab('character', $('mshop-tab-character'));
-}
-
-// Fix openMainShop — navigate ke page shop bukan modal
-function openMainShop() {
-  navigateMore('shop');
 }
 
 // ════════════════════════════════════════════════════════════
-// MINI AVATAR di HOME (canvas xp-avatar)
+// MINI AVATAR di HEADER (canvas xp-avatar)
 // ════════════════════════════════════════════════════════════
 function renderHomeAvatar() {
+  applyProfilePhoto();
   const canvas = $('xp-avatar-canvas'); if(!canvas) return;
   const W = canvas.width, H = canvas.height;
   const ctx = canvas.getContext('2d');
@@ -8039,9 +6435,10 @@ function renderJadwalList() {
   el.innerHTML = jadwals.map(j => {
     const dayNames=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
     const activeDays = (j.days||[0,1,2,3,4,5,6]).map(d=>dayNames[d]).join(' ');
+    const jic = (j.emoji && JADWAL_ICONS[j.emoji]) ? j.emoji : 'target';
     return `<div class="jadwal-card" style="border-left:3px solid ${j.color||'var(--yellow)'};">
       <div class="jadwal-card-main">
-        <div class="jadwal-emoji">${j.emoji||'📅'}</div>
+        <div class="jadwal-emoji">${jadwalIconSvg(jic)}</div>
         <div class="jadwal-info">
           <div class="jadwal-name" style="color:${j.color||'var(--yellow)'};">${j.name}</div>
           <div class="jadwal-times">${(j.times||[]).map(t=>`<span class="jadwal-time-chip">⏰ ${t}</span>`).join('')}</div>
@@ -8061,14 +6458,14 @@ function openAddJadwalModal() {
   _jadwalTimes = ['08:00'];
   const nameEl=$('jadwal-inp-name'); if(nameEl) nameEl.value='';
   $('jadwal-modal-title').textContent='TAMBAH JADWAL';
-  $('jadwal-inp-emoji').value='💧';
+  $('jadwal-inp-emoji').value='water';
   $('jadwal-inp-color').value='#FFE600';
   // Reset emoji picker
   buildJadwalEmojiPicker();
   buildJadwalColorPicker();
   buildJadwalTimesList();
-  // Reset days — semua aktif
-  document.querySelectorAll('#jadwal-days-picker .freq-btn').forEach(b=>b.classList.add('sel'));
+  // Reset days — tidak ada yang aktif secara default
+  document.querySelectorAll('#jadwal-days-picker .jhb-btn').forEach(b=>b.classList.remove('sel'));
   openModal('modal-jadwal');
 }
 
@@ -8078,34 +6475,54 @@ function editJadwal(id) {
   _jadwalTimes = [...(j.times||['08:00'])];
   $('jadwal-modal-title').textContent='EDIT JADWAL';
   const nameEl=$('jadwal-inp-name'); if(nameEl) nameEl.value=j.name;
-  $('jadwal-inp-emoji').value=j.emoji||'💧';
+  $('jadwal-inp-emoji').value=(j.emoji&&JADWAL_ICONS[j.emoji])?j.emoji:'water';
   $('jadwal-inp-color').value=j.color||'#FFE600';
   buildJadwalEmojiPicker(j.emoji);
   buildJadwalColorPicker(j.color);
   buildJadwalTimesList();
   // Days
   const days=j.days||[0,1,2,3,4,5,6];
-  document.querySelectorAll('#jadwal-days-picker .freq-btn').forEach(b=>{
+  document.querySelectorAll('#jadwal-days-picker .jhb-btn').forEach(b=>{
     const d=parseInt(b.dataset.day);
     b.classList.toggle('sel',days.includes(d));
   });
   openModal('modal-jadwal');
 }
 
-function buildJadwalEmojiPicker(selected='💧') {
-  const emojis='💧🎯📚💪😴🍎🧘‍♀️💊🏃‍♂️💼📝🎵🌿☕🏋️🎨🚿🍵'.split('').filter(Boolean);
+const JADWAL_ICONS = {
+  water:  `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#2196F3" d="M12 2C8.5 7 5 11 5 15a7 7 0 0014 0c0-4-3.5-8-7-13z"/><path fill="#8ECBFA" d="M8.7 15.5a3.3 3.3 0 003.3 3.3c.55 0 1-.45 1-1s-.45-1-1-1a1.3 1.3 0 01-1.3-1.3c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>`,
+  target: `<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="#FF3B30"/><circle cx="12" cy="12" r="6" fill="#fff"/><circle cx="12" cy="12" r="3.2" fill="#FF3B30"/></svg>`,
+  book:   `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#3B6FE0" d="M4 4.5A2.5 2.5 0 016.5 2H20v18H6.5A2.5 2.5 0 004 17.5v-13z"/><path fill="#EAF1FF" d="M6.5 2H20v16H6.5A2.5 2.5 0 004 15.5V4.5A2.5 2.5 0 016.5 2z"/><rect x="7" y="6" width="9" height="1.4" fill="#3B6FE0"/><rect x="7" y="9" width="9" height="1.4" fill="#3B6FE0"/></svg>`,
+  dumbbell:`<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="9" width="3" height="6" rx="1" fill="#444"/><rect x="19" y="9" width="3" height="6" rx="1" fill="#444"/><rect x="5" y="10.5" width="14" height="3" fill="#FF6B00"/><rect x="6.5" y="7.5" width="2.2" height="9" fill="#444"/><rect x="15.3" y="7.5" width="2.2" height="9" fill="#444"/></svg>`,
+  sleep:  `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#7B61FF" d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z"/><circle cx="17" cy="6" r="1" fill="#fff"/><circle cx="14" cy="9" r=".7" fill="#fff"/></svg>`,
+  apple:  `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4CAF50" d="M12.5 6c.4-1.7 2-2.8 2-2.8s.2 1.8-1 3c1.6.2 3.5 1.6 3.5 4.6 0 4-2.6 8.7-5.5 8.7-1 0-1.5-.5-2.5-.5s-1.6.5-2.5.5C4 19.5 2 15.4 2 11.6c0-3.4 2.2-5 4-5 1 0 1.8.6 2.5.6.6 0 1.6-.7 2.5-.9-.1-.5-.2-1-.1-1.6C11.4 4.2 12.1 5 12.5 6z"/><path fill="#8B5A2B" d="M12 3.2c.9-.3 1.6-.1 1.6-.1s-.1.9-1 1.4c-.6.3-1 .1-1 .1s0-1 .4-1.4z"/></svg>`,
+  yoga:   `<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="5" r="2.3" fill="#00BFA5"/><path fill="#26C6DA" d="M12 8c-3 0-5 2.4-5 5.2 0 1.6 1 2.8 2.3 2.8.6 0 1-.3 1.3-.8l1-1.7 1 1.7c.3.5.7.8 1.3.8 1.3 0 2.3-1.2 2.3-2.8C17 10.4 15 8 12 8z"/><path fill="#00897B" d="M9.5 16.5L7 20h3l2-3.5 2 3.5h3l-2.5-3.5"/></svg>`,
+  pill:   `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="9" width="20" height="6" rx="3" fill="#EF5350" transform="rotate(-35 12 12)"/><path fill="#fff" d="M12 12l6.5-4.5a3 3 0 114 4.4L15.9 16 12 12z" transform="rotate(-35 12 12)"/></svg>`,
+  run:    `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#FF6B00" d="M4 19l4.5-2 2-3-1.5-2.5L6 13l-1-1.5 4-2.5 3 1 3.5-1.5-.7-2L18 5l1 2-4 2 2.5 6 3.5 1-.7 2-4.3-1.3-2-4-2 3-4 2.5z"/><circle cx="15" cy="4" r="1.6" fill="#FF6B00"/></svg>`,
+  work:   `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="7" width="20" height="13" rx="1.5" fill="#8B5A2B"/><rect x="2" y="7" width="20" height="4" fill="#6D4520"/><rect x="9" y="4" width="6" height="4" rx="1" fill="none" stroke="#6D4520" stroke-width="1.6"/></svg>`,
+  note:   `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="2" width="14" height="18" rx="1" fill="#FFF3C4"/><path fill="#FFC107" d="M15 15l6-6 2 2-6 6-2.5.5.5-2.5z"/><rect x="6.5" y="6" width="8" height="1.3" fill="#E0B84C"/><rect x="6.5" y="9" width="6" height="1.3" fill="#E0B84C"/></svg>`,
+  music:  `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#7B2FBE" d="M9 17a3 3 0 11-2-2.8V5.8l10-2v9.5a3 3 0 11-2-2.8V6l-6 1.2z"/></svg>`,
+  plant:  `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4CAF50" d="M12 21V10"/><path fill="#4CAF50" stroke="#4CAF50" stroke-width="2" d="M12 21V10"/><path fill="#66BB6A" d="M12 12c0-4-3-6-7-6 0 4 3 7 7 6z"/><path fill="#2E7D32" d="M12 10c0-4 3-7 7-7 0 4.5-3 7.5-7 7z"/></svg>`,
+  coffee: `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#8B5A2B" d="M3 9h14v6a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/><path fill="none" stroke="#8B5A2B" stroke-width="2" d="M17 10.5h1.5a2.5 2.5 0 010 5H17"/><path fill="none" stroke="#C9A882" stroke-width="1.5" stroke-linecap="round" d="M7 3.5c0 1.2 1.5 1.2 1.5 2.5S7 7.3 7 8.5M11 3.5c0 1.2 1.5 1.2 1.5 2.5S11 7.3 11 8.5"/></svg>`,
+  weight: `<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="14" r="7" fill="#555"/><rect x="10" y="2" width="4" height="5" rx="1.5" fill="#777"/><circle cx="12" cy="14" r="2.5" fill="#333"/></svg>`,
+  palette:`<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#F4A9C0" d="M12 2C6.5 2 2 6 2 11c0 3.3 2.2 5 4.5 5H8a1.5 1.5 0 011.5 1.5c0 1-.7 1.3-.7 2.3 0 .9 1 1.2 2 1.2 5.5 0 9.2-4 9.2-9C22 6.6 17.5 2 12 2z"/><circle cx="7" cy="10" r="1.4" fill="#E53935"/><circle cx="11" cy="7" r="1.4" fill="#1E88E5"/><circle cx="16" cy="8.5" r="1.4" fill="#FDD835"/><circle cx="17" cy="13" r="1.4" fill="#43A047"/></svg>`,
+  shower: `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#78909C" d="M4 9a7 7 0 0113.9-1H19a2 2 0 010 4H5a2 2 0 01-1-3.7V9z"/><g fill="#2196F3"><circle cx="6" cy="15" r="1"/><circle cx="10" cy="16" r="1"/><circle cx="14" cy="15" r="1"/><circle cx="18" cy="16" r="1"/><circle cx="8" cy="19" r="1"/><circle cx="12" cy="20" r="1"/><circle cx="16" cy="19" r="1"/></g></svg>`,
+  tea:    `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#00897B" d="M3 9h14v6a4 4 0 01-4 4H7a4 4 0 01-4-4V9z"/><path fill="none" stroke="#00897B" stroke-width="2" d="M17 10.5h1.5a2.5 2.5 0 010 5H17"/><path fill="#B2DFDB" d="M5 9h10v2H5z"/></svg>`
+};
+const JADWAL_ICON_KEYS = Object.keys(JADWAL_ICONS);
+function jadwalIconSvg(key){ return JADWAL_ICONS[key] || JADWAL_ICONS.target; }
+
+function buildJadwalEmojiPicker(selected) {
   const container=$('jadwal-emoji-picker'); if(!container) return;
-  // Split into individual emojis properly
-  const emojiList=['💧','🎯','📚','💪','😴','🍎','🧘','💊','🏃','💼','📝','🎵','🌿','☕','🏋','🎨','🚿','🍵'];
-  const cur=$('jadwal-inp-emoji')?.value||'💧';
-  container.innerHTML=emojiList.map(e=>`<div onclick="selectJadwalEmoji('${e}')"
-    style="font-size:22px;cursor:pointer;padding:4px;border:2px solid ${e===cur?'var(--yellow)':'transparent'};
-    -webkit-tap-highlight-color:transparent;">${e}</div>`).join('');
+  const cur=selected || $('jadwal-inp-emoji')?.value || 'water';
+  container.innerHTML=JADWAL_ICON_KEYS.map(k=>`<div onclick="selectJadwalEmoji('${k}')"
+    style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;cursor:pointer;padding:3px;border:2px solid ${k===cur?'var(--yellow)':'transparent'};background:var(--surface);
+    -webkit-tap-highlight-color:transparent;">${jadwalIconSvg(k)}</div>`).join('');
 }
 
-function selectJadwalEmoji(e) {
-  const el=$('jadwal-inp-emoji'); if(el) el.value=e;
-  buildJadwalEmojiPicker(e);
+function selectJadwalEmoji(k) {
+  const el=$('jadwal-inp-emoji'); if(el) el.value=k;
+  buildJadwalEmojiPicker(k);
 }
 
 function buildJadwalColorPicker(selected='#FFE600') {
@@ -8124,8 +6541,9 @@ function buildJadwalTimesList() {
   const container=$('jadwal-times-list'); if(!container) return;
   container.innerHTML=_jadwalTimes.map((t,i)=>`
     <div style="display:flex;align-items:center;gap:7px;">
-      <input type="time" value="${t}" onchange="updateJadwalTime(${i},this.value)"
-        style="flex:1;font-family:sans-serif;font-weight:900;font-size:14px;background:var(--surface);border:var(--bo-t);color:var(--text);padding:6px 9px;">
+      <div class="custom-time-trigger" style="flex:1;" onclick="openTimePicker('jadwal-time-${i}')">
+        <span class="ctt-ico">⏰</span><span class="ctt-val" id="jadwal-time-val-${i}">${t||'--:--'}</span>
+      </div>
       ${_jadwalTimes.length>1?`<button class="btn btn-xs btn-danger" onclick="removeJadwalTime(${i})">✕</button>`:''}
     </div>`).join('');
 }
@@ -8145,9 +6563,9 @@ function removeJadwalTime(idx) {
 function saveJadwal() {
   const name=($('jadwal-inp-name')?.value||'').trim();
   if(!name){toast('Isi nama jadwal!','error');return;}
-  const emoji=$('jadwal-inp-emoji')?.value||'📅';
+  const emoji=$('jadwal-inp-emoji')?.value||'target';
   const color=$('jadwal-inp-color')?.value||'#FFE600';
-  const days=[...document.querySelectorAll('#jadwal-days-picker .freq-btn.sel')].map(b=>parseInt(b.dataset.day));
+  const days=[...document.querySelectorAll('#jadwal-days-picker .jhb-btn.sel')].map(b=>parseInt(b.dataset.day));
   if(!days.length){toast('Pilih minimal 1 hari!','error');return;}
   const times=_jadwalTimes.filter(Boolean);
   if(!times.length){toast('Tambah minimal 1 waktu!','error');return;}
@@ -8225,11 +6643,6 @@ function scheduleJadwalNext(j, timeStr) {
 
 // Schedule on app init
 setTimeout(scheduleAllJadwal, 2000);
-
-function shopAction(id, isOwned) {
-  if(isOwned) applyShopItem(id);
-  else buyShopItem(id);
-}
 
 // ════════════════════════════════════════════════════════════
 // FIREBASE — Friends & Chat System
@@ -8332,7 +6745,141 @@ function _afterFbLogin() {
   renderFriendsMain();
   renderSettingsAuth();
   renderProfileSocialSection();
-  const lm=$('modal-login');if(lm&&lm.classList.contains('open'))closeModal('modal-login');
+  const lm=$('auth-page');if(lm&&lm.classList.contains('open'))closeAuthPage();
+}
+
+// ── Auth Page (standalone, bukan modal) ──────────────────────
+let _authPageMode = 'login';
+function showAuthPage() {
+  setAuthMode('login');
+  const el = $('auth-page'); if (el) el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  _authFormRevealed = false;
+  const card = $('auth-card'); if (card) card.classList.remove('show');
+  startAuthShowcase();
+}
+function closeAuthPage() {
+  const el = $('auth-page'); if (el) el.classList.remove('open');
+  document.body.style.overflow = '';
+  stopAuthShowcase();
+}
+function setAuthMode(mode) {
+  _authPageMode = mode;
+  const tl = $('auth-tab2-login'), tr = $('auth-tab2-register');
+  if (tl) tl.classList.toggle('active', mode === 'login');
+  if (tr) tr.classList.toggle('active', mode === 'register');
+  const btn = $('auth2-submit-btn');
+  if (btn) btn.textContent = mode === 'login' ? 'MASUK' : 'DAFTAR';
+  const err = $('fb-auth-error'); if (err) err.textContent = '';
+}
+function authSubmit2() {
+  if (_authPageMode === 'register') fbRegister(); else fbLogin();
+}
+
+// ── Auth showcase: "Selamat datang" mengetik → logo terbentuk → judul & subjudul mengetik, loop ──
+// Form login baru muncul & menetap setelah siklus pertama kelar.
+let _authShowcaseTimer = null;
+let _authShowcaseRunning = false;
+let _authFormRevealed = false;
+const AUTH_WELCOME_TEXT = 'Selamat datang';
+const AUTH_TITLE_TEXT = 'OHT';
+const AUTH_SUB_TEXT = 'Orias Habit Tracker';
+
+function startAuthShowcase() {
+  if (_authShowcaseRunning) return;
+  _authShowcaseRunning = true;
+  runAuthShowcaseCycle();
+}
+function stopAuthShowcase() {
+  _authShowcaseRunning = false;
+  if (_authShowcaseTimer) { clearTimeout(_authShowcaseTimer); _authShowcaseTimer = null; }
+}
+function _authTypeInto(el, text, speed, cb) {
+  let i = 0;
+  el.textContent = '';
+  const wrap = el.parentElement;
+  if (wrap) wrap.classList.add('typing');
+  (function step() {
+    if (!_authShowcaseRunning) return;
+    if (i <= text.length) {
+      el.textContent = text.slice(0, i);
+      i++;
+      _authShowcaseTimer = setTimeout(step, speed);
+    } else {
+      if (wrap) wrap.classList.remove('typing');
+      if (cb) cb();
+    }
+  })();
+}
+function _authDeleteFrom(el, text, speed, cb) {
+  let i = text.length;
+  const wrap = el.parentElement;
+  if (wrap) wrap.classList.add('typing');
+  (function step() {
+    if (!_authShowcaseRunning) return;
+    if (i >= 0) {
+      el.textContent = text.slice(0, i);
+      i--;
+      _authShowcaseTimer = setTimeout(step, speed);
+    } else {
+      if (wrap) wrap.classList.remove('typing');
+      if (cb) cb();
+    }
+  })();
+}
+function _authRevealFormOnce() {
+  if (_authFormRevealed) return;
+  _authFormRevealed = true;
+  const card = $('auth-card'); if (card) card.classList.add('show');
+}
+function runAuthShowcaseCycle() {
+  if (!_authShowcaseRunning) return;
+  const twEl = $('auth-typewriter-text');
+  const logoEl = $('auth-showcase-logo');
+  const titleEl = $('auth-showcase-title-text');
+  const subEl = $('auth-showcase-sub-text');
+  if (!twEl || !logoEl || !titleEl || !subEl) return;
+
+  logoEl.classList.remove('show');
+  twEl.textContent = ''; titleEl.textContent = ''; subEl.textContent = '';
+
+  // 1) "Selamat datang" mengetik
+  _authTypeInto(twEl, AUTH_WELCOME_TEXT, 75, () => {
+    _authShowcaseTimer = setTimeout(() => {
+      // 2) "Selamat datang" terhapus (efek ketik mundur)
+      _authDeleteFrom(twEl, AUTH_WELCOME_TEXT, 40, () => {
+        _authShowcaseTimer = setTimeout(() => {
+          // 3) Logo/icon terbentuk penuh dari nol
+          logoEl.classList.add('show');
+          _authShowcaseTimer = setTimeout(() => {
+            // 4) Judul "OHT" mengetik
+            _authTypeInto(titleEl, AUTH_TITLE_TEXT, 130, () => {
+              _authShowcaseTimer = setTimeout(() => {
+                // 5) Subjudul mengetik
+                _authTypeInto(subEl, AUTH_SUB_TEXT, 45, () => {
+                  // Form login muncul & menetap (hanya kali pertama)
+                  _authRevealFormOnce();
+                  _authShowcaseTimer = setTimeout(() => {
+                    // 6) Logo memudar, judul & subjudul terhapus ketik-mundur, lalu loop
+                    logoEl.classList.remove('show');
+                    _authShowcaseTimer = setTimeout(() => {
+                      _authDeleteFrom(subEl, AUTH_SUB_TEXT, 25, () => {
+                        _authShowcaseTimer = setTimeout(() => {
+                          _authDeleteFrom(titleEl, AUTH_TITLE_TEXT, 70, () => {
+                            _authShowcaseTimer = setTimeout(runAuthShowcaseCycle, 450);
+                          });
+                        }, 150);
+                      });
+                    }, 300);
+                  }, 1700);
+                });
+              }, 260);
+            });
+          }, 900);
+        }, 300);
+      });
+    }, 850);
+  });
 }
 
 // ── Auth ──────────────────────────────────────────────────
@@ -8670,8 +7217,8 @@ function renderSettingsAuth() {
   const el = $('settings-auth-block'); if(!el) return;
 
   if(!_fbUser || !_fbProfile) {
-    // Not logged in — cukup tombol LOGIN, form lengkap ada di modal-login
-    el.innerHTML = '<button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="openModal(\'modal-login\')">LOGIN</button>';
+    // Not logged in — cukup tombol LOGIN, form lengkap ada di halaman auth
+    el.innerHTML = '<button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="showAuthPage()">LOGIN</button>';
     return;
   }
 
