@@ -325,31 +325,40 @@ function updateSoundUI(){
 }
 
 // ── MOOD ───────────────────────────────────────────────────
+function getMoodViewDate(){ return (typeof _journalViewDate!=='undefined' && _journalViewDate) || todayStr(); }
 function setMood(val,el){
+  const vd=getMoodViewDate();
+  if(vd!==todayStr()){ toast('Hanya mood hari ini yang bisa diubah.','info'); return; }
   document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
   el.classList.add('sel');
-  const td=todayStr();S.moodLog=S.moodLog||{};S.moodLog[td]=S.moodLog[td]||{};
-  S.moodLog[td].mood=val;S.moodLog[td].date=td;
+  S.moodLog=S.moodLog||{};S.moodLog[vd]=S.moodLog[vd]||{};
+  S.moodLog[vd].mood=val;S.moodLog[vd].date=vd;
   updateMoodUI();save();
 }
 function setEnergy(val){
+  const vd=getMoodViewDate();
+  if(vd!==todayStr()){ toast('Hanya mood hari ini yang bisa diubah.','info'); return; }
   document.querySelectorAll('.edot').forEach((d,i)=>d.classList.toggle('on',i<val));
-  const td=todayStr();S.moodLog=S.moodLog||{};S.moodLog[td]=S.moodLog[td]||{};
-  S.moodLog[td].energy=val;S.moodLog[td].date=td;
+  S.moodLog=S.moodLog||{};S.moodLog[vd]=S.moodLog[vd]||{};
+  S.moodLog[vd].energy=val;S.moodLog[vd].date=vd;
   updateMoodUI();save();
 }
 function updateMoodUI(){
-  const td=todayStr();const m=S.moodLog&&S.moodLog[td];
+  const vd=getMoodViewDate();const m=S.moodLog&&S.moodLog[vd];
   const mc=$('mood-checkin');const badge=$('mood-saved-badge');const lbl=$('mood-label');
+  if(mc)mc.classList.remove('done-today');
+  if(badge)badge.style.display='none';
   if(m&&(m.mood||m.energy)){
     if(mc)mc.classList.add('done-today');
     if(badge)badge.style.display='block';
-    if(lbl)lbl.textContent='Hari Ini ✓';
   }
+  if(lbl)lbl.textContent = vd===todayStr() ? 'Hari Ini' : (typeof odpFormatLabel==='function'?odpFormatLabel(vd):vd);
   if(typeof renderMoodHistoryStrip==='function') renderMoodHistoryStrip();
 }
 function restoreMoodUI(){
-  const td=todayStr();const m=S.moodLog&&S.moodLog[td];
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.edot').forEach(d=>d.classList.remove('on'));
+  const vd=getMoodViewDate();const m=S.moodLog&&S.moodLog[vd];
   if(m){
     if(m.mood){const btns=document.querySelectorAll('.mood-btn');if(btns[m.mood-1])btns[m.mood-1].classList.add('sel');}
     if(m.energy){document.querySelectorAll('.edot').forEach((d,i)=>d.classList.toggle('on',i<m.energy));}
@@ -569,6 +578,7 @@ function populateStackPicker(editId){
 
 // ── Page view state (global) ──
 let _reportViewDate   = null;
+let _reportViewMonth  = null; // {y, m} m=0-indexed; null = current month
 let _nutrViewDate     = null;
 let _wellnessDate     = null;
 let _journalViewDate  = null;
@@ -1035,23 +1045,44 @@ function renderReviewHistory(){
 }
 
 // ── REPORT ─────────────────────────────────────────────────
-function setReportPeriod(p,el){S.reportPeriod=p;save();document.querySelectorAll('#page-report .ptab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderReport();}
+function setReportMonth(offset){
+  const now=new Date();
+  let y, m;
+  if(offset===0 || !_reportViewMonth){
+    y=now.getFullYear(); m=now.getMonth();
+  } else {
+    y=_reportViewMonth.y; m=_reportViewMonth.m+offset;
+  }
+  if(m<0){m=11;y--;} if(m>11){m=0;y++;}
+  // Don't allow navigating into the future
+  if(y>now.getFullYear() || (y===now.getFullYear() && m>now.getMonth())){ y=now.getFullYear(); m=now.getMonth(); }
+  const isCurrent = (y===now.getFullYear() && m===now.getMonth());
+  _reportViewMonth = isCurrent ? null : {y,m};
+  renderReport();
+}
+function getReportMonthRange(){
+  const now=new Date();
+  const y = _reportViewMonth ? _reportViewMonth.y : now.getFullYear();
+  const m = _reportViewMonth ? _reportViewMonth.m : now.getMonth();
+  const isCurrent = (y===now.getFullYear() && m===now.getMonth());
+  const lastDay = isCurrent ? now.getDate() : new Date(y,m+1,0).getDate();
+  const dates=[];
+  for(let d=1; d<=lastDay; d++){
+    dates.push(y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
+  }
+  return {y,m,dates,isCurrent};
+}
 function renderReport(){
-  const today=new Date();
-  const todayS=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  const rp=S.reportPeriod||'daily';let label='',dates=[];
-  // Jika ada filter tanggal aktif dan mode daily, gunakan tanggal filter
-  const filterDate = (typeof _reportViewDate !== 'undefined' && _reportViewDate) ? _reportViewDate : null;
-  if(rp==='daily'){label=filterDate?filterDate:'Today';dates=[filterDate||todayS];}
-  else if(rp==='weekly'){const d=new Date(today);d.setDate(d.getDate()-6);while(d<=today){dates.push(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}label='Last 7 Days';}
-  else{const d=new Date(today);d.setDate(d.getDate()-29);while(d<=today){dates.push(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}label='Last 30 Days';}
-  document.querySelectorAll('#page-report .ptab').forEach(t=>{const oc=t.getAttribute('onclick')||'';t.classList.toggle('active',oc.includes(`'${rp}'`));});
-  setTxt('report-period-label',label);
+  const {y,m,dates,isCurrent}=getReportMonthRange();
+  const monthLbl=new Date(y,m,1).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+  const mlEl=$('report-month-label'); if(mlEl) mlEl.textContent=monthLbl.toUpperCase();
+  const rvEl=$('report-viewing-date');
+  if(rvEl) rvEl.textContent = `▸ ${dates.length} hari · ${monthLbl}${isCurrent?' (s/d hari ini)':''}`;
   const hist=S.history||[];const pl=hist.filter(h=>dates.includes(h.date));const dl=pl.filter(h=>h.status==='done');
   const activeHabitsCount=S.habits.filter(h=>!h.archived).length;
   const rate=dates.length>0&&activeHabitsCount>0?Math.round(dl.length/(dates.length*Math.max(1,activeHabitsCount))*100):0;
   const xpE=dl.reduce((s,h)=>s+(h.xp||10),0);const actD=[...new Set(dl.map(h=>h.date))].length;
-  const best=S.habits.reduce((m,h)=>Math.max(m,h.bestStreak||0),0);
+  const best=S.habits.reduce((mx,h)=>Math.max(mx,h.bestStreak||0),0);
   const kc=$('report-key-stats');
   if(kc)kc.innerHTML=[{v:dl.length,l:'Done',c:'yellow'},{v:rate+'%',l:'Rate',c:'pink'},{v:xpE,l:'XP',c:'cyan'},{v:actD,l:'Active Days',c:'lime'},{v:activeHabitsCount,l:'Habits',c:'orange'},{v:best,l:'Best Streak',c:'purple'}].map(s=>`<div class="report-stat stat-card ${s.c}"><div class="rs-val">${s.v}</div><div class="rs-lbl">${s.l}</div></div>`).join('');
   const CC=['#0057FF','#7B2FBE','#FF3CAC','#FF6B00','#FFE600','#AAFF00','#00F5D4'];
@@ -1059,8 +1090,10 @@ function renderReport(){
   if(ch){
     const mx=Math.max(1,S.habits.filter(h=>!h.archived).length);
     ch.innerHTML=dates.map((ds,i)=>{const cnt=hist.filter(h=>h.date===ds&&h.status==='done').length;const ht=Math.max(cnt?3:2,Math.min(88,Math.round(cnt/mx*88)));return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:88px;background:${CC[i%CC.length]};"></div></div>`;}).join('');
-    if(chl)chl.innerHTML=dates.map(ds=>{const d=new Date(ds);const dl2=['Su','Mo','Tu','We','Th','Fr','Sa'];return `<div class="chart-day-lbl">${rp==='monthly'?d.getDate():dl2[d.getDay()]}</div>`;}).join('');
+    if(chl)chl.innerHTML=dates.map(ds=>{const d=new Date(ds+'T12:00:00');return `<div class="chart-day-lbl">${d.getDate()}</div>`;}).join('');
   }
+  if(typeof renderReportWaterChart==='function') renderReportWaterChart(dates);
+  if(typeof renderReportSleepChart==='function') renderReportSleepChart(dates);
   const mc=$('mood-correlation-card');
   if(mc){
     const md=S.moodLog||{};const corr=dates.map(ds=>{const m=md[ds];const cnt=hist.filter(h=>h.date===ds&&h.status==='done').length;const mx2=Math.max(1,S.habits.filter(h=>!h.archived).length);return{date:ds,mood:m?.mood||0,energy:m?.energy||0,completion:Math.round(cnt/mx2*100)};}).filter(d=>d.mood>0);
@@ -2086,16 +2119,6 @@ function dismissNotif(el) {
     setTimeout(() => { el.remove(); _notifShowing = false; showNextNotif(); }, 320);
   }
 }
-// Click outside toast-container dismisses any active toast/notif immediately
-document.addEventListener('click', (e) => {
-  if (e.target.closest('.toast-container')) return;
-  document.querySelectorAll('.toast-container .toast:not(.removing)').forEach(t => {
-    if (t._timer) clearTimeout(t._timer);
-    t.classList.add('removing');
-    setTimeout(() => t.remove(), 320);
-  });
-  if (_notifShowing) { _notifShowing = false; showNextNotif(); }
-});
 
 // Browser push notification request
 function requestNotifPermission() {
@@ -4644,8 +4667,10 @@ function loadJournalDate(dateStr) {
       : '<span style="color:var(--sub);font-style:italic;font-size:11px;">Tap untuk menulis jurnal hari ini...</span>';
   }
   cancelJournalEdit();
-  // Render prev entries (all other dates)
-  renderJournalPrev(targetDate);
+  // Refresh mood/energy check-in for the viewed date
+  if(typeof restoreMoodUI==='function') restoreMoodUI();
+  // Previous-entries preview removed per user request — keep container empty
+  const prevEl = $('journal-prev-entries'); if(prevEl) prevEl.innerHTML = '';
   renderMoodHistoryStrip();
 }
 
@@ -4739,128 +4764,48 @@ function renderJournalPrev(currentDate) {
 // ════════════════════════════════════════════════════════════
 
 function initReportPage() {
-  _reportViewDate = null;
-  const inp = $('report-date-filter');
-  if(inp) inp.value = '';
-  renderReportDateLabel();
-  renderReportNutritionLog();
-  if(typeof renderReportWaterDisplay==='function') renderReportWaterDisplay();
-  if(typeof renderReportSleepDisplay==='function') renderReportSleepDisplay();
-  // Juga render habit report dengan date hari ini
+  _reportViewMonth = null;
   if(typeof renderReport==='function') renderReport();
 }
 
-function renderReportWaterDisplay() {
-  const el = $('water-record-display'); if(!el) return;
-  const d = _reportViewDate || todayStr();
-  try {
-    const log = JSON.parse(localStorage.getItem('oht_water_log') || '{}');
-    const data = log[d];
-    if(!data) {
-      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
-      return;
-    }
-    if(data.mode === 'ml') {
-      const pct = Math.min(100, Math.round((data.ml||0) / 2000 * 100));
-      el.innerHTML = `<div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;">
-        <div style="font-family:sans-serif;font-weight:900;font-size:20px;color:var(--yellow);">${data.ml||0}</div>
-        <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);">/ 2000 ml</div>
-      </div>
-      <div style="width:100%;height:8px;background:#222;border:1px solid var(--bc);overflow:hidden;">
-        <div style="height:100%;width:${pct}%;background:var(--yellow);transition:width .4s;"></div>
-      </div>
-      <div style="font-family:var(--font-mono, monospace);font-size:8px;color:var(--sub);margin-top:4px;">${pct}% dari target harian</div>`;
-    } else {
-      const g = data.glasses || 0;
-      const target = 8;
-      const pct = Math.min(100, Math.round(g / target * 100));
-      const cups = Array.from({length: target}, (_, i) => {
-        const filled = i < g;
-        return `<div style="width:26px;height:32px;border:2px solid ${filled ? 'var(--yellow)' : 'var(--bc)'};background:${filled ? 'color-mix(in srgb,var(--yellow) 25%,transparent)' : 'transparent'};display:flex;align-items:center;justify-content:center;font-size:12px;">${filled ? '💧' : ''}</div>`;
-      }).join('');
-      el.innerHTML = `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">${cups}</div>
-        <div style="display:flex;align-items:center;gap:9px;">
-          <div style="flex:1;height:4px;background:#222;overflow:hidden;"><div style="height:100%;width:${pct}%;background:var(--yellow);"></div></div>
-          <div style="font-family:sans-serif;font-weight:900;font-size:11px;color:var(--yellow);">${g}/${target}</div>
-        </div>`;
-    }
-  } catch(e) { el.innerHTML = '<div style="color:var(--sub);font-size:9px;">Error.</div>'; }
+function renderReportWaterChart(dates) {
+  const ch=$('report-water-chart'), chl=$('report-water-chart-labels'), avgEl=$('report-water-avg');
+  if(!ch) return;
+  S.waterLog = S.waterLog || {};
+  const TARGET=8;
+  const vals = dates.map(ds=>S.waterLog[ds]||0);
+  const loggedDays = vals.filter(v=>v>0).length;
+  const avg = loggedDays ? (vals.reduce((s,v)=>s+v,0)/loggedDays) : 0;
+  if(avgEl) avgEl.textContent = loggedDays ? `RATA-RATA ${avg.toFixed(1)}/${TARGET} GELAS` : 'BELUM ADA DATA';
+  ch.innerHTML = dates.map(ds=>{
+    const v=S.waterLog[ds]||0;
+    const ht=Math.max(v?3:2,Math.min(70,Math.round(v/TARGET*70)));
+    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:#00B4D8;"></div></div>`;
+  }).join('');
+  if(chl) chl.innerHTML = dates.map(ds=>{const d=new Date(ds+'T12:00:00');return `<div class="chart-day-lbl">${d.getDate()}</div>`;}).join('');
 }
 
-function renderReportSleepDisplay() {
-  const el = $('report-sleep-display'); if(!el) return;
-  const d = _reportViewDate || todayStr();
-  try {
-    const log = JSON.parse(localStorage.getItem('oht_sleep_log') || '{}');
-    const entries = log[d] || [];
-    if(!entries.length) {
-      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);">Belum ada data water. Input di tab Habits.</div>`;
-      return;
-    }
-    el.innerHTML = entries.map(e => {
-      const dur = e.duration ? `<span style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${e.duration}h</span>` : '';
-      return `<div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--bc);">
-        <span style="font-size:16px;">🌙</span>
-        <div style="flex:1;font-family:var(--font-mono, monospace);font-size:9px;">Tidur ${e.bed||'?'} → Bangun ${e.wake||'?'}</div>
-        ${dur}
-      </div>`;
-    }).join('');
-  } catch(e) { el.innerHTML = '<div style="color:var(--sub);font-size:9px;">Error.</div>'; }
-}
-
-function setReportDate(dateStr) {
-  _reportViewDate = dateStr || null;
-  // Update label tombol
-  const lbl = $('report-date-filter-label');
-  if(lbl) lbl.textContent = dateStr ? odpFormatLabel(dateStr) : odpTodayLabel();
-  renderReportDateLabel();
-  renderReportNutritionLog();
-  if(typeof renderReportWaterDisplay==='function') renderReportWaterDisplay();
-  if(typeof renderReportSleepDisplay==='function') renderReportSleepDisplay();
-  // Re-render habit performance for selected date
-  if(typeof renderReport==='function') renderReport();
-}
-
-function renderReportDateLabel() {
-  const el = $('report-viewing-date'); if(!el) return;
-  const d = _reportViewDate || todayStr();
-  const dt = new Date(d+'T12:00:00');
-  el.textContent = '▸ ' + dt.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-}
-
-function renderReportNutritionLog() {
-  const el = $('report-nutrition-log'); if(!el) return;
-  const d = _reportViewDate || todayStr();
-  try {
-    const log = JSON.parse(localStorage.getItem('oht_nutr_log')||'{}');
-    const meals = log[d] || [];
-    if(!meals.length) {
-      el.innerHTML = `<div style="font-family:var(--font-mono, monospace);font-size:9px;color:var(--sub);text-align:center;padding:8px;">Tidak ada data nutrisi.</div>`;
-      return;
-    }
-    const totKcal = meals.reduce((s,m)=>s+(m.kcal||0),0);
-    const totP = meals.reduce((s,m)=>s+(m.protein||0),0);
-    const totC = meals.reduce((s,m)=>s+(m.carbs||0),0);
-    const totF = meals.reduce((s,m)=>s+(m.fat||0),0);
-    el.innerHTML = `<div style="display:flex;gap:11px;flex-wrap:wrap;margin-bottom:9px;">
-      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;color:var(--yellow);">${totKcal}</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">kkal</div></div>
-      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totP}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">protein</div></div>
-      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totC}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">karbo</div></div>
-      <div><div style="font-family:sans-serif;font-weight:900;font-size:16px;">${totF}g</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">lemak</div></div>
-    </div>
-    ${meals.map(m=>`<div style="display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid var(--bc);">
-      <span style="font-size:16px;">${m.emoji||'🍽️'}</span>
-      <div style="flex:1;"><div style="font-family:sans-serif;font-weight:900;font-size:10px;">${m.name}</div><div style="font-family:var(--font-mono, monospace);font-size:7px;color:var(--sub);">${m.time||''} · P:${m.protein}g K:${m.carbs}g L:${m.fat}g</div></div>
-      <div style="font-family:sans-serif;font-weight:900;font-size:11px;color:var(--yellow);">${m.kcal}kkal</div>
-    </div>`).join('')}`;
-  } catch(e) {
-    el.innerHTML = '<div style="color:var(--sub);font-size:9px;padding:8px;">Error loading nutrition data.</div>';
-  }
+function renderReportSleepChart(dates) {
+  const ch=$('report-sleep-chart'), chl=$('report-sleep-chart-labels'), avgEl=$('report-sleep-avg');
+  if(!ch) return;
+  S.sleepLog = S.sleepLog || [];
+  const TARGET=8;
+  const hoursByDate = {};
+  S.sleepLog.forEach(e=>{ if(e.date) hoursByDate[e.date]=(hoursByDate[e.date]||0)+(e.hours||0); });
+  const vals = dates.map(ds=>hoursByDate[ds]||0);
+  const loggedDays = vals.filter(v=>v>0).length;
+  const avg = loggedDays ? (vals.reduce((s,v)=>s+v,0)/loggedDays) : 0;
+  if(avgEl) avgEl.textContent = loggedDays ? `RATA-RATA ${avg.toFixed(1)}/${TARGET} JAM` : 'BELUM ADA DATA';
+  ch.innerHTML = dates.map(ds=>{
+    const v=hoursByDate[ds]||0;
+    const ht=Math.max(v?3:2,Math.min(70,Math.round(v/TARGET*70)));
+    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:#7B2FBE;"></div></div>`;
+  }).join('');
+  if(chl) chl.innerHTML = dates.map(ds=>{const d=new Date(ds+'T12:00:00');return `<div class="chart-day-lbl">${d.getDate()}</div>`;}).join('');
 }
 
 function saveReportOther(val) {
-  const d = _reportViewDate || todayStr();
-  if(d !== todayStr()) return; // only save today
+  const d = todayStr();
   try {
     const log = JSON.parse(localStorage.getItem('oht_report_other')||'{}');
     log[d] = val;
@@ -4869,13 +4814,11 @@ function saveReportOther(val) {
 }
 
 function loadReportOther() {
-  const d = _reportViewDate || todayStr();
+  const d = todayStr();
   const ta = $('report-other-input'); if(!ta) return;
   try {
     const log = JSON.parse(localStorage.getItem('oht_report_other')||'{}');
     ta.value = log[d] || '';
-    ta.readOnly = d !== todayStr();
-    ta.style.opacity = d !== todayStr() ? '0.6' : '1';
   } catch(e){}
 }
 
