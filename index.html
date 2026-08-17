@@ -21,6 +21,9 @@
     if (raw) { var d = JSON.parse(raw); theme = d && d.accentTheme; }
     var hex = HEX[theme] || '#FFE600';
     if (theme && HEX[theme]) document.documentElement.setAttribute('data-accent', theme);
+    // Sinkronkan status bar PWA (meta theme-color) dengan accent yang dipilih
+    var metaTc = document.querySelector('meta[name="theme-color"]');
+    if (metaTc) metaTc.setAttribute('content', hex);
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">'
       + '<rect x="0" y="0" width="120" height="120" fill="#0a0a0a"/>'
       + '<rect x="0" y="0" width="120" height="28" fill="' + hex + '"/>'
@@ -222,11 +225,9 @@
   <!-- Header: title + month filter -->
   <div class="sec-hdr">
     <div class="sec-title">Report</div>
-    <div style="display:flex;align-items:center;gap:5px;">
-      <button class="btn btn-icon btn-sm" onclick="setReportMonth(-1)" aria-label="Bulan sebelumnya" style="padding:6px 7px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <div style="font-family:'Archivo Black',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.5px;min-width:96px;text-align:center;" id="report-month-label">—</div>
-      <button class="btn btn-icon btn-sm" onclick="setReportMonth(1)" aria-label="Bulan berikutnya" style="padding:6px 7px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><polyline points="9 18 15 12 9 6"/></svg></button>
-      <button class="btn btn-xs" onclick="setReportMonth(0)">BULAN INI</button>
+    <div class="oht-datepicker-wrap" id="wrap-report-month-filter">
+      <button class="btn btn-sm" onclick="openMonthPicker()" style="gap:5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span id="report-month-label">—</span></button>
+      <button class="btn btn-sm btn-primary" onclick="setReportMonth(0)">BULAN INI</button>
     </div>
   </div>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);margin-bottom:11px;" id="report-viewing-date"></div>
@@ -379,7 +380,7 @@
     <div style="display:flex;align-items:center;gap:6px;">
 <div class="oht-datepicker-wrap" id="wrap-wellness-date-filter">
       <button class="btn btn-sm" onclick="openDatePicker('wellness-date-filter','loadWellnessDate')" style="gap:5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span id="wellness-date-filter-label">TANGGAL</span></button>
-      <button class="btn btn-xs" onclick="loadWellnessDate('')">TODAY</button>
+      <button class="btn btn-sm btn-primary" onclick="loadWellnessDate('')">TODAY</button>
     </div>
     </div>
   </div>
@@ -398,8 +399,8 @@
     <!-- Mode toggle -->
     <div style="display:flex;gap:7px;align-items:center;justify-content:space-between;margin-bottom:11px;flex-wrap:wrap;">
       <div class="cat-tabs" style="font-size:8px;">
-        <div class="ctab active" id="water-tab-cups" onclick="setWellnessWaterMode('cups')">GELAS</div>
-        <div class="ctab" id="water-tab-ml" onclick="setWellnessWaterMode('ml')">ML</div>
+        <div class="ctab active" id="water-tab-cups" onclick="waterTabTap('cups')" title="Ganti mode di TARGET">GELAS</div>
+        <div class="ctab" id="water-tab-ml" onclick="waterTabTap('ml')" title="Ganti mode di TARGET">ML</div>
       </div>
       <button class="btn btn-xs" onclick="resetWater()" style="opacity:.6;">RESET</button>
     </div>
@@ -568,7 +569,7 @@
     <div style="display:flex;align-items:center;gap:6px;">
 <div class="oht-datepicker-wrap" id="wrap-nutr-date-filter">
       <button class="btn btn-sm" onclick="openDatePicker('nutr-date-filter','loadNutrDate')" style="gap:5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span id="nutr-date-filter-label">TANGGAL</span></button>
-      <button class="btn btn-xs" onclick="loadNutrDate('')">TODAY</button>
+      <button class="btn btn-sm btn-primary" onclick="loadNutrDate('')">TODAY</button>
     </div>
     </div>
   </div>
@@ -860,7 +861,7 @@
     <div class="sec-title">Journal</div>
 <div class="oht-datepicker-wrap" id="wrap-journal-date-filter">
       <button class="btn btn-sm" onclick="openDatePicker('journal-date-filter','loadJournalDate')" style="gap:5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span id="journal-date-filter-label">TANGGAL</span></button>
-      <button class="btn btn-xs" onclick="loadJournalDate('')">TODAY</button>
+      <button class="btn btn-sm btn-primary" onclick="loadJournalDate('')">TODAY</button>
     </div>
   </div>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);margin-bottom:11px;" id="journal-viewing-date"></div>
@@ -1425,7 +1426,23 @@
     <button class="odp-today-btn" onclick="odpToday()">HARI INI</button>
   </div>
 </div>
-<div id="oht-datepicker-overlay" onclick="closeDatePicker()" style="position:fixed;inset:0;z-index:1999;display:none;"></div>
+
+<!-- ══ CUSTOM MONTH PICKER POPUP (untuk Report) ══ -->
+<div id="oht-monthpicker-popup" class="oht-datepicker-popup" style="display:none;">
+  <div class="odp-header">
+    <button class="odp-nav" onclick="ompNav(-1)">‹</button>
+    <div class="odp-month" id="omp-year-label"></div>
+    <button class="odp-nav" onclick="ompNav(1)">›</button>
+  </div>
+  <div class="omp-grid" id="omp-months-grid">
+    <!-- bulan dirender oleh JS -->
+  </div>
+  <div class="odp-footer">
+    <button class="odp-today-btn" onclick="ompThisMonth()" style="margin-left:auto;">BULAN INI</button>
+  </div>
+</div>
+
+<div id="oht-datepicker-overlay" onclick="closeAnyPicker()" style="position:fixed;inset:0;z-index:1999;display:none;"></div>
 <script src="app.js"></script>
 </body>
 </html>

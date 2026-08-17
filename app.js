@@ -2332,6 +2332,9 @@ function setAccentTheme(theme) {
   S.accentTheme = theme;
   document.documentElement.setAttribute('data-accent', theme);
   updateFaviconAccent(theme);
+  // Sinkronkan status bar PWA (meta theme-color) dengan accent yang dipilih
+  const metaTc = document.querySelector('meta[name="theme-color"]');
+  if (metaTc) metaTc.setAttribute('content', ACCENT_HEX_MAP[theme] || '#FFE600');
   save();
   document.querySelectorAll('.accent-opt').forEach(el => {
     el.classList.toggle('sel', el.dataset.accent === theme);
@@ -4780,7 +4783,7 @@ function renderReportWaterChart(dates) {
   ch.innerHTML = dates.map(ds=>{
     const v=S.waterLog[ds]||0;
     const ht=Math.max(v?3:2,Math.min(70,Math.round(v/TARGET*70)));
-    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:#00B4D8;"></div></div>`;
+    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:var(--cyan);"></div></div>`;
   }).join('');
   if(chl) chl.innerHTML = dates.map(ds=>{const d=new Date(ds+'T12:00:00');return `<div class="chart-day-lbl">${d.getDate()}</div>`;}).join('');
 }
@@ -4799,7 +4802,7 @@ function renderReportSleepChart(dates) {
   ch.innerHTML = dates.map(ds=>{
     const v=hoursByDate[ds]||0;
     const ht=Math.max(v?3:2,Math.min(70,Math.round(v/TARGET*70)));
-    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:#7B2FBE;"></div></div>`;
+    return `<div class="bar-col"><div class="bar-fill" style="height:${ht}px;max-height:70px;background:var(--cyan);"></div></div>`;
   }).join('');
   if(chl) chl.innerHTML = dates.map(ds=>{const d=new Date(ds+'T12:00:00');return `<div class="chart-day-lbl">${d.getDate()}</div>`;}).join('');
 }
@@ -4830,6 +4833,9 @@ function initWellnessPage() {
   _wellnessDate = null;
   const inp = $('wellness-date-filter');
   if(inp) inp.value = '';
+  // Kunci mode GELAS/ML sesuai yang dipilih user di modal TARGET
+  const cfg = getWellnessConfig();
+  setWellnessWaterMode(cfg.waterMode);
   loadWellnessDate(null);
 }
 
@@ -5103,11 +5109,18 @@ function setWellnessWaterMode(mode) {
   const tabMl = $('water-tab-ml');
   const secCups = $('water-section-cups');
   const secMl = $('water-section-ml');
-  if(tabCups) tabCups.classList.toggle('active', mode === 'cups');
-  if(tabMl) tabMl.classList.toggle('active', mode === 'ml');
+  if(tabCups) { tabCups.classList.toggle('active', mode === 'cups'); tabCups.classList.toggle('locked', mode !== 'cups'); }
+  if(tabMl)   { tabMl.classList.toggle('active', mode === 'ml');     tabMl.classList.toggle('locked', mode !== 'ml'); }
   if(secCups) secCups.style.display = mode === 'cups' ? 'block' : 'none';
   if(secMl) secMl.style.display = mode === 'ml' ? 'block' : 'none';
   renderWellnessWater();
+}
+
+// Tab GELAS/ML dikunci mengikuti mode yang dipilih di modal TARGET.
+// Klik tab yang tidak aktif hanya kasih tahu user untuk ganti lewat TARGET.
+function waterTabTap(mode) {
+  if(mode === _wellnessWaterMode) return;
+  toast('Ganti mode via tombol TARGET 🎯', 'info');
 }
 
 function getWaterMlData() {
@@ -5581,6 +5594,12 @@ function closeDatePicker() {
   if(o) o.style.display = 'none';
 }
 
+// Tutup popup picker manapun yang sedang terbuka (dipanggil dari overlay)
+function closeAnyPicker() {
+  closeDatePicker();
+  closeMonthPicker();
+}
+
 function odpNav(dir) {
   _odpMonth += dir;
   if(_odpMonth < 0)  { _odpMonth = 11; _odpYear--; }
@@ -5653,6 +5672,85 @@ function odpToday() {
 
 function odpClear() {
   odpToday();
+}
+
+// ════════════════════════════════════════════════════════════
+// MONTH PICKER (Report) — style sama dengan date picker harian,
+// tapi grid isinya 12 bulan, panah maju/mundur = antar TAHUN.
+// ════════════════════════════════════════════════════════════
+let _ompYear = null;
+
+function openMonthPicker() {
+  const now = new Date();
+  _ompYear = _reportViewMonth ? _reportViewMonth.y : now.getFullYear();
+
+  const popup   = $('oht-monthpicker-popup');
+  const overlay = $('oht-datepicker-overlay');
+  if(!popup) return;
+
+  popup.style.display   = 'block';
+  overlay.style.display = 'block';
+
+  const btn = document.querySelector('#wrap-report-month-filter button');
+  if(btn) {
+    const rect       = btn.getBoundingClientRect();
+    const popupH     = 260;
+    const spaceBelow = window.innerHeight - rect.bottom - 8;
+    const top  = spaceBelow >= popupH ? rect.bottom + 6 : Math.max(8, rect.top - popupH - 6);
+    const left = Math.min(Math.max(8, rect.left), window.innerWidth - 272);
+    popup.style.top  = top  + 'px';
+    popup.style.left = left + 'px';
+  }
+
+  buildMonthPickerGrid();
+}
+
+function closeMonthPicker() {
+  const p = $('oht-monthpicker-popup');
+  if(p) p.style.display = 'none';
+}
+
+function ompNav(dir) {
+  _ompYear += dir;
+  buildMonthPickerGrid();
+}
+
+function buildMonthPickerGrid() {
+  const lbl = $('omp-year-label');
+  if(lbl) lbl.textContent = _ompYear;
+
+  const grid = $('omp-months-grid');
+  if(!grid) return;
+
+  const now  = new Date();
+  const curY = now.getFullYear(), curM = now.getMonth();
+  const selY = _reportViewMonth ? _reportViewMonth.y : curY;
+  const selM = _reportViewMonth ? _reportViewMonth.m : curM;
+
+  let html = '';
+  ODP_MONTHS.forEach((name, i) => {
+    const isFuture = _ompYear > curY || (_ompYear === curY && i > curM);
+    const isSel    = _ompYear === selY && i === selM;
+    const isCur    = _ompYear === curY && i === curM;
+    html += `<div class="omp-month-cell${isSel?' selected':''}${isCur?' today':''}${isFuture?' disabled':''}" ${isFuture?'':`onclick="ompSelect(${_ompYear},${i})"`}>${name.slice(0,3)}</div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function ompSelect(y, m) {
+  const now = new Date();
+  const isCurrent = (y === now.getFullYear() && m === now.getMonth());
+  _reportViewMonth = isCurrent ? null : {y, m};
+  renderReport();
+  closeMonthPicker();
+  const o = $('oht-datepicker-overlay'); if(o) o.style.display = 'none';
+}
+
+function ompThisMonth() {
+  _reportViewMonth = null;
+  renderReport();
+  closeMonthPicker();
+  const o = $('oht-datepicker-overlay'); if(o) o.style.display = 'none';
 }
 
 

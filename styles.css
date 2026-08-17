@@ -149,6 +149,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .ptab,.ctab{padding:5px 9px;font-size:9px;font-weight:700;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;cursor:pointer;border-right:var(--bo);background:var(--surface);color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;}
 .ptab:last-child,.ctab:last-child{border-right:none;}
 .ptab.active,.ctab.active{background:var(--black);color:var(--yellow);}
+.ctab.locked{opacity:.35;cursor:not-allowed;}
 .empty{text-align:center;padding:22px 11px;border:3px dashed #bbb;background:var(--bg);color:#bbb;}
 .empty-icon{font-size:26px;margin-bottom:6px;}
 .empty-title{font-family:'Archivo Black',sans-serif;font-size:11px;color:#bbb;margin-bottom:4px;}
@@ -432,7 +433,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .sleep-entry{display:flex;align-items:center;gap:7px;padding:7px 0;border-bottom:1px solid var(--bg);}
 .sleep-entry:last-child{border-bottom:none;}
 .sleep-bar-wrap{flex:1;height:7px;background:#e0e0d0;border:var(--bo);overflow:hidden;}
-.sleep-bar-fill{height:100%;background:var(--purple);}
+.sleep-bar-fill{height:100%;background:var(--cyan);}
 
 
 /* ══ CUSTOM SELECT PICKER ══ */
@@ -1085,6 +1086,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .odp-footer{display:flex;justify-content:space-between;margin-top:9px;padding-top:7px;border-top:1px solid var(--yellow);}
 .odp-today-btn,.odp-clear-btn{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--yellow);cursor:pointer;background:none;border:none;padding:3px 6px;}
 .odp-today-btn:hover,.odp-clear-btn:hover{text-decoration:underline;}
+.omp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:0;}
+.omp-month-cell{font-family:'IBM Plex Mono',monospace;font-size:9px;text-align:center;padding:11px 4px;cursor:pointer;border:1.5px solid transparent;color:var(--text);text-transform:uppercase;background:var(--surface);}
+.omp-month-cell:hover{border-color:var(--yellow);background:color-mix(in srgb,var(--yellow) 12%,transparent);}
+.omp-month-cell.today{color:var(--yellow);font-weight:700;text-decoration:underline;}
+.omp-month-cell.selected{background:var(--yellow);color:var(--black);font-weight:700;border:1.5px solid var(--black);}
+.omp-month-cell.disabled{opacity:.3;cursor:default;pointer-events:none;}
 
 /* ══ AUTH PAGE — halaman login/daftar terpisah (bukan modal) ══ */
 #auth-page{position:fixed;inset:0;z-index:9990;background:var(--bg);display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
